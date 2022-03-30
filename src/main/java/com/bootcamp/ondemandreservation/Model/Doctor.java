@@ -2,6 +2,8 @@ package com.bootcamp.ondemandreservation.Model;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Doctor {
@@ -10,6 +12,17 @@ public class Doctor {
     private Long id;
     private String firstName;
     private String lastName;
+
+    @OneToMany(mappedBy = "doctor")
+    private List<Appointment> appointmentList = new ArrayList<Appointment>();
+
+    public List<Appointment> getAppointmentList() {
+        return appointmentList;
+    }
+
+    public void addAppointmentList(Appointment appointment) {
+        this.appointmentList.add(appointment);
+    }
 
 
     public Long getId() {

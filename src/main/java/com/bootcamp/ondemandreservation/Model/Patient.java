@@ -1,9 +1,10 @@
 package com.bootcamp.ondemandreservation.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Patient {
@@ -17,7 +18,17 @@ public class Patient {
     private String idCard;
     private String phoneNumber;
     private String email;
+    @JsonIgnoreProperties("doctor")
+    @OneToMany(mappedBy = "patient")
+    private List<Appointment> appointmentList = new ArrayList<Appointment>();
 
+    public List<Appointment> getAppointmentList() {
+        return appointmentList;
+    }
+
+    public void addAppointmentList(Appointment appointment) {
+        this.appointmentList.add(appointment);
+    }
 
     public Long getId() {
         return id;

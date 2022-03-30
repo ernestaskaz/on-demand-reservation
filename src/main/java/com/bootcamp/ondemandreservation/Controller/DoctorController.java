@@ -1,5 +1,6 @@
 package com.bootcamp.ondemandreservation.Controller;
 
+import com.bootcamp.ondemandreservation.Model.Appointment;
 import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Service.DoctorService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,11 @@ public class DoctorController {
     @GetMapping
     public List<Doctor> getAllDoctors() {
         return doctorService.getAllDoctors();
+    }
+
+    @GetMapping("/appointments/{id}")
+    public List<Appointment> getAllAppointments(@PathVariable("id") Long id) {
+        return doctorService.getAllAppointments(id);
     }
 
     @GetMapping ("{id}")
