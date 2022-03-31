@@ -18,12 +18,29 @@ public class Patient {
     private String idCard;
     private String phoneNumber;
     private String email;
+    private boolean priorityQueue;
     @JsonIgnoreProperties("doctor")
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointmentList = new ArrayList<Appointment>();
 
+    public Patient () {
+
+    }
+
     public List<Appointment> getAppointmentList() {
         return appointmentList;
+    }
+
+    public boolean isPriorityQueue() {
+        return priorityQueue;
+    }
+
+    public void setPriorityQueue(boolean priorityQueue) {
+        this.priorityQueue = priorityQueue;
+    }
+
+    public void setAppointmentList(List<Appointment> appointmentList) {
+        this.appointmentList = appointmentList;
     }
 
     public void addAppointmentList(Appointment appointment) {

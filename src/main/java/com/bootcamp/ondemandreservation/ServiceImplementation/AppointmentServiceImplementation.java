@@ -64,6 +64,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
     @Override
     public void cancelAppointment(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId).get();
+        appointment.removePatient();
         appointment.setReserved(false);
         appointment.setAvailable(true);
         appointmentRepository.save(appointment);

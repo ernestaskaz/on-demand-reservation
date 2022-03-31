@@ -116,4 +116,12 @@ public class Appointment {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
+
+    public void removeDoctor() {
+        this.doctor = null;
+    }
+
+    public void removePatient() {
+        this.patient = null;
+    }
 }

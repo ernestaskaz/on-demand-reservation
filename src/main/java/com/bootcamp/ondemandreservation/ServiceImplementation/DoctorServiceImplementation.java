@@ -38,6 +38,12 @@ public class DoctorServiceImplementation implements DoctorService {
 
     @Override
     public void deleteDoctor(Long id) {
+        Doctor currentDoctor = findDoctorById(id);
+        List<Appointment> currentList = currentDoctor.getAppointmentList();
+        for (Appointment appointment: currentList) {
+            appointment.removeDoctor();
+        }
+        currentDoctor.getAppointmentList().clear();
         doctorRepository.deleteById(id);
     }
 
@@ -45,5 +51,11 @@ public class DoctorServiceImplementation implements DoctorService {
     public List<Appointment> getAllAppointments(Long id) {
         Doctor doctor = findDoctorById(id);
         return doctor.getAppointmentList();
+    }
+
+    @Override
+    public Doctor updateDoctor(Long id, Doctor doctor) {
+        doctor.setId(id);
+        return saveDoctor(doctor);
     }
 }

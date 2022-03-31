@@ -7,10 +7,6 @@ import java.util.List;
 
 public interface AppointmentService {
 
-//    Doctor saveDoctor(Doctor doctor);
-//    List<Doctor> getAllDoctors();
-//    Doctor findDoctorById(Long id);
-//    void deleteDoctor(Long id);
 
     Appointment saveAppointment(Long doctorId, Long patientId);
     Appointment saveAppointment(Appointment appointment);

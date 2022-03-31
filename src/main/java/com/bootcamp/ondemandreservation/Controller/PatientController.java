@@ -1,5 +1,6 @@
 package com.bootcamp.ondemandreservation.Controller;
 
+import com.bootcamp.ondemandreservation.Model.Appointment;
 import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Model.Patient;
 import com.bootcamp.ondemandreservation.Service.PatientService;
@@ -40,6 +41,18 @@ public class PatientController {
         patientService.deletePatientById(id);
         return new ResponseEntity<String>("Patient successfully deleted", HttpStatus.OK);
     }
+
+    @GetMapping("/appointments/{id}")
+    public List<Appointment> getAllAppointments(@PathVariable("id") Long id) {
+        return patientService.getAllAppointments(id);
+    }
+
+    @PutMapping ("{id}")
+    public Patient updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
+        return patientService.updatePatient(id, patient);
+
+    }
+
 
 
 }

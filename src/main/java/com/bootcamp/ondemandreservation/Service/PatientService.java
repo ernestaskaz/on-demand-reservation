@@ -1,5 +1,6 @@
 package com.bootcamp.ondemandreservation.Service;
 
+import com.bootcamp.ondemandreservation.Model.Appointment;
 import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Model.Patient;
 
@@ -11,4 +12,6 @@ public interface PatientService {
     List<Patient> getAllPatients();
     Patient findPatientById(Long id);
     void deletePatientById(Long id);
+    List<Appointment> getAllAppointments(Long id);
+    Patient updatePatient(Long id, Patient patient);
 }

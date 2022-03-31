@@ -1,5 +1,6 @@
 package com.bootcamp.ondemandreservation.ServiceImplementation;
 
+import com.bootcamp.ondemandreservation.Model.Appointment;
 import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Model.Patient;
 import com.bootcamp.ondemandreservation.Repository.PatientRepository;
@@ -38,5 +39,17 @@ public class PatientServiceImplementation implements PatientService {
     @Override
     public void deletePatientById(Long id) {
         patientRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Appointment> getAllAppointments(Long id) {
+        Patient patient = findPatientById(id);
+        return patient.getAppointmentList();
+    }
+
+    @Override
+    public Patient updatePatient(Long id, Patient patient) {
+        patient.setId(id);
+        return savePatient(patient);
     }
 }

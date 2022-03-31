@@ -20,6 +20,10 @@ public class Doctor {
         return appointmentList;
     }
 
+    public Doctor(){
+
+    }
+
     public void addAppointmentList(Appointment appointment) {
         this.appointmentList.add(appointment);
     }
