@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * implements the doctor service
+ */
 @Service
 public class DoctorServiceImplementation implements DoctorService {
 
