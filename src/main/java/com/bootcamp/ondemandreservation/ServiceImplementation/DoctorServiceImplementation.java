@@ -22,6 +22,11 @@ public class DoctorServiceImplementation implements DoctorService {
         this.doctorRepository = doctorRepository;
     }
 
+    /**
+     * Save doctor method
+     * @param doctor doctor to save
+     * @return Doctor as saved in the DB, nul;l if error
+     */
     @Override
     public Doctor saveDoctor(Doctor doctor) {
         return doctorRepository.save(doctor);
