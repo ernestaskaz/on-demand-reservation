@@ -16,6 +16,9 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private List<Appointment> appointmentList = new ArrayList<Appointment>();
 
+    @OneToMany(mappedBy = "doctor")
+    private List<Schedule> schedules = new ArrayList<Schedule>();
+
     public List<Appointment> getAppointmentList() {
         return appointmentList;
     }

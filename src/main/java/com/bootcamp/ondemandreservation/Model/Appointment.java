@@ -21,11 +21,11 @@ public class Appointment {
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     @ManyToOne
     @JsonIgnoreProperties({"appointmentList"})
-    Doctor doctor;
+    private Doctor doctor;
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     @ManyToOne
     @JsonIgnoreProperties({"appointmentList"})
-    Patient patient;
+    private Patient patient;
 
     public Appointment(){
 
