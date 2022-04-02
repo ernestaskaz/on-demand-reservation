@@ -8,8 +8,8 @@ public interface ScheduleService {
 
     Schedule saveSchedule(Schedule schedule);
     List<Schedule> getAllSchedules();
-    List<Schedule> getScheduleByDoctorId(Long id);
-    void updateSchedule(Long id, Schedule schedule);
-    void deleteSchedule(Long id);
+    Schedule updateSchedule(Long id, Schedule schedule);
+    Schedule findScheduleById(Long id);
+    void deleteScheduleById(Long id);
     void setDoctorToSchedule(Long scheduleId, Long doctorId);
 }

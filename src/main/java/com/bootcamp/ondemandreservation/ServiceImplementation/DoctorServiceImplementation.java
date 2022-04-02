@@ -52,6 +52,7 @@ public class DoctorServiceImplementation implements DoctorService {
     public void deleteDoctor(Long id) {
         Doctor currentDoctor = findDoctorById(id);
         currentDoctor.removeDoctorFromAppointmentList();
+        currentDoctor.removeDoctorFromSchedule();
         doctorRepository.deleteById(id);
     }
 

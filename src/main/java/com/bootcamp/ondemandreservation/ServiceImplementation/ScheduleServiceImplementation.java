@@ -20,6 +20,10 @@ public class ScheduleServiceImplementation implements ScheduleService {
         this.doctorRepository = doctorRepository;
     }
 
+    @Override
+    public Schedule findScheduleById(Long id) {
+        return scheduleRepository.findById(id).get();
+    }
 
     @Override
     public Schedule saveSchedule(Schedule schedule) {
@@ -28,23 +32,34 @@ public class ScheduleServiceImplementation implements ScheduleService {
 
     @Override
     public List<Schedule> getAllSchedules() {
-        return null;
+        return scheduleRepository.findAll();
+    }
+
+
+    @Override
+    public Schedule updateSchedule(Long id, Schedule schedule) {
+        Schedule dbSchedule = findScheduleById(id);
+        Doctor currentDoctor = dbSchedule.getDoctor();
+        schedule.setId(id);
+        schedule.setDoctor(currentDoctor);
+        return saveSchedule(schedule);
+
+
     }
 
     @Override
-    public List<Schedule> getScheduleByDoctorId(Long id) {
-        return null;
-    }
-
-    @Override
-    public void updateSchedule(Long id, Schedule schedule) {
+    public void deleteScheduleById(Long id) {
+        Schedule schedule = scheduleRepository.findById(id).get();
+        schedule.removeDoctor();
+        scheduleRepository.deleteById(id);
 
     }
 
-    @Override
-    public void deleteSchedule(Long id) {
-
-    }
+    /**
+     * @param doctorId takes in already existing doctor. has to be created before hand.
+     * @param scheduleId takes in already exististing schedule (day). has to be created before hand.
+     * maps doctor to schedule.
+     */
 
     @Override
     public void setDoctorToSchedule(Long scheduleId, Long doctorId) {
@@ -54,10 +69,6 @@ public class ScheduleServiceImplementation implements ScheduleService {
         currentDoctor.addScheduleList(schedule);
         scheduleRepository.save(schedule);
         doctorRepository.save(currentDoctor);
-
-
-        //save both
-
 
     }
 }
