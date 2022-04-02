@@ -1,6 +1,8 @@
 package com.bootcamp.ondemandreservation.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,8 @@ public class Doctor {
     private List<Appointment> appointmentList = new ArrayList<Appointment>();
 
     @OneToMany(mappedBy = "doctor")
-    private List<Schedule> schedules = new ArrayList<Schedule>();
+    @JsonIgnoreProperties({"doctor"})
+    private List<Schedule> schedulesList = new ArrayList<Schedule>();
 
     public Doctor(){
 
@@ -37,6 +40,19 @@ public class Doctor {
 
     public void addAppointmentList(Appointment appointment) {
         this.appointmentList.add(appointment);
+    }
+
+    public List<Schedule> getSchedulesList() {
+        return schedulesList;
+    }
+
+    public void addScheduleList(Schedule schedule) {
+        this.schedulesList.add(schedule);
+    }
+    public void removeDoctorFromSchedule() {
+        for (Schedule schedule : schedulesList) {
+            schedule.removeDoctor();
+        }
     }
 
     public String getSpecialty() {
