@@ -19,12 +19,19 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private List<Schedule> schedules = new ArrayList<Schedule>();
 
+    public Doctor(){
+
+    }
+
     public List<Appointment> getAppointmentList() {
         return appointmentList;
     }
 
-    public Doctor(){
 
+    public void removeDoctorFromAppointmentList() {
+        for (Appointment appointment: appointmentList) {
+            appointment.removeDoctor();
+        }
     }
 
     public void addAppointmentList(Appointment appointment) {

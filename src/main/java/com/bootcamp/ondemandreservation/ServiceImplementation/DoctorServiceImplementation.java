@@ -51,10 +51,7 @@ public class DoctorServiceImplementation implements DoctorService {
     @Override
     public void deleteDoctor(Long id) {
         Doctor currentDoctor = findDoctorById(id);
-        List<Appointment> currentList = currentDoctor.getAppointmentList();
-        for (Appointment appointment: currentList) {
-            appointment.removeDoctor();
-        }
+        currentDoctor.removeDoctorFromAppointmentList();
         doctorRepository.deleteById(id);
     }
 

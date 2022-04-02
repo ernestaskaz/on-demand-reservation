@@ -45,8 +45,8 @@ public class PatientServiceImplementation implements PatientService {
 
     @Override
     public void deletePatientById(Long id) {
-        Patient patient  = findPatientById(id);
-        patient.removePatientFromAppointmentList();
+        Patient currentPatient  = findPatientById(id);
+        currentPatient.removePatientFromAppointmentList();
         patientRepository.deleteById(id);
     }
 
