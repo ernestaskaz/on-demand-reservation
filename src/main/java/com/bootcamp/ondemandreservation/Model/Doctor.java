@@ -12,6 +12,7 @@ public class Doctor {
     private Long id;
     private String firstName;
     private String lastName;
+    private String specialty;
 
     @OneToMany(mappedBy = "doctor")
     private List<Appointment> appointmentList = new ArrayList<Appointment>();
@@ -38,6 +39,13 @@ public class Doctor {
         this.appointmentList.add(appointment);
     }
 
+    public String getSpecialty() {
+        return specialty;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
 
     public Long getId() {
         return id;
