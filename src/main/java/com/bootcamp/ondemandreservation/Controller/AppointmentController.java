@@ -38,7 +38,7 @@ public class AppointmentController {
     @PutMapping("/cancel/{appointmentId}")
     public ResponseEntity<String> cancelAppointment(@PathVariable("appointmentId") Long appointmentId) {
         appointmentService.cancelAppointment(appointmentId);
-        return new ResponseEntity<String>("Appointment has been canceled" + appointmentService.getAppointmentById(appointmentId).toString(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>("Appointment has been canceled", HttpStatus.ACCEPTED);
     }
     //does not cascade - contrained entities are not affected.
     @DeleteMapping("/{appointmentId}")
