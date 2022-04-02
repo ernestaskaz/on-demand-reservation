@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * implements the doctor service
- */
+
 @Service
 public class DoctorServiceImplementation implements DoctorService {
 
@@ -50,7 +48,6 @@ public class DoctorServiceImplementation implements DoctorService {
         for (Appointment appointment: currentList) {
             appointment.removeDoctor();
         }
-        currentDoctor.getAppointmentList().clear();
         doctorRepository.deleteById(id);
     }
 

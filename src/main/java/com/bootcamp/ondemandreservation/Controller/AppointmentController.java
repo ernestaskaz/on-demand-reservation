@@ -2,8 +2,6 @@ package com.bootcamp.ondemandreservation.Controller;
 
 import com.bootcamp.ondemandreservation.Model.Appointment;
 import com.bootcamp.ondemandreservation.Service.AppointmentService;
-import com.bootcamp.ondemandreservation.Service.DoctorService;
-import com.bootcamp.ondemandreservation.Service.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
