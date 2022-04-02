@@ -44,7 +44,7 @@ public class AppointmentController {
     @DeleteMapping("/{appointmentId}")
     public ResponseEntity<String> deleteAppointment(@PathVariable("appointmentId") Long appointmentId) {
         appointmentService.deleteAppointment(appointmentId);
-        return new ResponseEntity<String>("The appointment has been delete", HttpStatus.OK);
+        return new ResponseEntity<String>("The appointment has been deleted", HttpStatus.OK);
     }
 
 

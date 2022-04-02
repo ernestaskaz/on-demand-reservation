@@ -27,6 +27,12 @@ public class Patient {
 
     }
 
+    public void removePatientFromAppointmentList() {
+        for (Appointment appointment: appointmentList) {
+            appointment.removePatient();
+        }
+    }
+
     public List<Appointment> getAppointmentList() {
         return appointmentList;
     }
