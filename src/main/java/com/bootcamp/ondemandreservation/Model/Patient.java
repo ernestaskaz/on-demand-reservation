@@ -27,6 +27,14 @@ public class Patient {
 
     }
 
+    public Patient(Long id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+
+
     public void removePatientFromAppointmentList() {
         for (Appointment appointment: appointmentList) {
             appointment.removePatient();

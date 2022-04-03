@@ -50,10 +50,10 @@ public class AppointmentController {
 
 
 //TODO. USE IT LATER WHEN YOU NEED TO AUTO GENERATE APPOINTMENTS WITH NO CONSTRAINS. CHANGE PATH!
-    @PostMapping("/test")
-    public ResponseEntity <Appointment> testAppointment(@RequestBody Appointment appointment) {
-        return new ResponseEntity<Appointment>(appointmentService.saveAppointment(appointment), HttpStatus.CREATED);
-    }
+//    @PostMapping("/test")
+//    public ResponseEntity <Appointment> testAppointment(@RequestBody Appointment appointment) {
+//        return new ResponseEntity<Appointment>(appointmentService.saveAppointment(appointment), HttpStatus.CREATED);
+//    }
 
 
 

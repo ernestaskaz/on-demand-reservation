@@ -24,6 +24,11 @@ public class Schedule {
 
     }
 
+    public Schedule(DayOfWeek dayOfWeek, int startHour, int endHour) {
+        this.dayOfWeek = dayOfWeek;
+        this.startHour = startHour;
+        this.endHour = endHour;
+    }
 
     public Long getId() {
         return id;

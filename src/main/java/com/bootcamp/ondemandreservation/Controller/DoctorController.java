@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import java.util.List;
 
 @RestController
@@ -36,8 +37,8 @@ public class DoctorController {
     }
 
     @GetMapping ("{id}")
-    public Doctor findDoctorById(@PathVariable("id") Long id) {
-        return doctorService.findDoctorById(id);
+    public ResponseEntity<Doctor> findDoctorById(@PathVariable("id") Long id) {
+        return new ResponseEntity<Doctor>(doctorService.findDoctorById(id), HttpStatus.OK);
 
     }
 

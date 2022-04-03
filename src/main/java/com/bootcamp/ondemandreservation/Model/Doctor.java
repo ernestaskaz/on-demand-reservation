@@ -27,6 +27,19 @@ public class Doctor {
 
     }
 
+    public Doctor(Long id, String firstName, String lastName, String specialty) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.specialty = specialty;
+    }
+
+    public Doctor(String firstName, String lastName, String specialty) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.specialty = specialty;
+    }
+
     public List<Appointment> getAppointmentList() {
         return appointmentList;
     }
