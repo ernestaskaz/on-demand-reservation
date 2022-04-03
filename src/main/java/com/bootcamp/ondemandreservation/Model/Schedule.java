@@ -1,5 +1,7 @@
 package com.bootcamp.ondemandreservation.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.DayOfWeek;
 
@@ -13,14 +15,20 @@ public class Schedule {
     int startHour;
     int endHour;
     int lunchTime;
-    @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    @ManyToOne
+    @JsonIgnoreProperties({"schedulesList", "appointmentList"})
     private Doctor doctor;
 
     public Schedule() {
 
     }
 
+    public Schedule(DayOfWeek dayOfWeek, int startHour, int endHour) {
+        this.dayOfWeek = dayOfWeek;
+        this.startHour = startHour;
+        this.endHour = endHour;
+    }
 
     public Long getId() {
         return id;
@@ -68,5 +76,9 @@ public class Schedule {
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
+    }
+
+    public void removeDoctor() {
+        this.doctor = null;
     }
 }
