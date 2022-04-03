@@ -1,7 +1,6 @@
 package com.bootcamp.ondemandreservation.Controller;
 
 import com.bootcamp.ondemandreservation.Helpers;
-import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Model.Patient;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -42,6 +41,8 @@ public class PatientControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName").value("firstName"));
+
+
     }
 
     @Test

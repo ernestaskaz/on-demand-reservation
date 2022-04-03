@@ -1,29 +1,27 @@
 package com.bootcamp.ondemandreservation.Controller;
 
 import com.bootcamp.ondemandreservation.Helpers;
-import com.bootcamp.ondemandreservation.Model.Appointment;
+
 import com.bootcamp.ondemandreservation.Model.Doctor;
-import com.bootcamp.ondemandreservation.Model.Patient;
-import com.bootcamp.ondemandreservation.Service.DoctorService;
+
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.web.servlet.function.RequestPredicates.contentType;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -40,6 +38,14 @@ public class DoctorControllerTest {
     void canSaveDoctor() throws Exception {
 
         Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/doctor")
+                        .content(Helpers.asJsonString(doctor))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.specialty").value("Specialty"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/doctor")
                         .content(Helpers.asJsonString(doctor))
@@ -105,7 +111,7 @@ public class DoctorControllerTest {
     @Test
     @Order(6)
     void canDeleteDoctorById () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/doctor/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/doctor/2")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())

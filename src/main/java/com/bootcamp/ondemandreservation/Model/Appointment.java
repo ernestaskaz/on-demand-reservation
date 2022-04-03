@@ -37,6 +37,8 @@ public class Appointment {
         this.patient = patient;
     }
 
+
+
     public Long getId() {
         return id;
     }
