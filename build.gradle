@@ -18,6 +18,12 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.5'
+	// https://mvnrepository.com/artifact/org.postgresql/postgresql
+	implementation group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.36'
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-reload4j
+	//implementation group: 'org.slf4j', name: 'slf4j-reload4j', version: '1.7.36'
+
 
 
 }
