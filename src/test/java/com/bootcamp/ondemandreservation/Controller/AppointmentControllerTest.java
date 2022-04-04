@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AppointmentControllerTest {
 
     @Autowired
@@ -44,7 +46,7 @@ public class AppointmentControllerTest {
                 .andExpect(jsonPath("$.firstName").value("firstName"));
 
         //create Doctor;
-        Doctor doctor = new Doctor(1L, "this is name", "this is lastName", "Specialty");
+        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/doctor")
                         .content(Helpers.asJsonString(doctor))
@@ -56,7 +58,7 @@ public class AppointmentControllerTest {
 
         //create and map appointment;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/appointment/1/1")
+        mockMvc.perform(MockMvcRequestBuilders.post("/appointment/2/1")
                         .content(Helpers.asJsonString(doctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
