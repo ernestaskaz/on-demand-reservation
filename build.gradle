@@ -25,6 +25,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-reload4j
 	//implementation group: 'org.slf4j', name: 'slf4j-reload4j', version: '1.7.36'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
+	//Security framework
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
 }
 
 
