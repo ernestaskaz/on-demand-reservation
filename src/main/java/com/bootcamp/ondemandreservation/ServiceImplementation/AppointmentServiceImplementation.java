@@ -61,13 +61,20 @@ public class AppointmentServiceImplementation implements AppointmentService {
         return appointment.get();
     }
 
+    /**
+     * This method cancels appointment by removing patient(another patient can be set up);
+     * sets reserved to false so that searches would show this appointment;
+     * sets appointment to true so that searches would show this appointment;
+     */
+
     @Override
     public void cancelAppointment(Long appointmentId) {
-        Appointment appointment = appointmentRepository.findById(appointmentId).get();
-        appointment.removePatient();
-        appointment.setReserved(false);
-        appointment.setAvailable(true);
-        appointmentRepository.save(appointment);
+        Appointment currentAppointment = getAppointmentById(appointmentId);
+        currentAppointment.removePatient();
+        currentAppointment.setReserved(false);
+        currentAppointment.setAvailable(true);
+        currentAppointment.setConfirmed(false);
+        saveAppointment(currentAppointment);
 
     }
 

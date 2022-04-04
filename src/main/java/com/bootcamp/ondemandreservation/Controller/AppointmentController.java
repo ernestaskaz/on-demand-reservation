@@ -2,13 +2,13 @@ package com.bootcamp.ondemandreservation.Controller;
 
 import com.bootcamp.ondemandreservation.Model.Appointment;
 import com.bootcamp.ondemandreservation.Service.AppointmentService;
-import com.bootcamp.ondemandreservation.Service.DoctorService;
-import com.bootcamp.ondemandreservation.Service.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+//test comment
 
 @RestController
 @RequestMapping("/appointment")
@@ -38,22 +38,22 @@ public class AppointmentController {
     @PutMapping("/cancel/{appointmentId}")
     public ResponseEntity<String> cancelAppointment(@PathVariable("appointmentId") Long appointmentId) {
         appointmentService.cancelAppointment(appointmentId);
-        return new ResponseEntity<String>("Appointment has been canceled" + appointmentService.getAppointmentById(appointmentId).toString(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<String>("Appointment has been canceled", HttpStatus.OK);
     }
     //does not cascade - contrained entities are not affected.
     @DeleteMapping("/{appointmentId}")
     public ResponseEntity<String> deleteAppointment(@PathVariable("appointmentId") Long appointmentId) {
         appointmentService.deleteAppointment(appointmentId);
-        return new ResponseEntity<String>("The appointment has been delete", HttpStatus.OK);
+        return new ResponseEntity<String>("The appointment has been deleted", HttpStatus.OK);
     }
 
 
 
 //TODO. USE IT LATER WHEN YOU NEED TO AUTO GENERATE APPOINTMENTS WITH NO CONSTRAINS. CHANGE PATH!
-    @PostMapping("/test")
-    public ResponseEntity <Appointment> testAppointment(@RequestBody Appointment appointment) {
-        return new ResponseEntity<Appointment>(appointmentService.saveAppointment(appointment), HttpStatus.CREATED);
-    }
+//    @PostMapping("/test")
+//    public ResponseEntity <Appointment> testAppointment(@RequestBody Appointment appointment) {
+//        return new ResponseEntity<Appointment>(appointmentService.saveAppointment(appointment), HttpStatus.CREATED);
+//    }
 
 
 

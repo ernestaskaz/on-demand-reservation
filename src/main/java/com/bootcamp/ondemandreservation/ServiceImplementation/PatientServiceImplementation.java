@@ -36,8 +36,17 @@ public class PatientServiceImplementation implements PatientService {
         return patient.get();
     }
 
+    /**
+     * @param id passed from Controller to find specific patient.
+     *  To delete a Patient object, doctor can not have any relations to other tables.
+     *  This method removes relations to any Appointment list that a patient might have relations to.
+     *  Deletes patient.
+     */
+
     @Override
     public void deletePatientById(Long id) {
+        Patient currentPatient  = findPatientById(id);
+        currentPatient.removePatientFromAppointmentList();
         patientRepository.deleteById(id);
     }
 
