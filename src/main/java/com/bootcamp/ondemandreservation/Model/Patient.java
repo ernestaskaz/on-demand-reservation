@@ -7,17 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Patient {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String firstName;
-    private String lastName;
+public class Patient extends ODRUser{
     private String city;
     private int age;
     private String idCard;
     private String phoneNumber;
-    private String email;
     private boolean priorityQueue;
     @JsonIgnoreProperties("doctor")
     @OneToMany(mappedBy = "patient")
@@ -28,9 +22,7 @@ public class Patient {
     }
 
     public Patient(Long id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        super(id,firstName,lastName);
     }
 
 
@@ -61,29 +53,7 @@ public class Patient {
         this.appointmentList.add(appointment);
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
 
     public String getCity() {
         return city;
@@ -117,11 +87,5 @@ public class Patient {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

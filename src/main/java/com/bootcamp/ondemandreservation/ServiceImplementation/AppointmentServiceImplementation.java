@@ -3,12 +3,15 @@ package com.bootcamp.ondemandreservation.ServiceImplementation;
 import com.bootcamp.ondemandreservation.Model.Appointment;
 import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Model.Patient;
+import com.bootcamp.ondemandreservation.Model.Schedule;
 import com.bootcamp.ondemandreservation.Repository.AppointmentRepository;
 import com.bootcamp.ondemandreservation.Repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.Repository.PatientRepository;
 import com.bootcamp.ondemandreservation.Service.AppointmentService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,6 +84,50 @@ public class AppointmentServiceImplementation implements AppointmentService {
     @Override
     public void deleteAppointment(Long appointmentId) {
         appointmentRepository.deleteById(appointmentId);
+
+    }
+
+    /**
+     * @param daysCount passed from Controller specifies for how many days should appointments be generated.
+     * @param doctorId finds doctor for which appointments are generated and sets this doctor to newly created appointments.
+     *  This method iterates through currentDoctor schedules and adds appointments that are on specific day of the week
+     *  and between schedule.startHour and endHour for that specific day.
+     *  appointments are hourly.
+     */
+
+    @Override
+    public void generateAppointmentsBySchedule(Long doctorId, int daysCount) {
+
+        Doctor currentDoctor = doctorRepository.findById(doctorId).get();
+        DateTimeFormatter toStringDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter setHoursToZero = DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00");
+        //start generating appointments from the next day.
+        LocalDateTime addOneDay = LocalDateTime.now().plusDays(1);
+        // set generation at 00:00.
+        String zeroHoursAndMinutes = addOneDay.format(setHoursToZero);
+        // creates LocalDateTime start point for  appointment generation.
+        LocalDateTime startPoint = LocalDateTime.parse(zeroHoursAndMinutes, toStringDateFormatter);
+        LocalDateTime originalPoint = startPoint;
+        // creates LocalDateTime end point for appointment generation.
+        LocalDateTime endPoint = startPoint.plusDays(daysCount);
+
+
+        for (Schedule schedule : currentDoctor.getSchedulesList()) {
+
+            startPoint = originalPoint;
+            while(startPoint.isBefore(endPoint)) {
+
+
+                if (schedule.getDayOfWeek().equals(startPoint.getDayOfWeek()) && startPoint.getHour() >= schedule.getStartHour() && startPoint.getHour() <= schedule.getEndHour() && startPoint.getHour() != schedule.getLunchTime()) {
+                    Appointment appointment = new Appointment(startPoint, currentDoctor);
+                    currentDoctor.addAppointmentList(appointment);
+                    saveAppointment(appointment);
+                }
+                startPoint = startPoint.plusHours(1);
+
+        }
+
+        }
 
     }
 }
