@@ -30,6 +30,7 @@ public class Doctor extends ODRUser{
 
     public Doctor(String firstName, String lastName, String specialty) {
         super(firstName,lastName);
+        this.specialty = specialty;
     }
 
     public List<Appointment> getAppointmentList() {
