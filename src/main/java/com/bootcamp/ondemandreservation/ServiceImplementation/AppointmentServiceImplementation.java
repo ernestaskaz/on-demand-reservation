@@ -88,7 +88,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
     }
 
     /**
-     * @param endDate passed from Controller specifies for how many days should appointments be generated.
+     * @param daysCount passed from Controller specifies for how many days should appointments be generated.
      * @param doctorId finds doctor for which appointments are generated and sets this doctor to newly created appointments.
      *  This method iterates through currentDoctor schedules and adds appointments that are on specific day of the week
      *  and between schedule.startHour and endHour for that specific day.
@@ -96,7 +96,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
      */
 
     @Override
-    public void generateAppointmentsBySchedule(Long doctorId, int endDate) {
+    public void generateAppointmentsBySchedule(Long doctorId, int daysCount) {
 
         Doctor currentDoctor = doctorRepository.findById(doctorId).get();
         DateTimeFormatter toStringDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -109,7 +109,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
         LocalDateTime startPoint = LocalDateTime.parse(zeroHoursAndMinutes, toStringDateFormatter);
         LocalDateTime originalPoint = startPoint;
         // creates LocalDateTime end point for appointment generation.
-        LocalDateTime endPoint = startPoint.plusDays(endDate);
+        LocalDateTime endPoint = startPoint.plusDays(daysCount);
 
 
         for (Schedule schedule : currentDoctor.getSchedulesList()) {

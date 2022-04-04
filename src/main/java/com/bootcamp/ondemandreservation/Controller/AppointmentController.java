@@ -49,8 +49,8 @@ public class AppointmentController {
     }
 
     @PostMapping("/generate/{doctorId}")
-    public ResponseEntity<String> generateAppointmentsBySchedule(@PathVariable("doctorId") Long doctorId, @RequestBody int endDate) {
-        appointmentService.generateAppointmentsBySchedule(doctorId, endDate);
+    public ResponseEntity<String> generateAppointmentsBySchedule(@PathVariable("doctorId") Long doctorId, @RequestBody int daysCount) {
+        appointmentService.generateAppointmentsBySchedule(doctorId, daysCount);
         return new ResponseEntity<String>("Appointments for given date has been generated.", HttpStatus.OK);
     }
 
