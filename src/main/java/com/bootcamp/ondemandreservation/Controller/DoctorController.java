@@ -36,6 +36,11 @@ public class DoctorController {
         return doctorService.getAllAppointments(id);
     }
 
+    @GetMapping("/today/{id}")
+    public List<Appointment> getTodaysAppointments(@PathVariable("id") Long id) {
+        return doctorService.getTodaysAppointments(id);
+    }
+
     @GetMapping ("{id}")
     public ResponseEntity<Doctor> findDoctorById(@PathVariable("id") Long id) {
         return new ResponseEntity<Doctor>(doctorService.findDoctorById(id), HttpStatus.OK);

@@ -13,4 +13,6 @@ public interface DoctorService {
     void deleteDoctor(Long id);
     List<Appointment> getAllAppointments(Long id);
     Doctor updateDoctor(Long id, Doctor doctor);
+    List<Appointment> getTodaysAppointments(Long id);
+
 }

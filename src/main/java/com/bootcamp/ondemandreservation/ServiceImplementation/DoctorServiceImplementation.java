@@ -6,6 +6,8 @@ import com.bootcamp.ondemandreservation.Repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.Service.DoctorService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,5 +68,21 @@ public class DoctorServiceImplementation implements DoctorService {
     public Doctor updateDoctor(Long id, Doctor doctor) {
         doctor.setId(id);
         return saveDoctor(doctor);
+    }
+
+    @Override
+    public List<Appointment> getTodaysAppointments(Long id) {
+        List<Appointment> AllAppointments = getAllAppointments(id);
+        List<Appointment> todaysAppointments = new ArrayList<>();
+
+        for (Appointment appointment: AllAppointments) {
+
+            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
+                todaysAppointments.add(appointment);
+            }
+
+        }
+
+        return todaysAppointments;
     }
 }
