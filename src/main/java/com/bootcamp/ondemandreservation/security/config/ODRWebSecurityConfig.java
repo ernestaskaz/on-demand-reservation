@@ -1,5 +1,7 @@
 package com.bootcamp.ondemandreservation.security.config;
 
+import com.bootcamp.ondemandreservation.Service.ODRUserService;
+import com.bootcamp.ondemandreservation.ServiceImplementation.ODRUserServiceImplementation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,6 +23,8 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final Logger log= LoggerFactory.getLogger(ODRWebSecurityConfig.class);
     @Value("${security.csrf}")
     private boolean csrfEnabled;
+    @Autowired
+    private ODRUserService odrUserService;
 
     //private final PasswordEncoder appPasswordEncoder;
 
@@ -32,9 +37,9 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Creates an instance with the default configuration enabled.
      */
-    public ODRWebSecurityConfig(boolean csrfEnabled/*, PasswordEncoder appPasswordEncoder*/) {
+    public ODRWebSecurityConfig(boolean csrfEnabled, ODRUserService odrUserService) {
         this.csrfEnabled = csrfEnabled;
-        //this.appPasswordEncoder = appPasswordEncoder;
+        this.odrUserService = odrUserService;
     }
 
     /**
@@ -45,10 +50,9 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param disableDefaults true if the default configuration should be disabled, else
      *                        false
      */
-    public ODRWebSecurityConfig(boolean disableDefaults, boolean csrfEnabled/*, PasswordEncoder appPasswordEncoder*/) {
-        //super(disableDefaults);
+    public ODRWebSecurityConfig(boolean disableDefaults, boolean csrfEnabled, ODRUserService odrUserService) {
         this.csrfEnabled = csrfEnabled;
-        //this.appPasswordEncoder = appPasswordEncoder;
+        this.odrUserService = odrUserService;
     }
 
     /**
@@ -77,7 +81,7 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
         http.authorizeRequests().antMatchers("/**").permitAll();
     }
-/*
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
@@ -91,6 +95,6 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(odrUserService);
         return provider;
     }
-*/
+
 
 }
