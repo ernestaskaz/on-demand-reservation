@@ -37,7 +37,10 @@ public class Appointment {
         this.patient = patient;
     }
 
-
+    public Appointment(LocalDateTime appointmentTime, Doctor doctor) {
+        this.appointmentTime = appointmentTime;
+        this.doctor = doctor;
+    }
 
     public Long getId() {
         return id;

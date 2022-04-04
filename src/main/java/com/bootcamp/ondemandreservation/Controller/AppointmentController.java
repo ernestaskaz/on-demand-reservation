@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 //test comment
@@ -45,6 +46,12 @@ public class AppointmentController {
     public ResponseEntity<String> deleteAppointment(@PathVariable("appointmentId") Long appointmentId) {
         appointmentService.deleteAppointment(appointmentId);
         return new ResponseEntity<String>("The appointment has been deleted", HttpStatus.OK);
+    }
+
+    @PostMapping("/generate/{doctorId}")
+    public ResponseEntity<String> generateAppointmentsBySchedule(@PathVariable("doctorId") Long doctorId, @RequestBody int daysCount) {
+        appointmentService.generateAppointmentsBySchedule(doctorId, daysCount);
+        return new ResponseEntity<String>("Appointments for given date has been generated.", HttpStatus.OK);
     }
 
 
