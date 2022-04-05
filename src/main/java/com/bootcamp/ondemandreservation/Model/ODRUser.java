@@ -110,7 +110,7 @@ public class ODRUser implements UserDetails {
      * Returns the username used to authenticate the user. Cannot return
      * <code>null</code>.
      *
-     * @return the username (never <code>null</code>)
+     * @return the username (Currently the same as email address)
      */
     @Override
     public String getUsername() {

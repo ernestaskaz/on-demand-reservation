@@ -91,7 +91,11 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider =
                 new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder());
+        /*
+        * not setting passwordEncoder as the default delegatingPasswordEncoder should be the best choice
+        * Can possibly create some issues if it's changed, but that probably means the old one was
+        * compromised anyway, so eveyone needs to change their passwords for that reason.
+        */
         provider.setUserDetailsService(odrUserService);
         return provider;
     }
