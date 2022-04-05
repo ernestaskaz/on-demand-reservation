@@ -30,6 +30,9 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-test'
 	//Thymeleaf
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+	//Guava (Google's collection ov misc. utility classes)
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 }
 
 
