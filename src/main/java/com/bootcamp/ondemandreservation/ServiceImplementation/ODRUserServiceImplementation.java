@@ -3,6 +3,7 @@ package com.bootcamp.ondemandreservation.ServiceImplementation;
 import com.bootcamp.ondemandreservation.Model.ODRUser;
 import com.bootcamp.ondemandreservation.Repository.ODRUserRepository;
 import com.bootcamp.ondemandreservation.Service.ODRUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +13,15 @@ import java.util.List;
 
 @Service
 public class ODRUserServiceImplementation implements  ODRUserService {
+    @Autowired
     private ODRUserRepository odrUserRepository;
+
+    public ODRUserServiceImplementation() {
+    }
+
+    public ODRUserServiceImplementation(ODRUserRepository odrUserRepository) {
+        this.odrUserRepository = odrUserRepository;
+    }
 
     @Override
     public List<ODRUser> getAllODRUsers() {
