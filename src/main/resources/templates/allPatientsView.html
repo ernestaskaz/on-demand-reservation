@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -21,7 +23,7 @@
             <td th:text="${patient.lastName}"></td>
             <td th:text="${patient.email}"></td>
         </tr>
-        <table>
+        </table>
 </div>
 </body>
 </html>
