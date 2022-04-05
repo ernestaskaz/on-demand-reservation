@@ -8,7 +8,9 @@ import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -77,5 +79,12 @@ public class PatientServiceImplementation implements PatientService {
     public Patient updatePatient(Long id, Patient patient) {
         patient.setId(id);
         return savePatient(patient);
+    }
+
+    @Override
+    public Map<String, String> validatePatient(Patient patient) {
+        Map<String,String> rv=new HashMap<>();
+
+        return rv;
     }
 }
