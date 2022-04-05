@@ -4,38 +4,49 @@ import com.bootcamp.ondemandreservation.model.ODRUser;
 import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.service.PatientService;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
-public class PatientsController {
+public class PatientWebController {
     @Autowired
     private PatientService patientService;
 
-    public PatientsController(){}
+    public PatientWebController(){}
 
-    public PatientsController(PatientService patientService) {
+    public PatientWebController(PatientService patientService) {
         this.patientService = patientService;
     }
 
-    @GetMapping("/patients")
+    @GetMapping("/patient/list")
     String getPatients(Model model){
         List<Patient>  patients=patientService.getAllPatients();
         model.addAttribute("patients", patients);
         return "allPatientsView";
     }
-    @GetMapping("/patients/myDetails")
+    @GetMapping("/patient/myDetails")
     String patientDetails(Model model){
+        Patient patient = getLoggedInPatient();
+        model.addAttribute("patient", patient);
+        return "patientView";
+    }
+
+    /*@GetMapping("/patient/account")
+    String patientDetails2(Model model){
+        Patient patient = getLoggedInPatient();
+        model.addAttribute("patient", patient);
+        return "patientAccountView";
+    }*/
+
+
+    private Patient getLoggedInPatient() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long id=null;
         if (principal instanceof ODRUser) {
@@ -47,7 +58,6 @@ public class PatientsController {
         if(patient==null){
             throw new ODRUserNotFoundException();
         }
-        model.addAttribute("patient", patient);
-        return "patientView";
+        return patient;
     }
 }

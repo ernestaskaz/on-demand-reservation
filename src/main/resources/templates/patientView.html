@@ -11,13 +11,40 @@
       <div class="container-fluid">
         <div class="navbar-nav">
 <!--need mapping in controller for /patient/account -> return patientAccountView-->
-          <a class="nav-link active" aria-current="page" href="patient/account">My Account</a>
+          <a class="nav-link active" aria-current="page" href="account">My Account</a>
 <!--need mapping in controller for /patient/appointments -> return patientAppointmentsView-->
-          <a class="nav-link" href="patient/appointments">My Appointments</a>
+          <a class="nav-link" href="appointments">My Appointments</a>
 <!--need mapping in controller for /patient/details -> return patientAvailableAppointmentsView-->
-          <a class="nav-link" href="patient/available-appointments">Browse Available Appointments</a>
+          <a class="nav-link" href="available-appointments">Browse Available Appointments</a>
         </div>
       </div>
     </nav>
+    <!--Stupid copy/paste job for testing purposes only Zane can change it later. -->
+    <div class="d-flex justify-content-center">
+        <div class="col-auto">
+            <table class="table table-striped">
+                <thead>
+                <th scope="col">Name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Age</th>
+                <th scope="col">City</th>
+                <th scope="col">ID card</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">E-mail</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${patient.firstName}"></td>
+                    <td th:text="${patient.lastName}"></td>
+                    <td th:text="${patient.age}"></td>
+                    <td th:text="${patient.city}"></td>
+                    <td th:text="${patient.idCard}"></td>
+                    <td th:text="${patient.phoneNumber}"></td>
+                    <td th:text="${patient.email}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
   </body>
 </html>
