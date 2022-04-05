@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -32,11 +33,12 @@ public class ScheduleControllerTest {
 
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(1)
     void canSaveSchedule() throws Exception {
         Schedule schedule = new Schedule(DayOfWeek.MONDAY, 12, 16);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/schedule")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/schedule")
                         .content(Helpers.asJsonString(schedule))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -47,10 +49,11 @@ public class ScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(2)
     void canGetAllSchedules() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/schedule")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/schedule")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -58,11 +61,12 @@ public class ScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(3)
     void canUpdateSchedule () throws Exception {
 
         Schedule schedule = new Schedule(DayOfWeek.TUESDAY, 9, 15);
-        mockMvc.perform(MockMvcRequestBuilders.put("/schedule/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/schedule/1")
                         .content(Helpers.asJsonString(schedule))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -72,13 +76,14 @@ public class ScheduleControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(4)
     void canSetDoctorToSchedule() throws Exception {
 
         //since we need doctor to perform  this test, we create and save doctor using its controllerTest;
         Doctor doctor = new Doctor(1L,"this is name", "this is lastName", "Specialty");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/doctor")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
                         .content(Helpers.asJsonString(doctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -87,7 +92,7 @@ public class ScheduleControllerTest {
                 .andExpect(jsonPath("$.specialty").value("Specialty"));
 
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/schedule/1/2")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/schedule/1/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -98,9 +103,10 @@ public class ScheduleControllerTest {
 
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(5)
     void canDeletePatient () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/schedule/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/schedule/1")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())

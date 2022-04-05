@@ -37,7 +37,7 @@ public class AppointmentControllerTest {
 
         Patient patient = new Patient(1L, "firstName", "lastName");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/patient")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/patient")
                         .content(Helpers.asJsonString(patient))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -48,7 +48,7 @@ public class AppointmentControllerTest {
         //create Doctor;
         Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/doctor")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
                         .content(Helpers.asJsonString(doctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -58,7 +58,7 @@ public class AppointmentControllerTest {
 
         //create and map appointment;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/appointment/3/2")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/appointment/3/2")
                         .content(Helpers.asJsonString(doctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -73,7 +73,7 @@ public class AppointmentControllerTest {
     @WithMockUser(username="admin@default.com")
     @Order(2)
     void canGetAllAppointments () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/appointment")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/appointment")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -86,7 +86,7 @@ public class AppointmentControllerTest {
     @Order(3)
     void canFindAppointmentById() throws Exception{
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/appointment/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/appointment/1")
                         .accept(MediaType.ALL_VALUE))
                 .andDo(print())
                 .andDo(MockMvcResultHandlers.print())
@@ -99,7 +99,7 @@ public class AppointmentControllerTest {
     @Order(4)
     void canCancelAppointment () throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/appointment/cancel/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/appointment/cancel/1")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -112,7 +112,7 @@ public class AppointmentControllerTest {
     @WithMockUser(username="admin@default.com")
     @Order(5)
     void canDeleteAppointment () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/appointment/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/appointment/1")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())

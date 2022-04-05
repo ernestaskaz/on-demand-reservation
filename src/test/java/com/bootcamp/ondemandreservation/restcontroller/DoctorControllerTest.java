@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -35,12 +36,13 @@ public class DoctorControllerTest {
 
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(1)
     void canSaveDoctor() throws Exception {
 
         Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/doctor")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
                         .content(Helpers.asJsonString(doctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -48,7 +50,7 @@ public class DoctorControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName").value("this is name"));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/doctor")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
                         .content(Helpers.asJsonString(doctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -58,10 +60,11 @@ public class DoctorControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(3)
     void canFindDoctorById() throws Exception{
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/doctor/2")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/doctor/2")
                         .accept(MediaType.ALL_VALUE))
                 .andDo(print())
                 .andDo(MockMvcResultHandlers.print())
@@ -69,9 +72,10 @@ public class DoctorControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(2)
     void canGetAllDoctors () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/doctor")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/doctor")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -80,11 +84,12 @@ public class DoctorControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(4)
     void canUpdateDoctor () throws Exception {
 
         Doctor newDoctor = new Doctor("this is name", "this is lastName", "SpecialtyChanged");
-        mockMvc.perform(MockMvcRequestBuilders.put("/doctor/2")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/doctor/2")
                         .content(Helpers.asJsonString(newDoctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -110,9 +115,10 @@ public class DoctorControllerTest {
 //    }
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(6)
     void canDeleteDoctorById () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/doctor/2")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/doctor/2")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())
