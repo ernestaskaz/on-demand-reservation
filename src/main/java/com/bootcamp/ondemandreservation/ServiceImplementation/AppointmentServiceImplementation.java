@@ -87,6 +87,18 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     }
 
+    @Override
+    public void reserveAppointment(Long patientId, Long appointmentId) {
+        Appointment currentAppointment = getAppointmentById(appointmentId);
+        Patient currentPatient = patientRepository.findById(patientId).get();
+        currentAppointment.setReserved(true);
+        currentAppointment.setAvailable(false);
+        currentAppointment.setPatient(currentPatient);
+
+        saveAppointment(currentAppointment);
+
+    }
+
     /**
      * @param daysCount passed from Controller specifies for how many days should appointments be generated.
      * @param doctorId finds doctor for which appointments are generated and sets this doctor to newly created appointments.
