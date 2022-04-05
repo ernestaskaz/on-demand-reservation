@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-//test comment
-
 @RestController
 @RequestMapping("/appointment")
 public class AppointmentController {
@@ -27,6 +25,11 @@ public class AppointmentController {
     @GetMapping
     public List<Appointment> getAllAppointments() {
         return appointmentService.getAllAppointments();
+    }
+
+    @GetMapping("/available")
+    public List<Appointment> findByAvailableAndNotReserved() {
+        return appointmentService.findAvailableAndNotReserved();
     }
 
     @GetMapping("/{appointmentId}")
@@ -64,6 +67,7 @@ public class AppointmentController {
         return new ResponseEntity<Appointment>(appointmentService.updateAppointment(id, appointment), HttpStatus.OK);
 
     }
+
 
 
 

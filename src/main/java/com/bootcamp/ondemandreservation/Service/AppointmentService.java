@@ -1,9 +1,6 @@
 package com.bootcamp.ondemandreservation.Service;
 
 import com.bootcamp.ondemandreservation.Model.Appointment;
-import com.bootcamp.ondemandreservation.Model.Doctor;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AppointmentService {
@@ -12,6 +9,7 @@ public interface AppointmentService {
     Appointment saveAppointment(Long doctorId, Long patientId);
     Appointment saveAppointment(Appointment appointment);
     List<Appointment> getAllAppointments();
+    List<Appointment> findAvailableAndNotReserved();
     Appointment getAppointmentById(Long appointmentId);
     void cancelAppointment(Long appointmentId);
     void deleteAppointment(Long appointmentId);

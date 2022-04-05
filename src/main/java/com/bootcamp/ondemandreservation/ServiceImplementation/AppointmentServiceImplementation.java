@@ -59,6 +59,12 @@ public class AppointmentServiceImplementation implements AppointmentService {
     }
 
     @Override
+    public List<Appointment> findAvailableAndNotReserved() {
+        return appointmentRepository.findByIsAvailableTrueAndIsReservedFalse();
+    }
+
+
+    @Override
     public Appointment getAppointmentById(Long appointmentId) {
         Optional<Appointment> appointment = appointmentRepository.findById(appointmentId);
         return appointment.get();
