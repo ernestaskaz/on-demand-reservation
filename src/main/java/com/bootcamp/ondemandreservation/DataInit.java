@@ -17,6 +17,10 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used for custom initialisation on startup.
+ * Currently creates a default admin account if there is no admin in the DB.
+ */
 @Component
 public class DataInit {
     private static final Logger log= LoggerFactory.getLogger(DataInit.class);
@@ -31,6 +35,7 @@ public class DataInit {
     public void init(){
         initUsers();
     }
+
     private void initUsers(){
         Admin initialAdmin=new Admin(null,"admin@default.com","admind","Admin","Default");
 
