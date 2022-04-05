@@ -1,10 +1,10 @@
-package com.bootcamp.ondemandreservation.Implementation;
+package com.bootcamp.ondemandreservation.serviceimpl;
+
 
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
-import com.bootcamp.ondemandreservation.service.DoctorService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
-import com.bootcamp.ondemandreservation.serviceimpl.DoctorServiceImplementation;
+import com.bootcamp.ondemandreservation.service.DoctorService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,12 +14,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.junit.jupiter.api.Assertions;
-import static junit.framework.TestCase.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static junit.framework.TestCase.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class DoctorServiceImplementationTest {
@@ -30,11 +32,10 @@ public class DoctorServiceImplementationTest {
     ODRPasswordEncoder odrPasswordEncoder;
 
     DoctorService doctorService;
-    @BeforeClass
+
+    @BeforeEach
     void init() {
         doctorService = new DoctorServiceImplementation(doctorRepository, odrPasswordEncoder);
-
-
     }
 
     @Test
@@ -46,6 +47,7 @@ public class DoctorServiceImplementationTest {
         Mockito.when(doctorRepository.save(any(Doctor.class))).thenReturn(doctor);
 
         Doctor savedDoctor = doctorService.saveDoctor(doctor);
+        //Doctor savedDoctor = doctorRepository.save(doctor);
 
         assertEquals("something went wrong", doctor.getFirstName(), savedDoctor.getFirstName());
 
@@ -53,18 +55,22 @@ public class DoctorServiceImplementationTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com")
-    @Order(1)
+    @Order(2)
     void canGetAllDoctors() {
         Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
+        List<Doctor> doctorList = new ArrayList<>();
+        doctorList.add(doctor);
         //context
 
-        Mockito.when(doctorRepository.save(any(Doctor.class))).thenReturn(doctor);
+        Mockito.when(doctorRepository.findAll()).thenReturn(doctorList);
 
-        Doctor savedDoctor = doctorService.saveDoctor(doctor);
+        List<Doctor> doctorsToTest = doctorService.getAllDoctors();
 
-        assertEquals("something went wrong", doctor.getFirstName(), savedDoctor.getFirstName());
+        assertEquals("something went wrong", 1, doctorsToTest.size());
 
 
     }
+
+
+
 }
