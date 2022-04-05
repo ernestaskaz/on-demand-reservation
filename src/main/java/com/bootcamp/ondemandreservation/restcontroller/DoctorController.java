@@ -2,6 +2,7 @@ package com.bootcamp.ondemandreservation.restcontroller;
 
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
+import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,11 @@ public class DoctorController {
     @GetMapping("/appointments/{id}")
     public List<Appointment> getAllAppointments(@PathVariable("id") Long id) {
         return doctorService.getAllAppointments(id);
+    }
+
+    @GetMapping("/schedule/{id}")
+    public List<Schedule> getDoctorSchedules(@PathVariable("id") Long id) {
+        return doctorService.getDoctorSchedules(id);
     }
 
     @GetMapping("/today/{id}")
