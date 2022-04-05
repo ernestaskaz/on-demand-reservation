@@ -51,7 +51,7 @@ public class PatientControllerTest {
     @Order(3)
     void canFindPatientById() throws Exception{
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/patient/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/patient/2")
                         .accept(MediaType.ALL_VALUE))
                 .andDo(print())
                 .andDo(MockMvcResultHandlers.print())
@@ -74,7 +74,7 @@ public class PatientControllerTest {
     void canUpdatePatient () throws Exception {
 
         Patient patient = new Patient(1L, "firstName", "updatedLastName");
-        mockMvc.perform(MockMvcRequestBuilders.put("/patient/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/patient/2")
                         .content(Helpers.asJsonString(patient))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -87,7 +87,7 @@ public class PatientControllerTest {
     @Test
     @Order(5)
     void canDeletePatient () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/patient/1")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/patient/2")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())

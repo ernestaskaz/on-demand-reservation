@@ -87,7 +87,7 @@ public class ScheduleControllerTest {
                 .andExpect(jsonPath("$.specialty").value("Specialty"));
 
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/schedule/1/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/schedule/1/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())

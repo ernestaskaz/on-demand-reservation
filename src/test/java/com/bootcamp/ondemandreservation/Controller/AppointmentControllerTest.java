@@ -58,13 +58,13 @@ public class AppointmentControllerTest {
 
         //create and map appointment;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/appointment/2/1")
+        mockMvc.perform(MockMvcRequestBuilders.post("/appointment/3/2")
                         .content(Helpers.asJsonString(doctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.patient.id").value(1L))
+                .andExpect(jsonPath("$.patient.id").value(2L))
                 .andExpect(jsonPath("$.doctor.firstName").value("this is name"));
     }
 

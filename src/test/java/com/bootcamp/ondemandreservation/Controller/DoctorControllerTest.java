@@ -62,7 +62,7 @@ public class DoctorControllerTest {
     @Order(3)
     void canFindDoctorById() throws Exception{
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/doctor/1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/doctor/2")
                         .accept(MediaType.ALL_VALUE))
                 .andDo(print())
                 .andDo(MockMvcResultHandlers.print())
@@ -85,7 +85,7 @@ public class DoctorControllerTest {
     void canUpdateDoctor () throws Exception {
 
         Doctor newDoctor = new Doctor("this is name", "this is lastName", "SpecialtyChanged");
-        mockMvc.perform(MockMvcRequestBuilders.put("/doctor/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/doctor/2")
                         .content(Helpers.asJsonString(newDoctor))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
