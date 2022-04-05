@@ -5,6 +5,23 @@
     <title>Title</title>
 </head>
 <body>
+<p>
+    <span>List of patients</span>
+</p>
 
+<div th:if="${ not#lists.isEmpty(patients)}">
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>email</th>
+        </tr>
+        <tr th:each="patient : ${patients}">
+            <td th:text="${patient.firstName}"></td>
+            <td th:text="${patient.lastName}"></td>
+            <td th:text="${patient.email}"></td>
+        </tr>
+        <table>
+</div>
 </body>
 </html>
