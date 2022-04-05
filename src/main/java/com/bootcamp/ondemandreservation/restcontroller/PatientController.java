@@ -51,7 +51,11 @@ public class PatientController {
         return patientService.updatePatient(id, patient);
 
     }
+    @PutMapping ("/password/{id}")
+    public void updatePatient(@PathVariable("id") Long id, @RequestBody String password) {
+        patientService.changePassword(id,password);
 
+    }
 
 
 }

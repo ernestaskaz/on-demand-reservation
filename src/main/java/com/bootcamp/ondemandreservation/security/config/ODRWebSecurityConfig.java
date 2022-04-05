@@ -103,7 +103,8 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
             log.warn("CSRF protection disabled for testing purposes, re-enable in production.");
         }
         //http.authorizeRequests().antMatchers("/**").permitAll();
-        http.authorizeRequests().antMatchers("/**").authenticated().and().httpBasic();
+        http.authorizeRequests()
+                .antMatchers("/api/").authenticated().and().httpBasic();
     }
 
     @Override
