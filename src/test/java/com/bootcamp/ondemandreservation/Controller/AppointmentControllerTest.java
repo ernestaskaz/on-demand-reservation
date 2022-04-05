@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -32,6 +33,7 @@ public class AppointmentControllerTest {
 
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(1)
     void canSaveAppointment() throws Exception {
 
@@ -70,6 +72,7 @@ public class AppointmentControllerTest {
 
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(2)
     void canGetAllAppointments () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/appointment")
@@ -81,6 +84,7 @@ public class AppointmentControllerTest {
     }
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(3)
     void canFindAppointmentById() throws Exception{
 
@@ -93,6 +97,7 @@ public class AppointmentControllerTest {
 
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(4)
     void canCancelAppointment () throws Exception {
 
