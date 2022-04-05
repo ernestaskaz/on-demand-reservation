@@ -16,26 +16,25 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-
-@EnableWebSecurity
+//@EnableWebSecurity only needed if this loads 1st
 @Configuration
-@Order(1)
-public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private static final Logger log= LoggerFactory.getLogger(ODRWebSecurityConfig.class);
+@Order(2)
+public class ODRRESTSecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final Logger log= LoggerFactory.getLogger(ODRRESTSecurityConfig.class);
     @Value("${security.csrf}")
-    private boolean csrfEnabled;
+    protected boolean csrfEnabled;
     @Autowired
-    private AuthenticationProvider  authenticationProvider;
+    private AuthenticationProvider authenticationProvider;
     /**
      * Creates an instance with the default configuration enabled.
      */
-    public ODRWebSecurityConfig() {
+    public ODRRESTSecurityConfig() {
     }
 
     /**
      * Creates an instance with the default configuration enabled.
      */
-    public ODRWebSecurityConfig(boolean csrfEnabled, AuthenticationProvider authenticationProvider) {
+    public ODRRESTSecurityConfig(boolean csrfEnabled, AuthenticationProvider authenticationProvider) {
         this.csrfEnabled = csrfEnabled;
         this.authenticationProvider = authenticationProvider;
     }
@@ -59,16 +58,13 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         if(csrfEnabled){
-            log.trace("CSRF should be enabled");
+            log.trace("API CSRF should be enabled");
         }else{
             http.csrf().disable();
-            log.warn("CSRF protection disabled for testing purposes, re-enable in production.");
+            log.warn("API CSRF protection disabled for testing purposes, re-enable in production.");
         }
         //http.authorizeRequests().antMatchers("/**").permitAll();
-        http.logout()
-                .invalidateHttpSession(true).deleteCookies("JSESSIONID").clearAuthentication(true)
-                .logoutUrl("/logout_now").logoutSuccessUrl("/logoutSuccess").and()
-                .authorizeRequests().antMatchers("/web/**").authenticated().and().formLogin();
+        http.authorizeRequests().antMatchers("/api/**").authenticated().and().httpBasic();
 
     }
     @Override
