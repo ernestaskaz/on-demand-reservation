@@ -1,8 +1,7 @@
 package com.bootcamp.ondemandreservation;
 
-import com.bootcamp.ondemandreservation.Model.Admin;
-import com.bootcamp.ondemandreservation.Service.AdminService;
-import com.bootcamp.ondemandreservation.Service.ODRUserService;
+import com.bootcamp.ondemandreservation.model.Admin;
+import com.bootcamp.ondemandreservation.service.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
