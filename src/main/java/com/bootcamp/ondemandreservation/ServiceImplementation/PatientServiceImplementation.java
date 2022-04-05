@@ -1,7 +1,6 @@
 package com.bootcamp.ondemandreservation.ServiceImplementation;
 
 import com.bootcamp.ondemandreservation.Model.Appointment;
-import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Model.Patient;
 import com.bootcamp.ondemandreservation.Repository.PatientRepository;
 import com.bootcamp.ondemandreservation.Service.PatientService;
