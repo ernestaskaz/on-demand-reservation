@@ -5,8 +5,6 @@ import com.bootcamp.ondemandreservation.Service.AppointmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 //test comment
@@ -60,13 +58,13 @@ public class AppointmentController {
         return new ResponseEntity<String>("Appointments for given date has been generated.", HttpStatus.OK);
     }
 
-//comment
 
-//TODO. USE IT LATER WHEN YOU NEED TO AUTO GENERATE APPOINTMENTS WITH NO CONSTRAINS. CHANGE PATH!
-//    @PostMapping("/test")
-//    public ResponseEntity <Appointment> testAppointment(@RequestBody Appointment appointment) {
-//        return new ResponseEntity<Appointment>(appointmentService.saveAppointment(appointment), HttpStatus.CREATED);
-//    }
+    @PutMapping ("{id}")
+    public ResponseEntity<Appointment> updateAppointment(@PathVariable("id") Long id, @RequestBody Appointment appointment) {
+        return new ResponseEntity<Appointment>(appointmentService.updateAppointment(id, appointment), HttpStatus.OK);
+
+    }
+
 
 
 

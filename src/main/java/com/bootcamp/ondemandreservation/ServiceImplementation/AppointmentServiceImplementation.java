@@ -142,4 +142,14 @@ public class AppointmentServiceImplementation implements AppointmentService {
         }
 
     }
+
+    @Override
+    public Appointment updateAppointment(Long appointmentId, Appointment appointment) {
+        Appointment originalAppointment = getAppointmentById(appointmentId);
+        appointment.setId(appointmentId);
+        appointment.setPatient(originalAppointment.getPatient());
+        appointment.setDoctor(originalAppointment.getDoctor());
+       return saveAppointment(appointment);
+
+    }
 }
