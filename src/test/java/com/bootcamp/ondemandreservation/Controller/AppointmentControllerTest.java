@@ -111,6 +111,7 @@ public class AppointmentControllerTest {
 
 
     @Test
+    @WithMockUser(username="admin@default.com")
     @Order(5)
     void canDeleteAppointment () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/appointment/1")
