@@ -60,7 +60,7 @@ public class AppointmentController {
         return new ResponseEntity<String>("Appointments for given date has been generated.", HttpStatus.OK);
     }
 
-
+//comment
 
 //TODO. USE IT LATER WHEN YOU NEED TO AUTO GENERATE APPOINTMENTS WITH NO CONSTRAINS. CHANGE PATH!
 //    @PostMapping("/test")
