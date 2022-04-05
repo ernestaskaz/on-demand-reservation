@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface DoctorService {
 
+    void changePassword(Long id, String plaintextPassword);
     Doctor saveDoctor(Doctor doctor);
     List<Doctor> getAllDoctors();
     Doctor findDoctorById(Long id);

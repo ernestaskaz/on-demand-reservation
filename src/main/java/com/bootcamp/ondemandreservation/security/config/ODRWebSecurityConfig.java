@@ -2,6 +2,7 @@ package com.bootcamp.ondemandreservation.security.config;
 
 import com.bootcamp.ondemandreservation.Service.ODRUserService;
 import com.bootcamp.ondemandreservation.ServiceImplementation.ODRUserServiceImplementation;
+import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
     private boolean csrfEnabled;
     @Autowired
     private ODRUserService odrUserService;
+    @Autowired
+    private ODRPasswordEncoder odrPasswordEncoder;
 
     //private final PasswordEncoder appPasswordEncoder;
 
@@ -40,6 +43,30 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
     public ODRWebSecurityConfig(boolean csrfEnabled, ODRUserService odrUserService) {
         this.csrfEnabled = csrfEnabled;
         this.odrUserService = odrUserService;
+    }
+
+    /**
+     * Creates an instance with the default configuration enabled.
+     */
+    public ODRWebSecurityConfig(boolean csrfEnabled, ODRUserService odrUserService, ODRPasswordEncoder odrPasswordEncoder) {
+        this.csrfEnabled = csrfEnabled;
+        this.odrUserService = odrUserService;
+        this.odrPasswordEncoder = odrPasswordEncoder;
+    }
+
+    /**
+     * Creates an instance which allows specifying if the default configuration should be
+     * enabled. Disabling the default configuration should be considered more advanced
+     * usage as it requires more understanding of how the framework is implemented.
+     *
+     * @param disableDefaults true if the default configuration should be disabled, else
+     *                        false
+     */
+    public ODRWebSecurityConfig(boolean disableDefaults, boolean csrfEnabled, ODRUserService odrUserService, ODRPasswordEncoder odrPasswordEncoder) {
+        super(disableDefaults);
+        this.csrfEnabled = csrfEnabled;
+        this.odrUserService = odrUserService;
+        this.odrPasswordEncoder = odrPasswordEncoder;
     }
 
     /**
@@ -91,11 +118,8 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider =
                 new DaoAuthenticationProvider();
-        /*
-        * not setting passwordEncoder as the default delegatingPasswordEncoder should be the best choice
-        * Can possibly create some issues if it's changed, but that probably means the old one was
-        * compromised anyway, so eveyone needs to change their passwords for that reason.
-        */
+
+        provider.setPasswordEncoder(odrPasswordEncoder.defaultPasswordEncoder());
         provider.setUserDetailsService(odrUserService);
         return provider;
     }
