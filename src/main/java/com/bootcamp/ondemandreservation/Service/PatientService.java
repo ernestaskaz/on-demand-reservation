@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface PatientService {
 
+    void changePassword(Long id, String plaintextPassword);
     Patient savePatient(Patient patient);
     List<Patient> getAllPatients();
     Patient findPatientById(Long id);

@@ -5,6 +5,8 @@ import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Model.Patient;
 import com.bootcamp.ondemandreservation.Repository.PatientRepository;
 import com.bootcamp.ondemandreservation.Service.PatientService;
+import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +15,28 @@ import java.util.Optional;
 @Service
 public class PatientServiceImplementation implements PatientService {
 
+    @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private ODRPasswordEncoder odrPasswordEncoder;
 
-    public PatientServiceImplementation(PatientRepository patientRepository) {
-        this.patientRepository = patientRepository;
+
+    public PatientServiceImplementation() {
     }
 
+    public PatientServiceImplementation(PatientRepository patientRepository, ODRPasswordEncoder odrPasswordEncoder) {
+        this.patientRepository = patientRepository;
+        this.odrPasswordEncoder = odrPasswordEncoder;
+    }
+
+    @Override
+    public void changePassword(Long id, String plaintextPassword) {
+        Patient thePatient=findPatientById(id);
+        thePatient.setPassword(odrPasswordEncoder.defaultPasswordEncoder().encode(plaintextPassword));
+        savePatient(thePatient);
+
+
+    }
 
     @Override
     public Patient savePatient(Patient patient) {

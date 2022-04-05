@@ -1,9 +1,12 @@
 package com.bootcamp.ondemandreservation.ServiceImplementation;
 
+import com.bootcamp.ondemandreservation.Model.Admin;
 import com.bootcamp.ondemandreservation.Model.Appointment;
 import com.bootcamp.ondemandreservation.Model.Doctor;
 import com.bootcamp.ondemandreservation.Repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.Service.DoctorService;
+import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,12 +17,24 @@ import java.util.Optional;
 
 @Service
 public class DoctorServiceImplementation implements DoctorService {
-
+    @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private ODRPasswordEncoder odrPasswordEncoder;
 
+    public DoctorServiceImplementation() {
+    }
 
-    public DoctorServiceImplementation(DoctorRepository doctorRepository) {
+    public DoctorServiceImplementation(DoctorRepository doctorRepository, ODRPasswordEncoder odrPasswordEncoder) {
         this.doctorRepository = doctorRepository;
+        this.odrPasswordEncoder = odrPasswordEncoder;
+    }
+
+    @Override
+    public void changePassword(Long id, String plaintextPassword) {
+        Doctor theDoctor=findDoctorById(id);
+        theDoctor.setPassword(odrPasswordEncoder.defaultPasswordEncoder().encode(plaintextPassword));
+        saveDoctor(theDoctor);
     }
 
     /**

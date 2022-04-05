@@ -46,7 +46,8 @@ public class DataInit {
 
         if(adminService.getAllAdmins().size()==0){
             log.warn("No admins in the database, creating default admin user "+initialAdmin.toString());
-            adminService.saveAdmin(initialAdmin);
+            initialAdmin=adminService.saveAdmin(initialAdmin);
+            adminService.changePassword(initialAdmin.getId(), initialAdmin.getPassword());
         }
         SecurityContextHolder.getContext().setAuthentication(null);
     }

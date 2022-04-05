@@ -3,16 +3,35 @@ package com.bootcamp.ondemandreservation.ServiceImplementation;
 import com.bootcamp.ondemandreservation.Model.Admin;
 import com.bootcamp.ondemandreservation.Repository.AdminRepository;
 import com.bootcamp.ondemandreservation.Service.AdminService;
+import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class AdminServiceImplementation implements AdminService {
+    @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    private ODRPasswordEncoder odrPasswordEncoder;
+
+    public AdminServiceImplementation(){}
+
+    public AdminServiceImplementation(AdminRepository adminRepository, ODRPasswordEncoder odrPasswordEncoder) {
+        this.adminRepository = adminRepository;
+        this.odrPasswordEncoder = odrPasswordEncoder;
+    }
 
     public AdminServiceImplementation(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
+    }
+
+    @Override
+    public void changePassword(Long id, String plaintextPassword) {
+        Admin theAdmin=findAdminById(id);
+        theAdmin.setPassword(odrPasswordEncoder.defaultPasswordEncoder().encode(plaintextPassword));
+        saveAdmin(theAdmin);
     }
 
     @Override
