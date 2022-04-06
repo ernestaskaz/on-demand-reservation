@@ -24,7 +24,6 @@ import java.util.Map;
 public class DoctorWebController {
 
     public static final String DOCTOR_EDIT_TEMPLATE = "doctorDetailsEdit";
-    public static final String DOCTOR_ALL_APPOINTMENTS = "doctorDetailsEdit";
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
     @Autowired
@@ -56,7 +55,7 @@ public class DoctorWebController {
         model.addAttribute("doctor", doctor);
         model.addAttribute("appointments", doctor.getAppointmentList());
 
-        return "patientAppointmentsView";
+        return "doctorAllAppointmentsView";
     }
 
     @GetMapping("/doctor/today-appointments")
@@ -68,13 +67,22 @@ public class DoctorWebController {
         return "doctorTodayAppointmentView";
     }
 
-//    @GetMapping("/patient/edit")
-//    String editLoggedInPatient(Model model){
-//        model.addAttribute("errors", Collections.EMPTY_MAP);
-//        Patient patient=patientService.getLoggedInPatient();
-//        model.addAttribute("patient",patient);
-//        return PATIENT_EDIT_TEMPLATE;
-//    }
+    @GetMapping("/doctor/edit")
+    String editLoggedInPatient(Model model){
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        Doctor doctor = doctorService.getLoggedInDoctor();
+        model.addAttribute("doctor",doctor);
+        return DOCTOR_EDIT_TEMPLATE;
+    }
+
+    @GetMapping("/doctor/schedule")
+    String getDoctorSchedule(Model model){
+        Doctor doctor = doctorService.getLoggedInDoctor();
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("schedules", doctor.getSchedulesList());
+
+        return "doctorScheduleView";
+    }
 
 
 
