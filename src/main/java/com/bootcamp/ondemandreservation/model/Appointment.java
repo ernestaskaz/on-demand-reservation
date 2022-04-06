@@ -42,6 +42,16 @@ public class Appointment {
         this.doctor = doctor;
     }
 
+    public Appointment(LocalDateTime appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
+
+    public Appointment( LocalDateTime appointmentTime, boolean isReserved, boolean isAvailable) {
+        this.isReserved = isReserved;
+        this.isAvailable = isAvailable;
+        this.appointmentTime = appointmentTime;
+    }
+
     public Long getId() {
         return id;
     }
@@ -61,6 +71,8 @@ public class Appointment {
     public boolean isAvailable() {
         return isAvailable;
     }
+
+
 
     public void setAvailable(boolean available) {
         isAvailable = available;
@@ -129,4 +141,5 @@ public class Appointment {
     public void removePatient() {
         this.patient = null;
     }
+
 }

@@ -29,6 +29,13 @@ public class AppointmentServiceImplementation implements AppointmentService {
         this.patientRepository = patientRepository;
     }
 
+
+    /**
+     * @param doctorId and patientId passed from Controller to find specific entities.
+     * @Method saveAppointment then creates an appointment and maps to patient/doctor.
+     * sets isAvaialble and isReserved for appointment so that it is taken and not seen in getAvailableAndNotReserved appointments.
+     */
+
     @Override
     public Appointment saveAppointment(Long doctorId, Long patientId) {
         Doctor doctor = doctorRepository.findById(doctorId).get();
@@ -42,7 +49,6 @@ public class AppointmentServiceImplementation implements AppointmentService {
         doctor.addAppointmentList(appointment);
         patient.addAppointmentList(appointment);
         appointmentRepository.save(appointment);
-
 
         return appointment;
 
