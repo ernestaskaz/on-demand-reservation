@@ -40,7 +40,7 @@ public class ODRUserServiceImplementation implements  ODRUserService {
 
     @Override
     public ODRUser findODRUsersByEmail(String email) {
-        return odrUserRepository.findByEmail(email).get();
+        return odrUserRepository.findByEmail(email).orElse(null);
     }
 
     @Override
@@ -72,6 +72,7 @@ public class ODRUserServiceImplementation implements  ODRUserService {
         try {
             otherUser=findODRUsersByEmail(user.getEmail());
         }catch(Exception x){
+            x.printStackTrace();
             rv.put("email","unsuitable email");
         }
         if(otherUser!=null){
