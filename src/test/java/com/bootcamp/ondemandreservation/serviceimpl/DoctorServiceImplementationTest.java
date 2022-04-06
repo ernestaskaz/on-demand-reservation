@@ -1,10 +1,13 @@
 package com.bootcamp.ondemandreservation.serviceimpl;
 
 
+import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
+import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.DoctorService;
+import com.bootcamp.ondemandreservation.service.ODRUserService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,12 +36,14 @@ public class DoctorServiceImplementationTest {
     DoctorRepository doctorRepository;
     @Mock
     ODRPasswordEncoder odrPasswordEncoder;
+    @Mock
+    ODRUserService odrUserService;
 
     DoctorService doctorService;
 
     @BeforeEach
     void init() {
-        doctorService = new DoctorServiceImplementation(doctorRepository, odrPasswordEncoder);
+        doctorService = new DoctorServiceImplementation(doctorRepository, odrPasswordEncoder, odrUserService);
     }
 
     @Test
@@ -70,7 +76,6 @@ public class DoctorServiceImplementationTest {
 
         assertEquals("something went wrong", 1, doctorsToTest.size());
 
-//comment
     }
 
     @Test
@@ -83,6 +88,90 @@ public class DoctorServiceImplementationTest {
         Doctor foundDoctor = doctorService.findDoctorById(1L);
 
         assertEquals("something went wrong", doctor.getFirstName(), foundDoctor.getFirstName());
+
+
+    }
+
+
+    @Test
+    @Order(4)
+    void canGetDoctorAppointments() {
+        List<Appointment> appointmentList = new ArrayList<>();
+        List<Schedule> scheduleList = new ArrayList<>();
+        Appointment appointment = new Appointment();
+        Schedule schedule = new Schedule();
+        appointmentList.add(appointment);
+        scheduleList.add(schedule);
+        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
+
+        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+
+        Doctor foundDoctor = doctorService.findDoctorById(1L);
+
+
+        assertEquals("size is " + foundDoctor.getAppointmentList().size(), doctor.getAppointmentList().size(), foundDoctor.getAppointmentList().size());
+
+
+    }
+
+    @Test
+    @Order(5)
+    void canGetDoctorSchedules() {
+        List<Appointment> appointmentList = new ArrayList<>();
+        List<Schedule> scheduleList = new ArrayList<>();
+        Appointment appointment = new Appointment();
+        Schedule schedule = new Schedule();
+        appointmentList.add(appointment);
+        scheduleList.add(schedule);
+        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
+
+        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+
+        Doctor foundDoctor = doctorService.findDoctorById(1L);
+
+
+        assertEquals("size is " + foundDoctor.getSchedulesList().size(), doctor.getSchedulesList().size(), foundDoctor.getSchedulesList().size());
+
+
+    }
+
+    @Test
+    @Order(6)
+    void canUpdateDoctor() {
+
+        Doctor doctor = new Doctor("this is name", "this is changed lastName", "Specialty");
+
+
+        Mockito.when(doctorRepository.save(any(Doctor.class))).thenReturn(doctor);
+
+        Doctor updatedDoctor = doctorService.updateDoctor(1L, doctor);
+
+
+        assertEquals("something went wrong", doctor.getLastName(), updatedDoctor.getLastName());
+
+
+    }
+
+    @Test
+    @Order(7)
+    void canGetTodaysAppointments() {
+
+        List<Appointment> appointmentList = new ArrayList<>();
+        List<Schedule> scheduleList = new ArrayList<>();
+        Appointment appointment = new Appointment(LocalDateTime.now());
+        Appointment appointmentTwo = new Appointment(LocalDateTime.now().plusDays(1));
+        Schedule schedule = new Schedule();
+        appointmentList.add(appointment);
+        appointmentList.add(appointmentTwo);
+        scheduleList.add(schedule);
+        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
+
+        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+
+        List<Appointment> foundAppointments = doctorService.getTodaysAppointments(1L);
+
+
+        assertEquals("size is " + foundAppointments.size(), 1, foundAppointments.size());
 
 
     }

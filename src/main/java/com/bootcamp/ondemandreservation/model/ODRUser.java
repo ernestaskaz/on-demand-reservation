@@ -1,5 +1,6 @@
 package com.bootcamp.ondemandreservation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -138,6 +139,7 @@ public class ODRUser implements UserDetails {
      *
      * @return the authorities, sorted by natural key (never <code>null</code>)
      */
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

@@ -35,6 +35,15 @@ public class Doctor extends ODRUser{
         super(firstName,lastName);
         this.specialty = specialty;
     }
+    public Doctor(String firstName, String lastName, String specialty, List<Schedule> schedule, List<Appointment> appointmentList) {
+        super(firstName,lastName);
+        this.specialty = specialty;
+        this.schedulesList = schedule;
+        this.appointmentList = appointmentList;
+    }
+
+
+
 
     public List<Appointment> getAppointmentList() {
         return appointmentList;
