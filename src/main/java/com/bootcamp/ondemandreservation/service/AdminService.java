@@ -20,4 +20,6 @@ public interface AdminService {
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */
     Map<String, String> validateAdmin(Admin admin, boolean matchPassword);
+
+    Admin saveAdminAndPassword(Admin admin);
 }

@@ -79,4 +79,11 @@ public class AdminServiceImplementation implements AdminService {
     public Map<String, String> validateAdmin(Admin admin, boolean matchPassword) {
         return odrUserService.validate(admin,matchPassword);
     }
+
+    @Override
+    public Admin saveAdminAndPassword(Admin admin) {
+        admin.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
+                .encode(admin.getPassword()));
+        return saveAdmin(admin);
+    }
 }

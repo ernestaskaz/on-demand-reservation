@@ -1,5 +1,6 @@
 package com.bootcamp.ondemandreservation.controller;
 
+import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.service.AdminService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
@@ -66,5 +67,33 @@ public class AdminWebController {
         }
         return DOCTOR_CREATE_TEMPLATE;
     }
+
+    @GetMapping(ADMIN_CREATE_URL)
+    @PreAuthorize(ADMIN_ROLE)
+    String createAdmin(Model model){
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        model.addAttribute("admin",new Admin());
+        return ADMIN_CREATE_TEMPLATE;
+    }
+    @PostMapping(ADMIN_CREATE_URL)
+    @PreAuthorize(ADMIN_ROLE)
+    String createAdmin(@ModelAttribute Admin admin, Model model) {
+        Map errors = adminService.validateAdmin(admin, true);
+        model.addAttribute("admin", admin);
+        model.addAttribute("errors", errors);
+        if (errors.isEmpty()) {
+            admin.setId(null);
+            admin=adminService.saveAdminAndPassword(admin);
+            admin.setPassword("");
+            admin.setConfirmPassword("");
+            model.addAttribute("successMsg", String.format( "Administrator %s %s <%s> created with ID %d",
+                    admin.getFirstName(),
+                    admin.getLastName(),
+                    admin.getUsername(),
+                    admin.getId()));
+        }
+        return ADMIN_CREATE_TEMPLATE;
+    }
+
 
 }
