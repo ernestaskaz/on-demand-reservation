@@ -11,6 +11,7 @@ public interface AdminService {
     Admin saveAdmin(Admin admin);
     List<Admin> getAllAdmins();
     Admin findAdminById(Long id);
+    Admin getLoggedInAdmin();
     void deleteAdmin(Long id);
     Admin updateAdmin(Long id, Admin admin);
     /**

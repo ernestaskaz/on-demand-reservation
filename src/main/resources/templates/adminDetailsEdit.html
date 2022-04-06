@@ -14,7 +14,7 @@
 
 <div class="container">
     <div class="d-flex justify-content-center">
-        <form action="#" th:action="@{/web/patient/edit}" th:object="${patient}" method="post">
+        <form action="#" th:action="@{/web/admin/edit}" th:object="${admin}" method="post">
             <div class="mb-3">
                 <label for="inputName" class="form-label">First Name</label>
                 <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
@@ -24,20 +24,6 @@
                 <label for="inputLastName" class="form-label">Last Name</label>
                 <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName" value="lastName">
                 <p th:text="${errors.get('lastName')}"></p>
-            </div>
-            <div class="mb-3">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" th:field="*{city}" class="form-control" id="inputCity" value="city">
-            </div>
-            <div class="mb-3">
-                <label for="inputEmail" class="form-label">Email address</label>
-                <input type="text" th:field="*{email}" class="form-control" id="inputEmail" value="email">
-                <p th:text="${errors.get('email')}"></p>
-            </div>
-            <div class="mb-3">
-                <label for="inputPhoneNumber" class="form-label">Phone Number</label>
-                <input type="text" th:field="*{phoneNumber}" class="form-control" id="inputPhoneNumber" value="phoneNumber">
-                <p th:text="${errors.get('phoneNumber')}"></p>
             </div>
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Password</label>
