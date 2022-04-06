@@ -28,7 +28,6 @@
             <div class="mb-3">
                 <label for="inputCity" class="form-label">City</label>
                 <input type="text" th:field="*{city}" class="form-control" id="inputCity" value="city">
-                <p th:text="${errors.get('city')}"> </p>
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
@@ -40,11 +39,16 @@
                 <input type="text" th:field="*{phoneNumber}" class="form-control" id="inputPhoneNumber" value="phoneNumber">
                 <p th:text="${errors.get('phoneNumber')}"></p>
             </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Password</label>
+                <input type="text" th:field="*{password}" class="form-control" id="confirmPassword" value="password">
+                <p th:text="${errors.get('password')}"></p>
+            </div>
 
-            <input type="submit" value="Submit"/>
+            <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
             <a href="myDetails" class="btn btn-primary" role="button">Back to My Details</a>
 
-            <div th:text="${successMsg}"></div>
+            <p th:text="${successMsg}"></p>
 
         </form>
     </div>
