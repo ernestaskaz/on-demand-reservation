@@ -1,7 +1,9 @@
 package com.bootcamp.ondemandreservation.controller;
 
+import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
+import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,12 +26,15 @@ public class PatientWebController {
     private PatientService patientService;
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
+    @Autowired
+    private AppointmentService appointmentService;
 
     public PatientWebController(){}
 
-    public PatientWebController(PatientService patientService, ODRPasswordEncoder odrPasswordEncoder) {
+    public PatientWebController(PatientService patientService, ODRPasswordEncoder odrPasswordEncoder, AppointmentService appointmentService) {
         this.patientService = patientService;
         this.odrPasswordEncoder = odrPasswordEncoder;
+        this.appointmentService = appointmentService;
     }
 
     @GetMapping("/patient/all-patients")
@@ -63,6 +68,8 @@ public class PatientWebController {
 
     @GetMapping("/patient/available-appointments")
     String patientAppointmentsAvailable(Model model){
+        List<Appointment>  appointments = appointmentService.findAvailableAndNotReserved();
+        model.addAttribute("appointments", appointments);
 
         return "patientAvailableAppointmentsView";
     }

@@ -13,21 +13,24 @@
         <div class="col-auto">
             <table class="table table-striped">
                 <thead>
-                <th scope="col">Id</th>
+                <th scope="col">Appointment</th>
                 <th scope="col">Time</th>
-                <th scope="col">Comment</th>
-                <th scope="col">Available</th>
-                <th scope="col">Price</th>
+                <th scope="col">Patient</th>
                 <th scope="col">Doctor</th>
+                <th scope="col">Price</th>
+                <th scope="col">Specialty</th>
+                <th scope="col">Edit</th>
                 </thead>
                 <tbody>
                 <tr th:each="appointment : ${appointments}">
                     <td th:text="${appointment.id}"></td>
                     <td th:text="${appointment.appointmentTime}"></td>
-                    <td th:text="${appointment.comment}"></td>
-                    <td th:text="${appointment.isAvailable}"></td>
+                    <td th:text="${appointment.patient.firstName}+' '+${appointment.patient.lastName}"></td>
+                    <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                     <td th:text="${appointment.price}"></td>
-                    <td th:text="${appointment.doctor.id}"></td>
+                    <td><button type="button" class="btn btn-primary">Reserve Appointment</button></td>
+                    <td th:text="${appointment.doctor.specialty}"></td>
+
                 </tr>
                 </tbody>
             </table>
