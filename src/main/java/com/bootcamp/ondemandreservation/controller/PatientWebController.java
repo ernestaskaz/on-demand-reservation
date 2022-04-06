@@ -25,26 +25,49 @@ public class PatientWebController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/patient/list")
+    @GetMapping("/patient/all-patients")
     String getPatients(Model model){
         List<Patient>  patients=patientService.getAllPatients();
         model.addAttribute("patients", patients);
         return "allPatientsView";
     }
+
+    @GetMapping("/patient/list")
+    String getPatient(Model model){
+        List<Patient>  patients=patientService.getAllPatients();
+        model.addAttribute("patients", patients);
+        return "patientView";
+    }
+
     @GetMapping("/patient/myDetails")
     String patientDetails(Model model){
         Patient patient = patientService.getLoggedInPatient();
         model.addAttribute("patient", patient);
-        return "patientView";
+        return "patientAccountView";
     }
 
-    @GetMapping("/patient/myAppointments")
+
+    @GetMapping("/patient/appointments")
     String patientAppointments(Model model){
         Patient patient = patientService.getLoggedInPatient();
         model.addAttribute("patient", patient);
         model.addAttribute("appointments", patient.getAppointmentList());
-        return "patientAppointmentView";
+        return "patientAppointmentsView";
     }
+
+
+    @GetMapping("/patient/available-appointments")
+    String patientAppointmentsAvailable(Model model){
+        return "patientAvailableAppointmentsView";
+    }
+
+//    @GetMapping("/patient/myAppointments")
+//    String patientAppoimntments(Model model){
+//        Patient patient = patientService.getLoggedInPatient();
+//        model.addAttribute("patient", patient);
+//        model.addAttribute("appointments", patient.getAppointmentList());
+//        return "patientAppointmentView";
+//    }
     /*@GetMapping("/patient/account")
     String patientDetails2(Model model){
         Patient patient = getLoggedInPatient();
