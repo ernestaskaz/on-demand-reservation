@@ -9,9 +9,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
@@ -61,19 +65,25 @@ public class PatientWebController {
         return "patientAvailableAppointmentsView";
     }
 
-//    @GetMapping("/patient/myAppointments")
-//    String patientAppoimntments(Model model){
-//        Patient patient = patientService.getLoggedInPatient();
-//        model.addAttribute("patient", patient);
-//        model.addAttribute("appointments", patient.getAppointmentList());
-//        return "patientAppointmentView";
-//    }
-    /*@GetMapping("/patient/account")
-    String patientDetails2(Model model){
-        Patient patient = getLoggedInPatient();
+    @GetMapping("/patient/edit")
+    String editLoggedInPatient(Model model){
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        model.addAttribute("patient",patientService.getLoggedInPatient());
+        return "patientDetailsEdit";
+    }
+    @PostMapping("/patient/edit")
+    String editLoggedInPatient(@ModelAttribute Patient patient, Model model){
+        //TODO Add change password functionality
+        Map errors=patientService.validatePatient(patient,false);
         model.addAttribute("patient", patient);
-        return "patientAccountView";
-    }*/
+        model.addAttribute("errors", errors);
+        if(errors.isEmpty()) {
+            patientService.savePatientAndPassword(patient);
+            model.addAttribute("successMsg","Your data were updated successfully.");
+        }
+        return "patientDetailsEdit";
+    }
+
 
 
 
