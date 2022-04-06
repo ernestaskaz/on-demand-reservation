@@ -19,9 +19,11 @@ import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(MockitoExtension.class)
 public class DoctorServiceImplementationTest {
@@ -67,6 +69,20 @@ public class DoctorServiceImplementationTest {
         List<Doctor> doctorsToTest = doctorService.getAllDoctors();
 
         assertEquals("something went wrong", 1, doctorsToTest.size());
+
+
+    }
+
+    @Test
+    @Order(3)
+    void canFindDoctorById() {
+        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
+        //context
+        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+
+        Doctor foundDoctor = doctorService.findDoctorById(1L);
+
+        assertEquals("something went wrong", doctor.getFirstName(), foundDoctor.getFirstName());
 
 
     }
