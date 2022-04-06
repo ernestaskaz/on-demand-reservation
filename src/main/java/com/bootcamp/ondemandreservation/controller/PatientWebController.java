@@ -46,6 +46,7 @@ public class PatientWebController {
         return "patientAccountView";
     }
 
+
     @GetMapping("/patient/appointments")
     String patientAppointments(Model model){
         Patient patient = patientService.getLoggedInPatient();
