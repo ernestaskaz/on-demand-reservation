@@ -7,6 +7,7 @@ import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.DoctorService;
+import com.bootcamp.ondemandreservation.service.ODRUserService;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,12 +36,14 @@ public class DoctorServiceImplementationTest {
     DoctorRepository doctorRepository;
     @Mock
     ODRPasswordEncoder odrPasswordEncoder;
+    @Mock
+    ODRUserService odrUserService;
 
     DoctorService doctorService;
 
     @BeforeEach
     void init() {
-        doctorService = new DoctorServiceImplementation(doctorRepository, odrPasswordEncoder);
+        doctorService = new DoctorServiceImplementation(doctorRepository, odrPasswordEncoder, odrUserService);
     }
 
     @Test
