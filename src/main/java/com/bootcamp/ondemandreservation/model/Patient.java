@@ -16,9 +16,11 @@ public class Patient extends ODRUser{
     @JsonIgnoreProperties("doctor")
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointmentList = new ArrayList<Appointment>();
+    {
+        setAccountType("PATIENT");
+    }
 
     public Patient () {
-
     }
 
     public Patient(Long id, String firstName, String lastName) {

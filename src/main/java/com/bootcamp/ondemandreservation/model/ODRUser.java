@@ -1,10 +1,13 @@
 package com.bootcamp.ondemandreservation.model;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -25,9 +28,35 @@ public class ODRUser implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
+    private String accountType;
+    @Transient
+    private String confirmPassword;
+    @Transient
+    private List<SimpleGrantedAuthority> authorities;
+
+
 
     public ODRUser(){
 
+    }
+
+    public ODRUser(Long id, String email, String password, String firstName, String lastName, String accountType) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.accountType = accountType;
+    }
+
+    public ODRUser(Long id, String email, String password, String firstName, String lastName, String accountType, String confirmPassword) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        setAccountType(accountType);//important as we also init  authorities there
+        this.confirmPassword = confirmPassword;
     }
 
     public ODRUser(Long id, String email, String password, String firstName, String lastName) {
@@ -56,7 +85,24 @@ public class ODRUser implements UserDetails {
         this.id = id;
     }
 
+    public String getAccountType() {
+        return accountType;
+    }
 
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+        authorities= new ArrayList<SimpleGrantedAuthority>();
+        SimpleGrantedAuthority role=new SimpleGrantedAuthority("ROLE_"+accountType);
+        authorities.add(role);
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -86,6 +132,7 @@ public class ODRUser implements UserDetails {
     }
 
 
+
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.
      *
@@ -93,7 +140,7 @@ public class ODRUser implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     /**

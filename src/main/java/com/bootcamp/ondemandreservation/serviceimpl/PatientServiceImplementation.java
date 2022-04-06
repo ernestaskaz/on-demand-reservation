@@ -1,14 +1,21 @@
 package com.bootcamp.ondemandreservation.serviceimpl;
 
 import com.bootcamp.ondemandreservation.model.Appointment;
+import com.bootcamp.ondemandreservation.model.ODRUser;
+import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
+import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
+import com.bootcamp.ondemandreservation.service.ODRUserService;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -18,14 +25,17 @@ public class PatientServiceImplementation implements PatientService {
     private PatientRepository patientRepository;
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
+    @Autowired
+    private ODRUserService odrUserService;
 
 
     public PatientServiceImplementation() {
     }
 
-    public PatientServiceImplementation(PatientRepository patientRepository, ODRPasswordEncoder odrPasswordEncoder) {
+    public PatientServiceImplementation(PatientRepository patientRepository, ODRPasswordEncoder odrPasswordEncoder, ODRUserService odrUserService) {
         this.patientRepository = patientRepository;
         this.odrPasswordEncoder = odrPasswordEncoder;
+        this.odrUserService = odrUserService;
     }
 
     @Override
@@ -76,6 +86,51 @@ public class PatientServiceImplementation implements PatientService {
     @Override
     public Patient updatePatient(Long id, Patient patient) {
         patient.setId(id);
+        return savePatient(patient);
+    }
+    @Override
+    public Patient getLoggedInPatient() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long id=null;
+        if (principal instanceof ODRUser) {
+            id = ((ODRUser)principal).getId();
+        } else {
+            throw new ODRUserNotFoundException();
+        }
+        Patient  patient=findPatientById(id);
+        if(patient==null){
+            throw new ODRUserNotFoundException();
+        }
+        return patient;
+    }
+
+    /**
+     * ODRUser.validate() + custom validation for phone number.
+     * @param patient patient to be validated
+     * @param matchPassword
+     * @return
+     */
+    @Override
+    public Map<String, String> validatePatient(Patient patient, boolean matchPassword) {
+        Map<String, String> rv = new HashMap<>(odrUserService.validate(patient,matchPassword));
+        if(!patient.getPhoneNumber().isBlank()&&!ODRInputSanitiser.seemsToBePhoneNumber( patient.getPhoneNumber())){
+            rv.put("phoneNumber","invalid");
+        }
+
+
+        return rv;
+    }
+
+    /**
+     * The same as savePatient, but the password is treated as plain text
+     * and is hashed&salted before saving
+     * @param patient patient model to save
+     * @return
+     */
+    @Override
+    public Patient savePatientAndPassword(Patient patient) {
+        patient.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
+                .encode(patient.getPassword()));
         return savePatient(patient);
     }
 }

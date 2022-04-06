@@ -18,6 +18,9 @@ public class Doctor extends ODRUser{
     @OneToMany(mappedBy = "doctor")
     @JsonIgnoreProperties({"doctor"})
     private List<Schedule> schedulesList = new ArrayList<Schedule>();
+    {
+        setAccountType("DOCTOR");
+    }
 
     public Doctor(){
 

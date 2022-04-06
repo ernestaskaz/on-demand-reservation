@@ -1,21 +1,24 @@
 package com.bootcamp.ondemandreservation.controller;
 
-import com.bootcamp.ondemandreservation.model.ODRUser;
-import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
 public class PatientWebController {
+    public static final String PATIENT_EDIT_URL = "/patient/edit";
+    public static final String PATIENT_EDIT_TEMPLATE = "patientDetailsEdit";
     @Autowired
     private PatientService patientService;
 
@@ -25,39 +28,62 @@ public class PatientWebController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/patient/list")
+    @GetMapping("/patient/all-patients")
     String getPatients(Model model){
         List<Patient>  patients=patientService.getAllPatients();
         model.addAttribute("patients", patients);
         return "allPatientsView";
     }
-    @GetMapping("/patient/myDetails")
-    String patientDetails(Model model){
-        Patient patient = getLoggedInPatient();
-        model.addAttribute("patient", patient);
+
+    @GetMapping("/patient/list")
+    String getPatient(Model model){
+        List<Patient>  patients=patientService.getAllPatients();
+        model.addAttribute("patients", patients);
         return "patientView";
     }
 
-    /*@GetMapping("/patient/account")
-    String patientDetails2(Model model){
-        Patient patient = getLoggedInPatient();
+    @GetMapping("/patient/myDetails")
+    String patientDetails(Model model){
+        Patient patient = patientService.getLoggedInPatient();
         model.addAttribute("patient", patient);
         return "patientAccountView";
-    }*/
-
-
-    private Patient getLoggedInPatient() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long id=null;
-        if (principal instanceof ODRUser) {
-            id = ((ODRUser)principal).getId();
-        } else {
-            throw new ODRUserNotFoundException();
-        }
-        Patient  patient=patientService.findPatientById(id);
-        if(patient==null){
-            throw new ODRUserNotFoundException();
-        }
-        return patient;
     }
+
+
+    @GetMapping("/patient/appointments")
+    String patientAppointments(Model model){
+        Patient patient = patientService.getLoggedInPatient();
+        model.addAttribute("patient", patient);
+        model.addAttribute("appointments", patient.getAppointmentList());
+        return "patientAppointmentsView";
+    }
+
+
+    @GetMapping("/patient/available-appointments")
+    String patientAppointmentsAvailable(Model model){
+        return "patientAvailableAppointmentsView";
+    }
+
+    @GetMapping(PATIENT_EDIT_URL)
+    String editLoggedInPatient(Model model){
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        model.addAttribute("patient",patientService.getLoggedInPatient());
+        return PATIENT_EDIT_TEMPLATE;
+    }
+    @PostMapping(PATIENT_EDIT_URL)
+    String editLoggedInPatient(@ModelAttribute Patient patient, Model model){
+        //TODO Add change password functionality
+        Map errors=patientService.validatePatient(patient,false);
+        model.addAttribute("patient", patient);
+        model.addAttribute("errors", errors);
+        if(errors.isEmpty()) {
+            patientService.savePatientAndPassword(patient);
+            model.addAttribute("successMsg","Your data were updated successfully.");
+        }
+        return PATIENT_EDIT_TEMPLATE;
+    }
+
+
+
+
 }

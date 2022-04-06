@@ -4,6 +4,10 @@ import javax.persistence.Entity;
 
 @Entity
 public class Admin extends ODRUser{
+    {
+        setAccountType("ADMIN");
+    }
+
     public Admin() {
 
     }
