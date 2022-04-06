@@ -6,12 +6,14 @@ import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
+import com.bootcamp.ondemandreservation.service.ODRUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -21,13 +23,17 @@ public class DoctorServiceImplementation implements DoctorService {
     private DoctorRepository doctorRepository;
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
+    @Autowired
+    private ODRUserService odrUserService;
+
 
     public DoctorServiceImplementation() {
     }
 
-    public DoctorServiceImplementation(DoctorRepository doctorRepository, ODRPasswordEncoder odrPasswordEncoder) {
+    public DoctorServiceImplementation(DoctorRepository doctorRepository, ODRPasswordEncoder odrPasswordEncoder, ODRUserService odrUserService) {
         this.doctorRepository = doctorRepository;
         this.odrPasswordEncoder = odrPasswordEncoder;
+        this.odrUserService = odrUserService;
     }
 
     @Override
@@ -105,5 +111,17 @@ public class DoctorServiceImplementation implements DoctorService {
         }
 
         return todaysAppointments;
+    }
+
+    /**
+     * Validates the doctor
+     * Needs some specialty validation later
+     * @param doctor        Doctor to be validated
+     * @param matchPassword if we should check for password and confirmPassword to match.
+     * @return Map with fields (email, not getEmail) as keys and error messages as values
+     */
+    @Override
+    public Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword) {
+        return odrUserService.validate(doctor,matchPassword);
     }
 }

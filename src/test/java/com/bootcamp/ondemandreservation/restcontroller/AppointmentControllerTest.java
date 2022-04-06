@@ -7,6 +7,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AppointmentControllerTest {
-
+    private static final Logger log= LoggerFactory.getLogger(AppointmentControllerTest.class);
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,7 +38,6 @@ public class AppointmentControllerTest {
     void canSaveAppointment() throws Exception {
 
         Patient patient = new Patient(1L, "firstName", "lastName");
-
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/patient")
                         .content(Helpers.asJsonString(patient))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -47,6 +48,7 @@ public class AppointmentControllerTest {
 
         //create Doctor;
         Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
+
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
                         .content(Helpers.asJsonString(doctor))
