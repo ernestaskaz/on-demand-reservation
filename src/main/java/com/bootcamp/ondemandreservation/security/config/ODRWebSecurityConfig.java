@@ -70,7 +70,7 @@ public class ODRWebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.logout()
                 .invalidateHttpSession(true).deleteCookies("JSESSIONID").clearAuthentication(true)
                 .logoutUrl("/logout_now").logoutSuccessUrl("/logoutSuccess").and()
-                .authorizeRequests().antMatchers("/web/**").authenticated().and().formLogin();
+                .authorizeRequests().antMatchers("/web/**").authenticated().and().formLogin().defaultSuccessUrl("/web/", false);
 
     }
     @Override
