@@ -1,9 +1,12 @@
 package com.bootcamp.ondemandreservation.serviceimpl;
 
 import com.bootcamp.ondemandreservation.model.ODRUser;
+import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
+import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.repository.ODRUserRepository;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,22 @@ public class ODRUserServiceImplementation implements  ODRUserService {
     @Override
     public ODRUser findODRUsersByEmail(String email) {
         return odrUserRepository.findByEmail(email).get();
+    }
+
+    @Override
+    public ODRUser getLoggedInODRUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long id=null;
+        if (principal instanceof ODRUser) {
+            id = ((ODRUser)principal).getId();
+        } else {
+            throw new ODRUserNotFoundException();
+        }
+        ODRUser odrUser=findODRUserById(id);
+        if(odrUser==null){
+            throw new ODRUserNotFoundException();
+        }
+        return odrUser;
     }
 
     /**

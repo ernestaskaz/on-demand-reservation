@@ -25,9 +25,33 @@ public class ODRUser implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
+    private String accountType;
+    @Transient
+    private String confirmPassword;
+
+
 
     public ODRUser(){
 
+    }
+
+    public ODRUser(Long id, String email, String password, String firstName, String lastName, String accountType) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.accountType = accountType;
+    }
+
+    public ODRUser(Long id, String email, String password, String firstName, String lastName, String accountType, String confirmPassword) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.accountType = accountType;
+        this.confirmPassword = confirmPassword;
     }
 
     public ODRUser(Long id, String email, String password, String firstName, String lastName) {
@@ -56,7 +80,21 @@ public class ODRUser implements UserDetails {
         this.id = id;
     }
 
+    public String getAccountType() {
+        return accountType;
+    }
 
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
     public void setPassword(String password) {
         this.password = password;
@@ -84,6 +122,7 @@ public class ODRUser implements UserDetails {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
 
     /**

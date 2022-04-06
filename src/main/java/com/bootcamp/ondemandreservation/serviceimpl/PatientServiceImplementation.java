@@ -1,14 +1,20 @@
 package com.bootcamp.ondemandreservation.serviceimpl;
 
 import com.bootcamp.ondemandreservation.model.Appointment;
+import com.bootcamp.ondemandreservation.model.ODRUser;
+import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
+import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -77,5 +83,46 @@ public class PatientServiceImplementation implements PatientService {
     public Patient updatePatient(Long id, Patient patient) {
         patient.setId(id);
         return savePatient(patient);
+    }
+    @Override
+    public Patient getLoggedInPatient() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long id=null;
+        if (principal instanceof ODRUser) {
+            id = ((ODRUser)principal).getId();
+        } else {
+            throw new ODRUserNotFoundException();
+        }
+        Patient  patient=findPatientById(id);
+        if(patient==null){
+            throw new ODRUserNotFoundException();
+        }
+        return patient;
+    }
+
+    @Override
+    public Map<String, String> validatePatient(Patient patient) {
+        Map<String,String> rv=new HashMap<>();
+        if(patient.getEmail()==null||patient.getEmail().isBlank()){
+            rv.put("email","required");
+        }
+        if(!ODRInputSanitiser.likelyIsEmail(patient.getEmail())){
+            rv.put("email","incorrect email");
+        }
+        if(patient.getFirstName()==null||patient.getFirstName().isBlank()){
+            rv.put("firstName","required");
+        }
+        if(!ODRInputSanitiser.seemsToBeSafe(patient.getFirstName())){
+            rv.put("firstName","invalid");
+        }
+        if(patient.getLastName()==null||patient.getLastName().isBlank()){
+            rv.put("lastName","required");
+        }
+        if(!ODRInputSanitiser.seemsToBeSafe(patient.getLastName())){
+            rv.put("lastName","invalid");
+        }
+        //TODO phone, etc.
+
+        return rv;
     }
 }
