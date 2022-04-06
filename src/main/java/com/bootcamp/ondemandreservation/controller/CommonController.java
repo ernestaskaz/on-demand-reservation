@@ -40,7 +40,7 @@ public class CommonController {
         }else if(userType.equals("PATIENT")){
             return "patientView";//placeholder
         }else if(userType.equals("DOCTOR")){
-            return "doctor_idx";//placeholder
+            return "doctorView";//placeholder
         }
         return "index";
     }

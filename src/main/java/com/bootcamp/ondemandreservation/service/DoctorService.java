@@ -19,6 +19,7 @@ public interface DoctorService {
     List<Schedule> getDoctorSchedules(Long id);
     Doctor updateDoctor(Long id, Doctor doctor);
     List<Appointment> getTodaysAppointments(Long id);
+    Doctor getLoggedInDoctor();
     /**
      * Validates the doctor
      * @param doctor Doctor to be validated

@@ -131,6 +131,7 @@ public class AdminWebController {
 
 
     @GetMapping("/admin/myDetails")
+    @PreAuthorize(ADMIN_ROLE)
     String patientDetails(Model model){
         Admin admin = adminService.getLoggedInAdmin();
         model.addAttribute("admin", admin);
@@ -138,6 +139,7 @@ public class AdminWebController {
     }
 
     @GetMapping("/admin/edit")
+    @PreAuthorize(ADMIN_ROLE)
     String editLoggedInAdmin(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         Admin admin = adminService.getLoggedInAdmin();

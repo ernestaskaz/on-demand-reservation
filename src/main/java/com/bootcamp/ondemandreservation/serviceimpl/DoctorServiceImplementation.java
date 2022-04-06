@@ -1,14 +1,13 @@
 package com.bootcamp.ondemandreservation.serviceimpl;
 
-import com.bootcamp.ondemandreservation.model.Appointment;
-import com.bootcamp.ondemandreservation.model.Doctor;
-import com.bootcamp.ondemandreservation.model.Schedule;
+import com.bootcamp.ondemandreservation.model.*;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -64,6 +63,23 @@ public class DoctorServiceImplementation implements DoctorService {
         Optional<Doctor> doctor = doctorRepository.findById(id);
         return doctor.get();
     }
+
+    @Override
+    public Doctor getLoggedInDoctor() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long id=null;
+        if (principal instanceof ODRUser) {
+            id = ((ODRUser)principal).getId();
+        } else {
+            throw new ODRUserNotFoundException();
+        }
+        Doctor doctor = findDoctorById(id);
+        if(doctor==null){
+            throw new ODRUserNotFoundException();
+        }
+        return doctor;
+    }
+
 
     /**
      * @param id passed from Controller to find specific doctor.
