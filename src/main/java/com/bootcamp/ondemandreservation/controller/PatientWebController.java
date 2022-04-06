@@ -38,6 +38,13 @@ public class PatientWebController {
         return "patientView";
     }
 
+    @GetMapping("/patient/myAppointments")
+    String patientAppoimntments(Model model){
+        Patient patient = patientService.getLoggedInPatient();
+        model.addAttribute("patient", patient);
+        model.addAttribute("appointments", patient.getAppointmentList());
+        return "patientAppointmentView";
+    }
     /*@GetMapping("/patient/account")
     String patientDetails2(Model model){
         Patient patient = getLoggedInPatient();
