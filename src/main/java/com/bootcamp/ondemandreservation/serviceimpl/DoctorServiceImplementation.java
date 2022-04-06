@@ -122,8 +122,8 @@ public class DoctorServiceImplementation implements DoctorService {
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */
     @Override
-    public Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword) {
-        Map rv=odrUserService.validate(doctor,matchPassword);
+    public Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword,boolean forUpdate) {
+        Map rv=odrUserService.validate(doctor,matchPassword,forUpdate);
         if(doctor.getSpecialty()!=null&&!ODRInputSanitiser.seemsToBeSafe(doctor.getSpecialty())){
             rv.put("specialty", "unsuitable");
         }

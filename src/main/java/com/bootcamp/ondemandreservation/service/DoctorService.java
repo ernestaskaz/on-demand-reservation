@@ -25,7 +25,7 @@ public interface DoctorService {
      * @param matchPassword if we should check for password and confirmPassword to match.
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */
-    Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword);
+    Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword, boolean forUpdate);
 
 
     Doctor saveDoctorAndPassword(Doctor doctor);

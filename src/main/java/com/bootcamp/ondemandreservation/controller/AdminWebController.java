@@ -1,5 +1,7 @@
 package com.bootcamp.ondemandreservation.controller;
 
+
+import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.model.Patient;
@@ -25,6 +27,8 @@ public class AdminWebController {
     public static final String APPOINTMENT_GET_ALL_TODAY = "/admin/today-appointments";
     public static final String DOCTOR_CREATE_URL = "/doctor/create";
     public static final String DOCTOR_CREATE_TEMPLATE = "doctorCreate";
+    public static final String ADMIN_CREATE_URL = "/admin/create";
+    public static final String ADMIN_CREATE_TEMPLATE = "adminCreate";
     public static final String ADMIN_ROLE = "hasRole('ROLE_ADMIN')";
     @Autowired
     private AdminService adminService;
@@ -54,7 +58,7 @@ public class AdminWebController {
     @PostMapping(DOCTOR_CREATE_URL)
     @PreAuthorize(ADMIN_ROLE)
     String createDoctor(@ModelAttribute Doctor doctor, Model model) {
-        Map errors = doctorService.validateDoctor(doctor, true);
+        Map errors = doctorService.validateDoctor(doctor, true,false);
         model.addAttribute("doctor", doctor);
         model.addAttribute("errors", errors);
         if (errors.isEmpty()) {
@@ -70,6 +74,35 @@ public class AdminWebController {
         }
         return DOCTOR_CREATE_TEMPLATE;
     }
+
+
+    @GetMapping(ADMIN_CREATE_URL)
+    @PreAuthorize(ADMIN_ROLE)
+    String createAdmin(Model model){
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        model.addAttribute("admin",new Admin());
+        return ADMIN_CREATE_TEMPLATE;
+    }
+    @PostMapping(ADMIN_CREATE_URL)
+    @PreAuthorize(ADMIN_ROLE)
+    String createAdmin(@ModelAttribute Admin admin, Model model) {
+        Map errors = adminService.validateAdmin(admin, true,false);
+        model.addAttribute("admin", admin);
+        model.addAttribute("errors", errors);
+        if (errors.isEmpty()) {
+            admin.setId(null);
+            admin=adminService.saveAdminAndPassword(admin);
+            admin.setPassword("");
+            admin.setConfirmPassword("");
+            model.addAttribute("successMsg", String.format( "Administrator %s %s <%s> created with ID %d",
+                    admin.getFirstName(),
+                    admin.getLastName(),
+                    admin.getUsername(),
+                    admin.getId()));
+        }
+        return ADMIN_CREATE_TEMPLATE;
+    }
+
 
     @GetMapping(DOCTOR_GET_ALL)
     @PreAuthorize(ADMIN_ROLE)
@@ -94,5 +127,6 @@ public class AdminWebController {
         model.addAttribute("appointments", appointments);
         return "todaysAllAppointments";
     }
+
 
 }
