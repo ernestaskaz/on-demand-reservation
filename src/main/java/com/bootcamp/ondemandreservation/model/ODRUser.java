@@ -1,10 +1,13 @@
 package com.bootcamp.ondemandreservation.model;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
@@ -28,6 +31,8 @@ public class ODRUser implements UserDetails {
     private String accountType;
     @Transient
     private String confirmPassword;
+    @Transient
+    private List<SimpleGrantedAuthority> authorities;
 
 
 
@@ -50,7 +55,7 @@ public class ODRUser implements UserDetails {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.accountType = accountType;
+        setAccountType(accountType);//important as we also init  authorities there
         this.confirmPassword = confirmPassword;
     }
 
@@ -86,6 +91,9 @@ public class ODRUser implements UserDetails {
 
     public void setAccountType(String accountType) {
         this.accountType = accountType;
+        authorities= new ArrayList<SimpleGrantedAuthority>();
+        SimpleGrantedAuthority role=new SimpleGrantedAuthority("ROLE_"+accountType);
+        authorities.add(role);
     }
 
     public String getConfirmPassword() {
@@ -132,7 +140,7 @@ public class ODRUser implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     /**
