@@ -10,6 +10,7 @@ public interface AppointmentService {
     Appointment saveAppointment(Appointment appointment);
     List<Appointment> getAllAppointments();
     List<Appointment> findAvailableAndNotReserved();
+    List<Appointment> getTodaysAppointments();
     Appointment getAppointmentById(Long appointmentId);
     void cancelAppointment(Long appointmentId);
     void deleteAppointment(Long appointmentId);

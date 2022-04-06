@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,22 @@ public class AppointmentServiceImplementation implements AppointmentService {
     @Override
     public List<Appointment> findAvailableAndNotReserved() {
         return appointmentRepository.findByIsAvailableTrueAndIsReservedFalse();
+    }
+
+    @Override
+    public List<Appointment> getTodaysAppointments() {
+        List<Appointment> AllAppointments = getAllAppointments();
+        List<Appointment> todaysAppointments = new ArrayList<>();
+
+        for (Appointment appointment: AllAppointments) {
+
+            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
+                todaysAppointments.add(appointment);
+            }
+
+        }
+
+        return todaysAppointments;
     }
 
 
