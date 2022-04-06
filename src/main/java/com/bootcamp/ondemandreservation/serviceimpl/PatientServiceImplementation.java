@@ -6,6 +6,7 @@ import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
 import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
+import com.bootcamp.ondemandreservation.service.ODRUserService;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,17 @@ public class PatientServiceImplementation implements PatientService {
     private PatientRepository patientRepository;
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
+    @Autowired
+    private ODRUserService odrUserService;
 
 
     public PatientServiceImplementation() {
     }
 
-    public PatientServiceImplementation(PatientRepository patientRepository, ODRPasswordEncoder odrPasswordEncoder) {
+    public PatientServiceImplementation(PatientRepository patientRepository, ODRPasswordEncoder odrPasswordEncoder, ODRUserService odrUserService) {
         this.patientRepository = patientRepository;
         this.odrPasswordEncoder = odrPasswordEncoder;
+        this.odrUserService = odrUserService;
     }
 
     @Override
@@ -102,37 +106,7 @@ public class PatientServiceImplementation implements PatientService {
 
     @Override
     public Map<String, String> validatePatient(Patient patient) {
-        Map<String,String> rv=new HashMap<>();
-        if(patient.getEmail()==null||patient.getEmail().isBlank()){
-            rv.put("email","required");
-        }
-        if(!ODRInputSanitiser.likelyIsEmail(patient.getEmail())){
-            rv.put("email","incorrect email");
-        }
-        if(patient.getFirstName()==null||patient.getFirstName().isBlank()){
-            rv.put("firstName","required");
-        }
-        if(!ODRInputSanitiser.seemsToBeSafe(patient.getFirstName())){
-            rv.put("firstName","invalid");
-        }
-        if(patient.getLastName()==null||patient.getLastName().isBlank()){
-            rv.put("lastName","required");
-        }
-        if(!ODRInputSanitiser.seemsToBeSafe(patient.getLastName())){
-            rv.put("lastName","invalid");
-        }
-        if(patient.getPassword()==null||patient.getPassword().isBlank()){
-            rv.put("password","required");
-        }
-        if(!patient.getPassword().equals(patient.getConfirmPassword())){
-            rv.put("confirmPassword","does not match");
-        }
-        if(!(patient.getPassword().length()<6)){
-            rv.put("password","too short");
-        }
-        if(!ODRInputSanitiser.seemsToBeSafe(patient.getPassword())){
-            rv.put("password","invalid");
-        }
+        Map<String, String> rv = new HashMap<>(odrUserService.validate(patient));
         if(!patient.getPhoneNumber().isBlank()&&!ODRInputSanitiser.seemsToBePhoneNumber( patient.getPhoneNumber())){
             rv.put("phoneNumber","invalid");
         }

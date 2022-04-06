@@ -4,6 +4,7 @@ import com.bootcamp.ondemandreservation.model.ODRUser;
 import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.repository.ODRUserRepository;
+import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,7 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ODRUserServiceImplementation implements  ODRUserService {
@@ -54,6 +57,45 @@ public class ODRUserServiceImplementation implements  ODRUserService {
             throw new ODRUserNotFoundException();
         }
         return odrUser;
+    }
+
+    @Override
+    public Map<String, String> validate(ODRUser user) {
+        Map<String,String> rv=new HashMap<>();
+        if(user.getEmail()==null||user.getEmail().isBlank()){
+            rv.put("email","required");
+        }
+        if(!ODRInputSanitiser.likelyIsEmail(user.getEmail())){
+            rv.put("email","incorrect email");
+        }
+        if(user.getFirstName()==null||user.getFirstName().isBlank()){
+            rv.put("firstName","required");
+        }
+        if(!ODRInputSanitiser.seemsToBeSafe(user.getFirstName())){
+            rv.put("firstName","invalid");
+        }
+        if(user.getLastName()==null||user.getLastName().isBlank()){
+            rv.put("lastName","required");
+        }
+        if(!ODRInputSanitiser.seemsToBeSafe(user.getLastName())){
+            rv.put("lastName","invalid");
+        }
+        if(user.getPassword()==null||user.getPassword().isBlank()){
+            rv.put("password","required");
+        }
+        if(!user.getPassword().equals(user.getConfirmPassword())){
+            rv.put("confirmPassword","does not match");
+        }
+        if(!(user.getPassword().length()<6)){
+            rv.put("password","too short");
+        }
+        if(!ODRInputSanitiser.seemsToBeSafe(user.getPassword())){
+            rv.put("password","invalid");
+        }
+
+
+
+        return rv;
     }
 
     /**
