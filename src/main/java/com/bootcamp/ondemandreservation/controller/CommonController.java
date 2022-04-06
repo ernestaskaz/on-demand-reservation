@@ -36,7 +36,7 @@ public class CommonController {
     String root(Model model){
         String userType=odrUserService.getLoggedInODRUser().getAccountType();
         if(userType.equals("ADMIN")){
-            return "admin_idx";//placeholder
+            return "adminView";//placeholder
         }else if(userType.equals("PATIENT")){
             return "patientView";//placeholder
         }else if(userType.equals("DOCTOR")){
