@@ -22,5 +22,5 @@ public interface PatientService {
      * @param patient patient to be validated
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */
-    Map<String,String> validatePatient(Patient patient);
+    Map<String,String> validatePatient(Patient patient, boolean matchPassword);
 }

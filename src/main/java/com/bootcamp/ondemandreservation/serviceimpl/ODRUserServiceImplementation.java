@@ -60,7 +60,7 @@ public class ODRUserServiceImplementation implements  ODRUserService {
     }
 
     @Override
-    public Map<String, String> validate(ODRUser user) {
+    public Map<String, String> validate(ODRUser user,boolean matchPassword) {
         Map<String,String> rv=new HashMap<>();
         if(user.getEmail()==null||user.getEmail().isBlank()){
             rv.put("email","required");
@@ -83,17 +83,15 @@ public class ODRUserServiceImplementation implements  ODRUserService {
         if(user.getPassword()==null||user.getPassword().isBlank()){
             rv.put("password","required");
         }
-        if(!user.getPassword().equals(user.getConfirmPassword())){
-            rv.put("confirmPassword","does not match");
-        }
-        if(!(user.getPassword().length()<6)){
+        if((user.getPassword().length()<6)){
             rv.put("password","too short");
         }
         if(!ODRInputSanitiser.seemsToBeSafe(user.getPassword())){
             rv.put("password","invalid");
         }
-
-
+        if(matchPassword&&!user.getPassword().equals(user.getConfirmPassword())){
+            rv.put("confirmPassword","does not match");
+        }
 
         return rv;
     }

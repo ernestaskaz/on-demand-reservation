@@ -59,7 +59,7 @@ public class CommonController {
 
     @PostMapping("/register")
     String registrationForm(@ModelAttribute Patient patient, Model model){
-        Map errors=patientService.validatePatient(patient);
+        Map errors=patientService.validatePatient(patient,true);
         if(!errors.isEmpty()) {
             model.addAttribute("patient", patient);
             model.addAttribute("errors", errors);
