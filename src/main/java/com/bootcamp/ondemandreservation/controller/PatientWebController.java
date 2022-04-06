@@ -59,6 +59,7 @@ public class PatientWebController {
 
     @GetMapping("/patient/available-appointments")
     String patientAppointmentsAvailable(Model model){
+
         return "patientAvailableAppointmentsView";
     }
 
