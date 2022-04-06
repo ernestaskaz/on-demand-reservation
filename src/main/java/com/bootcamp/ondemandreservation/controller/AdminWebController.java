@@ -125,7 +125,7 @@ public class AdminWebController {
     String getAllTodayAppointments(Model model) {
         List<Appointment> appointments = appointmentService.getTodaysAppointments();
         model.addAttribute("appointments", appointments);
-        return "todaysAllAppointments";
+        return "allAppointmentsTodayView";
     }
 
 
