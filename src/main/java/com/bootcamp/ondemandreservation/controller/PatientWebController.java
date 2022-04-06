@@ -33,7 +33,7 @@ public class PatientWebController {
     }
     @GetMapping("/patient/myDetails")
     String patientDetails(Model model){
-        Patient patient = getLoggedInPatient();
+        Patient patient = patientService.getLoggedInPatient();
         model.addAttribute("patient", patient);
         return "patientView";
     }
@@ -46,18 +46,5 @@ public class PatientWebController {
     }*/
 
 
-    private Patient getLoggedInPatient() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long id=null;
-        if (principal instanceof ODRUser) {
-            id = ((ODRUser)principal).getId();
-        } else {
-            throw new ODRUserNotFoundException();
-        }
-        Patient  patient=patientService.findPatientById(id);
-        if(patient==null){
-            throw new ODRUserNotFoundException();
-        }
-        return patient;
-    }
+
 }

@@ -15,6 +15,7 @@ public interface PatientService {
     void deletePatientById(Long id);
     List<Appointment> getAllAppointments(Long id);
     Patient updatePatient(Long id, Patient patient);
+    Patient getLoggedInPatient();
 
     /**
      * Validates the patient

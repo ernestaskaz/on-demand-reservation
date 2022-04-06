@@ -1,6 +1,7 @@
 package com.bootcamp.ondemandreservation.controller;
 
 import com.bootcamp.ondemandreservation.model.Patient;
+import com.bootcamp.ondemandreservation.service.ODRUserService;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,14 +21,27 @@ import java.util.Map;
 public class CommonController {
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private ODRUserService odrUserService;
+
     public CommonController(){}
-    public CommonController(PatientService patientService){
-        this.patientService=patientService;
+
+    public CommonController(PatientService patientService, ODRUserService odrUserService) {
+        this.patientService = patientService;
+        this.odrUserService = odrUserService;
     }
 
     //Crude hacks to work around context path problem until I find real solution.
     @GetMapping("/web/")
     String root(Model model){
+        String userType=odrUserService.getLoggedInODRUser().getAccountType();
+        if(userType.equals("ADMIN")){
+            return "admin_idx";//placeholder
+        }else if(userType.equals("PATIENT")){
+            return "patient_idx";//placeholder
+        }else if(userType.equals("DOCTOR")){
+            return "doctor_idx";//placeholder
+        }
         return "index";
     }
 

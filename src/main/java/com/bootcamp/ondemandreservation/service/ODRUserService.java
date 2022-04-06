@@ -11,5 +11,6 @@ public interface ODRUserService extends UserDetailsService {
     List<ODRUser> getAllODRUsers();
     ODRUser findODRUserById(Long id);
     ODRUser findODRUsersByEmail(String email);
+    ODRUser getLoggedInODRUser();
 
 }

@@ -28,18 +28,30 @@ public class ODRInputSanitiser {
         if(indexOfAtSymbol<1||indexOfAtSymbol>63){
             return false;
         }
-        /*
-        should be enough for basic "Bobby Tables" JPA/SQL injection ( "Robert'); DROP TABLE USERS") scenario
-         */
-        if(email.indexOf("\u0000")>0||email.indexOf("\\")>0
-                ||email.indexOf("`")>0||email.indexOf("\'")>0
-                ||email.indexOf("'")>0||email.indexOf("\r")>0
-                ||email.indexOf("\n")>0){
+        if (!seemsToBeSafe(email))
             return false;
-        }
         String domain=email.substring(indexOfAtSymbol+1);
 
         return domain.matches("[A-Za-z0-9\\-\\.]+");
 
+    }
+
+    /**
+     * Very basic test for common escape characters/tags
+     * should be enough for basic "Bobby Tables" JPA/SQL injection ( "Robert'); DROP TABLE USERS") scenario
+     * DOES NOT HELP against more sophisticated methods.
+     * or basic XSS
+     * @param value
+     * @return
+     */
+    public static boolean seemsToBeSafe(String value) {
+        if(value.indexOf("\u0000")>0|| value.indexOf("\\")>0
+                || value.indexOf("`")>0||value.indexOf("\"")>0
+                || value.indexOf("'")>0|| value.indexOf("\r")>0
+                || value.indexOf("\n")>0|| value.indexOf(">")>0
+                || value.indexOf("<")>0){
+            return false;
+        }
+        return true;
     }
 }
