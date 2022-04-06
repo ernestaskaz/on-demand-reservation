@@ -22,6 +22,8 @@ import java.util.Map;
 public class AdminWebController {
     public static final String DOCTOR_CREATE_URL = "/doctor/create";
     public static final String DOCTOR_CREATE_TEMPLATE = "doctorCreate";
+    public static final String ADMIN_CREATE_URL = "/admin/create";
+    public static final String ADMIN_CREATE_TEMPLATE = "adminCreate";
     public static final String ADMIN_ROLE = "hasRole('ROLE_ADMIN')";
     @Autowired
     private AdminService adminService;
