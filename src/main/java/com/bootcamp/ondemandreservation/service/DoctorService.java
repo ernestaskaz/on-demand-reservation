@@ -28,4 +28,5 @@ public interface DoctorService {
     Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword);
 
 
+    Doctor saveDoctorAndPassword(Doctor doctor);
 }

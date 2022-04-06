@@ -92,8 +92,7 @@ public class ODRUserServiceImplementation implements  ODRUserService {
         }
         if(user.getPassword()==null||user.getPassword().isBlank()){
             rv.put("password","required");
-        }
-        if((user.getPassword().length()<6)){
+        }else if((user.getPassword().length()<6)){
             rv.put("password","too short");
         }
         if(!ODRInputSanitiser.seemsToBeSafe(user.getPassword())){
