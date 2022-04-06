@@ -64,42 +64,43 @@ public class ODRUserServiceImplementation implements  ODRUserService {
         Map<String,String> rv=new HashMap<>();
         if(user.getEmail()==null||user.getEmail().isBlank()){
             rv.put("email","required");
-        }
-        if(!ODRInputSanitiser.likelyIsEmail(user.getEmail())){
-            rv.put("email","incorrect email");
-        }
-        ODRUser otherUser=null;
-        try {
-            otherUser=findODRUsersByEmail(user.getEmail());
-        }catch(Exception x){
-            x.printStackTrace();
-            rv.put("email","unsuitable email");
-        }
-        if(otherUser!=null){
-            rv.put("email","already registered");
+        }else {
+            if (!ODRInputSanitiser.likelyIsEmail(user.getEmail())) {
+                rv.put("email", "incorrect email");
+            }
+            ODRUser otherUser = null;
+            try {
+                otherUser = findODRUsersByEmail(user.getEmail());
+            } catch (Exception x) {
+                x.printStackTrace();
+                rv.put("email", "unsuitable email");
+            }
+            if (otherUser != null) {
+                rv.put("email", "already registered");
+            }
         }
         if(user.getFirstName()==null||user.getFirstName().isBlank()){
             rv.put("firstName","required");
-        }
-        if(!ODRInputSanitiser.seemsToBeSafe(user.getFirstName())){
+        }else if(!ODRInputSanitiser.seemsToBeSafe(user.getFirstName())){
             rv.put("firstName","invalid");
         }
         if(user.getLastName()==null||user.getLastName().isBlank()){
             rv.put("lastName","required");
-        }
-        if(!ODRInputSanitiser.seemsToBeSafe(user.getLastName())){
+        }else if(!ODRInputSanitiser.seemsToBeSafe(user.getLastName())){
             rv.put("lastName","invalid");
         }
         if(user.getPassword()==null||user.getPassword().isBlank()){
             rv.put("password","required");
-        }else if((user.getPassword().length()<6)){
-            rv.put("password","too short");
-        }
-        if(!ODRInputSanitiser.seemsToBeSafe(user.getPassword())){
-            rv.put("password","invalid");
-        }
-        if(matchPassword&&!user.getPassword().equals(user.getConfirmPassword())){
-            rv.put("confirmPassword","does not match");
+        }else {
+            if ((user.getPassword().length() < 6)) {
+                rv.put("password", "too short");
+            }
+            if (!ODRInputSanitiser.seemsToBeSafe(user.getPassword())) {
+                rv.put("password", "invalid");
+            }
+            if (matchPassword && !user.getPassword().equals(user.getConfirmPassword())) {
+                rv.put("confirmPassword", "does not match");
+            }
         }
 
         return rv;
