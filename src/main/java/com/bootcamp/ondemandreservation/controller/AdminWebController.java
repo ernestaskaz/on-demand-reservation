@@ -1,12 +1,12 @@
 package com.bootcamp.ondemandreservation.controller;
 
 import com.bootcamp.ondemandreservation.model.Doctor;
-import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.service.AdminService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +22,7 @@ import java.util.Map;
 public class AdminWebController {
     public static final String DOCTOR_CREATE_URL = "/doctor/create";
     public static final String DOCTOR_CREATE_TEMPLATE = "doctorCreate";
+    public static final String ADMIN_ROLE = "hasRole('ROLE_ADMIN')";
     @Autowired
     private AdminService adminService;
     @Autowired
@@ -38,19 +39,28 @@ public class AdminWebController {
         this.patientService = patientService;
     }
     @GetMapping(DOCTOR_CREATE_URL)
-    String editLoggedInPatient(Model model){
+    @PreAuthorize(ADMIN_ROLE)
+    String createDoctor(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         model.addAttribute("doctor",new Doctor());
         return DOCTOR_CREATE_TEMPLATE;
     }
     @PostMapping(DOCTOR_CREATE_URL)
-    String editLoggedInPatient(@ModelAttribute Patient patient, Model model) {
-        Map errors = patientService.validatePatient(patient, false);
-        model.addAttribute("patient", patient);
+    @PreAuthorize(ADMIN_ROLE)
+    String createDoctor(@ModelAttribute Doctor doctor, Model model) {
+        Map errors = doctorService.validateDoctor(doctor, true);
+        model.addAttribute("doctor", doctor);
         model.addAttribute("errors", errors);
         if (errors.isEmpty()) {
-            patientService.savePatientAndPassword(patient);
-            model.addAttribute("successMsg", "Your data were updated successfully.");
+            doctor.setId(null);
+            doctor=doctorService.saveDoctorAndPassword(doctor);
+            doctor.setPassword("");
+            doctor.setConfirmPassword("");
+            model.addAttribute("successMsg", String.format( "Doctor %s %s <%s> created with ID %d",
+                                                                            doctor.getFirstName(),
+                                                                            doctor.getLastName(),
+                                                                            doctor.getUsername(),
+                                                                            doctor.getId()));
         }
         return DOCTOR_CREATE_TEMPLATE;
     }

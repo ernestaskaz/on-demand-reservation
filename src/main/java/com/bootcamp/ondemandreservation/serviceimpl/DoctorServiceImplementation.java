@@ -124,4 +124,17 @@ public class DoctorServiceImplementation implements DoctorService {
     public Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword) {
         return odrUserService.validate(doctor,matchPassword);
     }
+    /**
+     * The same as saveDoctor, but the password is treated as plain text
+     * and is hashed&salted before saving
+     * @param doctor Doctor model to save
+     * @return doctor with hashed password
+     */
+
+    @Override
+    public Doctor saveDoctorAndPassword(Doctor doctor) {
+        doctor.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
+                .encode(doctor.getPassword()));
+        return saveDoctor(doctor);
+    }
 }
