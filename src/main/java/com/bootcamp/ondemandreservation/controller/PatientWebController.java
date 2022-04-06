@@ -1,11 +1,8 @@
 package com.bootcamp.ondemandreservation.controller;
 
-import com.bootcamp.ondemandreservation.model.ODRUser;
-import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +17,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/web/")
 public class PatientWebController {
+    public static final String PATIENT_EDIT_URL = "/patient/edit";
+    public static final String PATIENT_EDIT_TEMPLATE = "patientDetailsEdit";
     @Autowired
     private PatientService patientService;
 
@@ -65,13 +64,13 @@ public class PatientWebController {
         return "patientAvailableAppointmentsView";
     }
 
-    @GetMapping("/patient/edit")
+    @GetMapping(PATIENT_EDIT_URL)
     String editLoggedInPatient(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         model.addAttribute("patient",patientService.getLoggedInPatient());
-        return "patientDetailsEdit";
+        return PATIENT_EDIT_TEMPLATE;
     }
-    @PostMapping("/patient/edit")
+    @PostMapping(PATIENT_EDIT_URL)
     String editLoggedInPatient(@ModelAttribute Patient patient, Model model){
         //TODO Add change password functionality
         Map errors=patientService.validatePatient(patient,false);
@@ -81,7 +80,7 @@ public class PatientWebController {
             patientService.savePatientAndPassword(patient);
             model.addAttribute("successMsg","Your data were updated successfully.");
         }
-        return "patientDetailsEdit";
+        return PATIENT_EDIT_TEMPLATE;
     }
 
 
