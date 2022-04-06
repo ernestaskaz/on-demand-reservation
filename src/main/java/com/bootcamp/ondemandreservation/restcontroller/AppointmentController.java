@@ -27,6 +27,12 @@ public class AppointmentController {
         return appointmentService.getAllAppointments();
     }
 
+    @GetMapping("/today")
+    public List<Appointment> getTodaysAppointments() {
+        return appointmentService.getTodaysAppointments();
+    }
+
+
     @GetMapping("/available")
     public List<Appointment> findByAvailableAndNotReserved() {
         return appointmentService.findAvailableAndNotReserved();

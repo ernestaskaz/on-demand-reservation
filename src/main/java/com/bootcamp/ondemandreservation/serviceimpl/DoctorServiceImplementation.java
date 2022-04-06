@@ -2,6 +2,7 @@ package com.bootcamp.ondemandreservation.serviceimpl;
 
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
+import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
@@ -76,6 +77,12 @@ public class DoctorServiceImplementation implements DoctorService {
     public List<Appointment> getAllAppointments(Long id) {
         Doctor doctor = findDoctorById(id);
         return doctor.getAppointmentList();
+    }
+
+    @Override
+    public List<Schedule> getDoctorSchedules(Long id) {
+        Doctor doctor = findDoctorById(id);
+        return doctor.getSchedulesList();
     }
 
     @Override
