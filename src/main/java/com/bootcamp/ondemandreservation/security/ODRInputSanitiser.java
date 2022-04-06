@@ -2,6 +2,10 @@ package com.bootcamp.ondemandreservation.security;
 
 public class ODRInputSanitiser {
 
+    public static boolean seemsToBePhoneNumber(String num){
+        return num.matches("\\+?[0-9\\s]+");
+    }
+
     /**
      * from  https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
      * As such, the best way to validate email addresses is to perform some basic initial validation, and then pass the address to the mail server and catch the exception if it rejects it. This means that any the application can be confident that its mail server can send emails to any addresses it accepts. The initial validation could be as simple as:

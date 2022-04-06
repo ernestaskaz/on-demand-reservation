@@ -39,7 +39,7 @@ public class PatientWebController {
     }
 
     @GetMapping("/patient/myAppointments")
-    String patientAppoimntments(Model model){
+    String patientAppointments(Model model){
         Patient patient = patientService.getLoggedInPatient();
         model.addAttribute("patient", patient);
         model.addAttribute("appointments", patient.getAppointmentList());

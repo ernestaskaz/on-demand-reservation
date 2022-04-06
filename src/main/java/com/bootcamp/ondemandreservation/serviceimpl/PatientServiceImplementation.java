@@ -121,7 +121,22 @@ public class PatientServiceImplementation implements PatientService {
         if(!ODRInputSanitiser.seemsToBeSafe(patient.getLastName())){
             rv.put("lastName","invalid");
         }
-        //TODO phone, etc.
+        if(patient.getPassword()==null||patient.getPassword().isBlank()){
+            rv.put("password","required");
+        }
+        if(!patient.getPassword().equals(patient.getConfirmPassword())){
+            rv.put("confirmPassword","does not match");
+        }
+        if(!(patient.getPassword().length()<6)){
+            rv.put("password","too short");
+        }
+        if(!ODRInputSanitiser.seemsToBeSafe(patient.getPassword())){
+            rv.put("password","invalid");
+        }
+        if(!patient.getPhoneNumber().isBlank()&&!ODRInputSanitiser.seemsToBePhoneNumber( patient.getPhoneNumber())){
+            rv.put("phoneNumber","invalid");
+        }
+
 
         return rv;
     }
