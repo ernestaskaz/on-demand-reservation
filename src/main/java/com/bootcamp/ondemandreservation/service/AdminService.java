@@ -19,5 +19,7 @@ public interface AdminService {
      * @param matchPassword if we should check for password and confirmPassword to match.
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */
-    Map<String, String> validateAdmin(Admin admin, boolean matchPassword);
+    Map<String, String> validateAdmin(Admin admin, boolean matchPassword, boolean forUpdate);
+
+    Admin saveAdminAndPassword(Admin admin);
 }

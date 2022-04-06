@@ -111,8 +111,8 @@ public class PatientServiceImplementation implements PatientService {
      * @return
      */
     @Override
-    public Map<String, String> validatePatient(Patient patient, boolean matchPassword) {
-        Map<String, String> rv = new HashMap<>(odrUserService.validate(patient,matchPassword));
+    public Map<String, String> validatePatient(Patient patient, boolean matchPassword, boolean forUpdate) {
+        Map<String, String> rv = new HashMap<>(odrUserService.validate(patient,matchPassword, forUpdate));
         if(!(patient.getPhoneNumber()==null)&&
                 !patient.getPhoneNumber().isBlank()&&
                 !ODRInputSanitiser.seemsToBePhoneNumber( patient.getPhoneNumber())){

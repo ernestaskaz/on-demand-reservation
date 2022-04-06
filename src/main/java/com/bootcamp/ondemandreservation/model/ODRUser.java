@@ -1,6 +1,7 @@
 package com.bootcamp.ondemandreservation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.base.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ODRUser implements UserDetails {
+
 
     @SequenceGenerator(
             name = "user_sequence",
@@ -39,6 +41,15 @@ public class ODRUser implements UserDetails {
 
     public ODRUser(){
 
+    }
+    public ODRUser(ODRUser user){
+        this.id = user.id;
+        this.email = user.email;
+        this.password = user.password;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        setAccountType(user.accountType);//important as we also init  authorities there
+        this.confirmPassword = user.confirmPassword;
     }
 
     public ODRUser(Long id, String email, String password, String firstName, String lastName, String accountType) {
@@ -211,4 +222,7 @@ public class ODRUser implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
 }

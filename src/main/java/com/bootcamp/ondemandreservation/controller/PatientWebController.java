@@ -1,8 +1,7 @@
 package com.bootcamp.ondemandreservation.controller;
 
-import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Patient;
-import com.bootcamp.ondemandreservation.service.AppointmentService;
+import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,13 +23,13 @@ public class PatientWebController {
     @Autowired
     private PatientService patientService;
     @Autowired
-    private AppointmentService appointmentService;
+    private ODRPasswordEncoder odrPasswordEncoder;
 
     public PatientWebController(){}
 
-    public PatientWebController(PatientService patientService, AppointmentService appointmentService) {
+    public PatientWebController(PatientService patientService, ODRPasswordEncoder odrPasswordEncoder) {
         this.patientService = patientService;
-        this.appointmentService = appointmentService;
+        this.odrPasswordEncoder = odrPasswordEncoder;
     }
 
     @GetMapping("/patient/all-patients")
@@ -64,8 +63,6 @@ public class PatientWebController {
 
     @GetMapping("/patient/available-appointments")
     String patientAppointmentsAvailable(Model model){
-        List<Appointment>  appointments = appointmentService.findAvailableAndNotReserved();
-        model.addAttribute("appointments", appointments);
 
         return "patientAvailableAppointmentsView";
     }
@@ -73,18 +70,26 @@ public class PatientWebController {
     @GetMapping("/patient/edit")
     String editLoggedInPatient(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
-        model.addAttribute("patient",patientService.getLoggedInPatient());
+        Patient patient=patientService.getLoggedInPatient();
+        model.addAttribute("patient",patient);
         return PATIENT_EDIT_TEMPLATE;
     }
     @PostMapping("/patient/edit")
     String editLoggedInPatient(@ModelAttribute Patient patient, Model model){
         //TODO Add change password functionality
-        Map errors=patientService.validatePatient(patient,false);
+        Map errors=patientService.validatePatient(patient,false,true);
         model.addAttribute("patient", patient);
         model.addAttribute("errors", errors);
         if(errors.isEmpty()) {
-            patientService.savePatientAndPassword(patient);
-            model.addAttribute("successMsg","Your data were updated successfully.");
+            String currentPassword=patientService.getLoggedInPatient().getPassword();
+            if(odrPasswordEncoder.defaultPasswordEncoder().matches(patient.getPassword(),currentPassword)) {
+                patient.setPassword(currentPassword);
+                patientService.savePatient(patient);
+                model.addAttribute("successMsg","Your data were updated successfully.");
+            }else{
+                errors.put("password","Incorrect password");
+            }
+
         }
         return PATIENT_EDIT_TEMPLATE;
     }

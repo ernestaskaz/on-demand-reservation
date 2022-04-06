@@ -11,10 +11,9 @@
         <h1>Edit my details</h1>
     </div>
 </div>
-
 <div class="container">
     <div class="d-flex justify-content-center">
-        <form action="#" th:action="@{/web/patient/edit}" th:object="${patient}" method="post">
+        <form action="#" th:action="@{/web/admin/create}" th:object="${admin}" method="post">
             <div class="mb-3">
                 <label for="inputName" class="form-label">First Name</label>
                 <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
@@ -25,35 +24,29 @@
                 <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName" value="lastName">
                 <p th:text="${errors.get('lastName')}"></p>
             </div>
-            <div class="mb-3">
-                <label for="inputCity" class="form-label">City</label>
-                <input type="text" th:field="*{city}" class="form-control" id="inputCity" value="city">
-            </div>
+
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
                 <input type="text" th:field="*{email}" class="form-control" id="inputEmail" value="email">
                 <p th:text="${errors.get('email')}"></p>
             </div>
-            <div class="mb-3">
-                <label for="inputPhoneNumber" class="form-label">Phone Number</label>
-                <input type="text" th:field="*{phoneNumber}" class="form-control" id="inputPhoneNumber" value="phoneNumber">
-                <p th:text="${errors.get('phoneNumber')}"></p>
-            </div>
-            <div class="mb-3">
 
-                <label for="confirmPassword" class="form-label">Password</label>
-                <input type="text" th:field="*{password}" class="form-control" id="confirmPassword" value="password">
-
-                <label for="inputPassword" class="form-label">Your current password</label>
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Password</label>
                 <input type="text" th:field="*{password}" class="form-control" id="inputPassword" >
-
                 <p th:text="${errors.get('password')}"></p>
             </div>
+            <div class="mb-3">
+                <label for="inputConfirmPassword" class="form-label">Confirm password</label>
+                <input type="text" th:field="*{confirmPassword}" class="form-control" id="inputConfirmPassword" >
+                <p th:text="${errors.get('confirmPassword')}"></p>
+            </div>
 
-            <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
+
+            <input type="submit" value="Submit"/>
             <a href="myDetails" class="btn btn-primary" role="button">Back to My Details</a>
 
-            <p th:text="${successMsg}"></p>
+            <div th:text="${successMsg}"></div>
 
         </form>
     </div>
