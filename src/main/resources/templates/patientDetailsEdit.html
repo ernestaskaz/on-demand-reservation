@@ -13,7 +13,7 @@
 </div>
 <div class="container">
     <div class="d-flex justify-content-center">
-        <form action="#" th:action="@{edit}" th:object="${patient}" method="post">
+        <form action="#" th:action="@{/web/patient/edit}" th:object="${patient}" method="post">
             <div class="mb-3">
                 <label for="inputName" class="form-label">First Name</label>
                 <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
@@ -36,7 +36,8 @@
             </div>
             <input type="submit" value="Submit" />
 <!--            <button name="submit" type="submit" value="0" class="btn btn-primary">Submit Changes</button>-->
-<!--            <a href="myDetails" class="btn btn-primary" role="button">Back to My Details</a>-->
+            <a href="myDetails" class="btn btn-primary" role="button">Back to My Details</a>
+            <p th:text="${successMsg}"></p>
         </form>
 
     </div>
