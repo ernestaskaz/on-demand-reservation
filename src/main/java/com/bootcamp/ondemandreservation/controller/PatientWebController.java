@@ -1,6 +1,8 @@
 package com.bootcamp.ondemandreservation.controller;
 
+import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Patient;
+import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +23,14 @@ public class PatientWebController {
     public static final String PATIENT_EDIT_TEMPLATE = "patientDetailsEdit";
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private AppointmentService appointmentService;
 
     public PatientWebController(){}
 
-    public PatientWebController(PatientService patientService) {
+    public PatientWebController(PatientService patientService, AppointmentService appointmentService) {
         this.patientService = patientService;
+        this.appointmentService = appointmentService;
     }
 
     @GetMapping("/patient/all-patients")
@@ -59,6 +64,9 @@ public class PatientWebController {
 
     @GetMapping("/patient/available-appointments")
     String patientAppointmentsAvailable(Model model){
+        List<Appointment>  appointments = appointmentService.findAvailableAndNotReserved();
+        model.addAttribute("appointments", appointments);
+
         return "patientAvailableAppointmentsView";
     }
 
