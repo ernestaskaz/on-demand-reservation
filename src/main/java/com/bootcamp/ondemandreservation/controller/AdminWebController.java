@@ -25,6 +25,7 @@ public class AdminWebController {
     public static final String DOCTOR_GET_ALL = "/admin/all-doctors";
     public static final String APPOINTMENT_GET_ALL = "/admin/all-appointments";
     public static final String APPOINTMENT_GET_ALL_TODAY = "/admin/today-appointments";
+    public static final String ADMIN_EDIT_TEMPLATE = "adminDetailsEdit";
     public static final String DOCTOR_CREATE_URL = "/doctor/create";
     public static final String DOCTOR_CREATE_TEMPLATE = "doctorCreate";
     public static final String ADMIN_CREATE_URL = "/admin/create";
@@ -126,6 +127,24 @@ public class AdminWebController {
         List<Appointment> appointments = appointmentService.getTodaysAppointments();
         model.addAttribute("appointments", appointments);
         return "allAppointmentsTodayView";
+    }
+
+
+    @GetMapping("/admin/myDetails")
+    @PreAuthorize(ADMIN_ROLE)
+    String patientDetails(Model model){
+        Admin admin = adminService.getLoggedInAdmin();
+        model.addAttribute("admin", admin);
+        return "adminAccountView";
+    }
+
+    @GetMapping("/admin/edit")
+    @PreAuthorize(ADMIN_ROLE)
+    String editLoggedInAdmin(Model model){
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        Admin admin = adminService.getLoggedInAdmin();
+        model.addAttribute("admin",admin);
+        return ADMIN_EDIT_TEMPLATE;
     }
 
 

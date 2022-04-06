@@ -1,11 +1,15 @@
 package com.bootcamp.ondemandreservation.serviceimpl;
 
 import com.bootcamp.ondemandreservation.model.Admin;
+import com.bootcamp.ondemandreservation.model.ODRUser;
+import com.bootcamp.ondemandreservation.model.ODRUserNotFoundException;
+import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.repository.AdminRepository;
 import com.bootcamp.ondemandreservation.service.AdminService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,6 +59,22 @@ public class AdminServiceImplementation implements AdminService {
     }
 
     @Override
+    public Admin getLoggedInAdmin() {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Long id=null;
+            if (principal instanceof ODRUser) {
+                id = ((ODRUser)principal).getId();
+            } else {
+                throw new ODRUserNotFoundException();
+            }
+            Admin admin = findAdminById(id);
+            if(admin==null){
+                throw new ODRUserNotFoundException();
+            }
+            return admin;
+        }
+
+    @Override
     public void deleteAdmin(Long id) {
         adminRepository.deleteById(id);
     }
@@ -67,6 +87,8 @@ public class AdminServiceImplementation implements AdminService {
         admin.setId(id);
         return saveAdmin(admin);
     }
+
+
 
     /**
      * Validates the admin

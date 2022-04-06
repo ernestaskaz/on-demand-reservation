@@ -14,7 +14,7 @@
 
 <div class="container">
     <div class="d-flex justify-content-center">
-        <form action="#" th:action="@{/web/admin/edit}" th:object="${admin}" method="post">
+        <form action="#" th:action="@{/web/patient/edit}" th:object="${doctor}" method="post">
             <div class="mb-3">
                 <label for="inputName" class="form-label">First Name</label>
                 <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
@@ -26,13 +26,22 @@
                 <p th:text="${errors.get('lastName')}"></p>
             </div>
             <div class="mb-3">
+                <label for="inputSpecialty" class="form-label">Specialty</label>
+                <input type="text" th:field="*{specialty}" class="form-control" id="inputSpecialty" value="specialty">
+                <p th:text="${errors.get('specialty')}"></p>
+            </div>
+            <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Password</label>
                 <input type="text" th:field="*{password}" class="form-control" id="confirmPassword" value="password">
+
+                <label for="inputPassword" class="form-label">Your current password</label>
+                <input type="text" th:field="*{password}" class="form-control" id="inputPassword" >
+
                 <p th:text="${errors.get('password')}"></p>
             </div>
 
             <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
-            <a href="/web/myDetails" class="btn btn-primary" role="button">Back to My Details</a>
+            <a href="myDetails" class="btn btn-primary" role="button">Back to My Details</a>
 
             <p th:text="${successMsg}"></p>
 
