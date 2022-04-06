@@ -40,13 +40,8 @@
                 <p th:text="${errors.get('phoneNumber')}"></p>
             </div>
             <div class="mb-3">
-
                 <label for="confirmPassword" class="form-label">Password</label>
                 <input type="text" th:field="*{password}" class="form-control" id="confirmPassword" value="password">
-
-                <label for="inputPassword" class="form-label">Your current password</label>
-                <input type="text" th:field="*{password}" class="form-control" id="inputPassword" >
-
                 <p th:text="${errors.get('password')}"></p>
             </div>
 

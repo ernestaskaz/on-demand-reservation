@@ -13,6 +13,7 @@
         <div class="col-auto">
             <table class="table table-striped">
                 <thead>
+                <th scope="col">Id</th>
                 <th scope="col">Time</th>
                 <th scope="col">Comment</th>
                 <th scope="col">Available</th>
@@ -20,7 +21,14 @@
                 <th scope="col">Doctor</th>
                 </thead>
                 <tbody>
-
+                <tr th:each="appointment : ${appointments}">
+                    <td th:text="${appointment.id}"></td>
+                    <td th:text="${appointment.appointmentTime}"></td>
+                    <td th:text="${appointment.comment}"></td>
+                    <td th:text="${appointment.isAvailable}"></td>
+                    <td th:text="${appointment.price}"></td>
+                    <td th:text="${appointment.doctor.id}"></td>
+                </tr>
                 </tbody>
             </table>
         </div>
