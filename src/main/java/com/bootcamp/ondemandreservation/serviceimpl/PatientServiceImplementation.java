@@ -104,6 +104,12 @@ public class PatientServiceImplementation implements PatientService {
         return patient;
     }
 
+    /**
+     * ODRUser.validate() + custom validation for phone number.
+     * @param patient patient to be validated
+     * @param matchPassword
+     * @return
+     */
     @Override
     public Map<String, String> validatePatient(Patient patient, boolean matchPassword) {
         Map<String, String> rv = new HashMap<>(odrUserService.validate(patient,matchPassword));

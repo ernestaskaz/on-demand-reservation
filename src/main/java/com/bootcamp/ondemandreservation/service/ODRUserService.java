@@ -18,7 +18,7 @@ public interface ODRUserService extends UserDetailsService {
      * Validates the user
      * All doctor/patient/admin validations could call this
      * to get common fields validated.
-     * @param user patient to be validated
+     * @param user user to be validated
      * @param matchPassword if we should check for password and confirmPassword to match.
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */

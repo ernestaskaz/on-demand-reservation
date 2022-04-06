@@ -2,9 +2,11 @@ package com.bootcamp.ondemandreservation.service;
 
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
+import com.bootcamp.ondemandreservation.model.ODRUser;
 import com.bootcamp.ondemandreservation.model.Schedule;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DoctorService {
 
@@ -17,5 +19,13 @@ public interface DoctorService {
     List<Schedule> getDoctorSchedules(Long id);
     Doctor updateDoctor(Long id, Doctor doctor);
     List<Appointment> getTodaysAppointments(Long id);
+    /**
+     * Validates the doctor
+     * @param doctor Doctor to be validated
+     * @param matchPassword if we should check for password and confirmPassword to match.
+     * @return Map with fields (email, not getEmail) as keys and error messages as values
+     */
+    Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword);
+
 
 }
