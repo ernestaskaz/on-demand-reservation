@@ -4,6 +4,7 @@ import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
+import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
@@ -122,7 +123,11 @@ public class DoctorServiceImplementation implements DoctorService {
      */
     @Override
     public Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword) {
-        return odrUserService.validate(doctor,matchPassword);
+        Map rv=odrUserService.validate(doctor,matchPassword);
+        if(doctor.getSpecialty()!=null&&!ODRInputSanitiser.seemsToBeSafe(doctor.getSpecialty())){
+            rv.put("specialty", "unsuitable");
+        }
+        return rv;
     }
     /**
      * The same as saveDoctor, but the password is treated as plain text
