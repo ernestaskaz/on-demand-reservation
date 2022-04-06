@@ -15,31 +15,40 @@
     <div class="d-flex justify-content-center">
         <form action="#" th:action="@{/web/admin/create}" th:object="${admin}" method="post">
             <div class="mb-3">
-                <span th:text="${errors.toString()}"/>
-            </div>
-            <div class="mb-3">
                 <label for="inputName" class="form-label">First Name</label>
                 <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
+                <p th:text="${errors.get('firstName')}"></p>
             </div>
             <div class="mb-3">
                 <label for="inputLastName" class="form-label">Last Name</label>
                 <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName" value="lastName">
+                <p th:text="${errors.get('lastName')}"></p>
             </div>
+
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
                 <input type="text" th:field="*{email}" class="form-control" id="inputEmail" value="email">
+                <p th:text="${errors.get('email')}"></p>
             </div>
-            <input type="submit" value="Submit" />
-            <!--            <button name="submit" type="submit" value="0" class="btn btn-primary">Submit Changes</button>-->
+
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Password</label>
+                <input type="text" th:field="*{password}" class="form-control" id="inputPassword" >
+                <p th:text="${errors.get('password')}"></p>
+            </div>
+            <div class="mb-3">
+                <label for="inputConfirmPassword" class="form-label">Confirm password</label>
+                <input type="text" th:field="*{confirmPassword}" class="form-control" id="inputConfirmPassword" >
+                <p th:text="${errors.get('confirmPassword')}"></p>
+            </div>
+
+
+            <input type="submit" value="Submit"/>
             <a href="myDetails" class="btn btn-primary" role="button">Back to My Details</a>
-            <p th:text="${successMsg}"></p>
+
+            <div th:text="${successMsg}"></div>
+
         </form>
-
-    </div>
-</div>
-<div class="container">
-    <div class="d-flex justify-content-center">
-
     </div>
 </div>
 </body>

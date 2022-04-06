@@ -22,5 +22,5 @@ public interface ODRUserService extends UserDetailsService {
      * @param matchPassword if we should check for password and confirmPassword to match.
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */
-    Map<String, String> validate(ODRUser user, boolean matchPassword);
+    Map<String, String> validate(ODRUser user, boolean matchPassword, boolean forUpdate);
 }

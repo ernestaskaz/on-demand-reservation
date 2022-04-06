@@ -60,7 +60,7 @@ public class ODRUserServiceImplementation implements  ODRUserService {
     }
 
     @Override
-    public Map<String, String> validate(ODRUser user,boolean matchPassword) {
+    public Map<String, String> validate(ODRUser user,boolean matchPassword,boolean forUpdate) {
         Map<String,String> rv=new HashMap<>();
         if(user.getEmail()==null||user.getEmail().isBlank()){
             rv.put("email","required");
@@ -75,9 +75,15 @@ public class ODRUserServiceImplementation implements  ODRUserService {
                 x.printStackTrace();
                 rv.put("email", "unsuitable email");
             }
-            if (otherUser != null) {
+            if (!forUpdate&&otherUser != null) {
                 rv.put("email", "already registered");
             }
+            if(forUpdate){
+                if(findODRUsersByEmail(user.getEmail()).getId()!=user.getId()){
+                    rv.put("email","wrong email for this user.");
+                }
+            }
+
         }
         if(user.getFirstName()==null||user.getFirstName().isBlank()){
             rv.put("firstName","required");

@@ -40,6 +40,11 @@
                 <input type="text" th:field="*{phoneNumber}" class="form-control" id="inputPhoneNumber" value="phoneNumber">
                 <p th:text="${errors.get('phoneNumber')}"></p>
             </div>
+            <div class="mb-3">
+                <label for="inputPassword" class="form-label">Your current password</label>
+                <input type="text" th:field="*{password}" class="form-control" id="inputPassword" >
+                <p th:text="${errors.get('password')}"></p>
+            </div>
 
             <input type="submit" value="Submit"/>
             <a href="myDetails" class="btn btn-primary" role="button">Back to My Details</a>

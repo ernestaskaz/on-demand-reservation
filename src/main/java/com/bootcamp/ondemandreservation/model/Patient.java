@@ -1,6 +1,7 @@
 package com.bootcamp.ondemandreservation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.collect.Lists;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,6 +22,16 @@ public class Patient extends ODRUser{
     }
 
     public Patient () {
+    }
+
+    public Patient(Patient patient) {
+        super(patient);
+        this.city = patient.city;
+        this.age = patient.age;
+        this.idCard = patient.idCard;
+        this.phoneNumber = patient.phoneNumber;
+        this.priorityQueue = patient.priorityQueue;
+        this.appointmentList = new ArrayList<>(patient.appointmentList);
     }
 
     public Patient(Long id, String firstName, String lastName) {

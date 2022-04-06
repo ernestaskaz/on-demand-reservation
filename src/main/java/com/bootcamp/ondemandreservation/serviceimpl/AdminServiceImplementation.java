@@ -76,8 +76,8 @@ public class AdminServiceImplementation implements AdminService {
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */
     @Override
-    public Map<String, String> validateAdmin(Admin admin, boolean matchPassword) {
-        return odrUserService.validate(admin,matchPassword);
+    public Map<String, String> validateAdmin(Admin admin, boolean matchPassword,boolean forUpdate) {
+        return odrUserService.validate(admin,matchPassword,forUpdate);
     }
 
     @Override

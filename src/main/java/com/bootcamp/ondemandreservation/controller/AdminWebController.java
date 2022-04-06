@@ -51,7 +51,7 @@ public class AdminWebController {
     @PostMapping(DOCTOR_CREATE_URL)
     @PreAuthorize(ADMIN_ROLE)
     String createDoctor(@ModelAttribute Doctor doctor, Model model) {
-        Map errors = doctorService.validateDoctor(doctor, true);
+        Map errors = doctorService.validateDoctor(doctor, true,false);
         model.addAttribute("doctor", doctor);
         model.addAttribute("errors", errors);
         if (errors.isEmpty()) {
@@ -78,7 +78,7 @@ public class AdminWebController {
     @PostMapping(ADMIN_CREATE_URL)
     @PreAuthorize(ADMIN_ROLE)
     String createAdmin(@ModelAttribute Admin admin, Model model) {
-        Map errors = adminService.validateAdmin(admin, true);
+        Map errors = adminService.validateAdmin(admin, true,false);
         model.addAttribute("admin", admin);
         model.addAttribute("errors", errors);
         if (errors.isEmpty()) {
