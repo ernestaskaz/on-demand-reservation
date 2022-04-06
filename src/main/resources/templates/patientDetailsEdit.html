@@ -11,40 +11,42 @@
         <h1>Edit my details</h1>
     </div>
 </div>
+
 <div class="container">
     <div class="d-flex justify-content-center">
         <form action="#" th:action="@{/web/patient/edit}" th:object="${patient}" method="post">
             <div class="mb-3">
                 <label for="inputName" class="form-label">First Name</label>
                 <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
+                <p th:text="${errors.get('firstName')}"></p>
             </div>
             <div class="mb-3">
                 <label for="inputLastName" class="form-label">Last Name</label>
                 <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName" value="lastName">
+                <p th:text="${errors.get('lastName')}"></p>
             </div>
             <div class="mb-3">
                 <label for="inputCity" class="form-label">City</label>
                 <input type="text" th:field="*{city}" class="form-control" id="inputCity" value="city">
+                <p th:text="${errors.get('city')}"> </p>
             </div>
             <div class="mb-3">
                 <label for="inputEmail" class="form-label">Email address</label>
                 <input type="text" th:field="*{email}" class="form-control" id="inputEmail" value="email">
+                <p th:text="${errors.get('email')}"></p>
             </div>
             <div class="mb-3">
                 <label for="inputPhoneNumber" class="form-label">Phone Number</label>
                 <input type="text" th:field="*{phoneNumber}" class="form-control" id="inputPhoneNumber" value="phoneNumber">
+                <p th:text="${errors.get('phoneNumber')}"></p>
             </div>
-            <input type="submit" value="Submit" />
-<!--            <button name="submit" type="submit" value="0" class="btn btn-primary">Submit Changes</button>-->
+
+            <input type="submit" value="Submit"/>
             <a href="myDetails" class="btn btn-primary" role="button">Back to My Details</a>
-            <p th:text="${successMsg}"></p>
+
+            <div th:text="${successMsg}"></div>
+
         </form>
-
-    </div>
-</div>
-<div class="container">
-    <div class="d-flex justify-content-center">
-
     </div>
 </div>
 </body>
