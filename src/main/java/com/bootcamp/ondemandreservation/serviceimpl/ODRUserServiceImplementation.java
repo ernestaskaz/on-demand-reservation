@@ -68,6 +68,15 @@ public class ODRUserServiceImplementation implements  ODRUserService {
         if(!ODRInputSanitiser.likelyIsEmail(user.getEmail())){
             rv.put("email","incorrect email");
         }
+        ODRUser otherUser=null;
+        try {
+            otherUser=findODRUsersByEmail(user.getEmail());
+        }catch(Exception x){
+            rv.put("email","unsuitable email");
+        }
+        if(otherUser!=null){
+            rv.put("email","already registered");
+        }
         if(user.getFirstName()==null||user.getFirstName().isBlank()){
             rv.put("firstName","required");
         }

@@ -66,7 +66,7 @@ public class CommonController {
             return "register";
         }else{
             patient.setId(null);
-            patientService.savePatient(patient);
+            patientService.savePatientAndPassword(patient);
             return "registerSuccess";
         }
     }

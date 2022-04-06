@@ -114,4 +114,17 @@ public class PatientServiceImplementation implements PatientService {
 
         return rv;
     }
+
+    /**
+     * The same as savePatient, but the password is treated as plain text
+     * and is hashed&salted before saving
+     * @param patient patient model to save
+     * @return
+     */
+    @Override
+    public Patient savePatientAndPassword(Patient patient) {
+        patient.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
+                .encode(patient.getPassword()));
+        return savePatient(patient);
+    }
 }
