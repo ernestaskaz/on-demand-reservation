@@ -17,7 +17,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/web/")
 public class PatientWebController {
-    public static final String PATIENT_EDIT_URL = "/patient/edit";
+    //public static final String PATIENT_EDIT_URL = "/patient/edit";
     public static final String PATIENT_EDIT_TEMPLATE = "patientDetailsEdit";
     @Autowired
     private PatientService patientService;
@@ -48,8 +48,7 @@ public class PatientWebController {
         model.addAttribute("patient", patient);
         return "patientAccountView";
     }
-
-
+    
     @GetMapping("/patient/appointments")
     String patientAppointments(Model model){
         Patient patient = patientService.getLoggedInPatient();
@@ -58,19 +57,18 @@ public class PatientWebController {
         return "patientAppointmentsView";
     }
 
-
     @GetMapping("/patient/available-appointments")
     String patientAppointmentsAvailable(Model model){
         return "patientAvailableAppointmentsView";
     }
 
-    @GetMapping(PATIENT_EDIT_URL)
+    @GetMapping("/patient/edit")
     String editLoggedInPatient(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         model.addAttribute("patient",patientService.getLoggedInPatient());
         return PATIENT_EDIT_TEMPLATE;
     }
-    @PostMapping(PATIENT_EDIT_URL)
+    @PostMapping("/patient/edit")
     String editLoggedInPatient(@ModelAttribute Patient patient, Model model){
         //TODO Add change password functionality
         Map errors=patientService.validatePatient(patient,false);
@@ -82,8 +80,4 @@ public class PatientWebController {
         }
         return PATIENT_EDIT_TEMPLATE;
     }
-
-
-
-
 }

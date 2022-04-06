@@ -20,19 +20,19 @@
 <div class="container">
     <div class="d-flex justify-content-center">
         <ul class="list">
-            <li class="list-group-item" th:text="${patient.id}"></li>
-            <li class="list-group-item" th:text="${patient.firstName}"></li>
-            <li class="list-group-item" th:text="${patient.lastName}"></li>
-            <li class="list-group-item" th:text="${patient.age}"></li>
-            <li class="list-group-item" th:text="${patient.city}"></li>
-            <li class="list-group-item" th:text="${patient.idCard}"></li>
-            <li class="list-group-item" th:text="${patient.phoneNumber}"></li>
-            <li class="list-group-item" th:text="${patient.email}"></li>
+            <li class="list-group-item" th:text="'Id: '+ ${patient.id}"></li>
+            <li class="list-group-item" th:text="'Name: '+${patient.firstName}"></li>
+            <li class="list-group-item" th:text="'Last Name: '+${patient.lastName}"></li>
+            <li class="list-group-item" th:text="'Age: '+${patient.age}"></li>
+            <li class="list-group-item" th:text="'City: '+${patient.city}"></li>
+            <li class="list-group-item" th:text="'Id Card: '+ ${patient.idCard}"></li>
+            <li class="list-group-item" th:text="'Phone Number: '+${patient.phoneNumber}"></li>
+            <li class="list-group-item" th:text="'Email: '+${patient.email}"></li>
         </ul>
     </div>
 </div>
 <div class="container">
     <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-primary">Edit my details</button>
+        <a href="edit" class="btn btn-primary" role="button">Edit my details</a>
     </div>
 </div>
