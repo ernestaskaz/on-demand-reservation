@@ -29,7 +29,12 @@
                 <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                 <td th:text="${appointment.doctor.specialty}"></td>
 
-                <td><button type="button" class="btn btn-primary">Reserve Appointment</button></td>
+                <td>
+                    <form th:action="@{/web/patient/selfReserve}" th:object="${appointment}" method="post">
+                        <Input type="hidden" th:field="*{id}"/>
+                        <button type="button" class="btn btn-primary">Reserve Appointment</button></form>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>
