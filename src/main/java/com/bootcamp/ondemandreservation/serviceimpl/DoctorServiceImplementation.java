@@ -166,15 +166,17 @@ public class DoctorServiceImplementation implements DoctorService {
         doctor.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
                 .encode(doctor.getPassword()));
 
+        Doctor savedDoctor = saveDoctor(doctor);
+
         Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 12, 19, 15);
         Schedule scheduleFriday = new Schedule(DayOfWeek.FRIDAY, 12, 19, 15);
 
-        scheduleFriday.setDoctor(doctor);
-        scheduleMonday.setDoctor(doctor);
+        scheduleFriday.setDoctor(savedDoctor);
+        scheduleMonday.setDoctor(savedDoctor);
 
-    //    appointmentService.generateAppointmentsBySchedule(foundDoctor.getId(), 15);
+        scheduleService.saveSchedule(scheduleFriday);
+        scheduleService.saveSchedule(scheduleMonday);
 
-
-        return saveDoctor(doctor);
+        return savedDoctor;
     }
 }
