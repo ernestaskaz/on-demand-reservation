@@ -35,7 +35,7 @@
                     <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                     <td th:text="${appointment.doctor.specialty}"></td>
                     <td>
-                        <a th:href="@{/web/patient/appointments(id=${appointment.id})}">Cancel</a>
+                        <a th:href="@{/web/patient/appointments/cancel(id=${appointment.id})}">Cancel</a>
                     </td>
                 </tr>
                 </tbody>
