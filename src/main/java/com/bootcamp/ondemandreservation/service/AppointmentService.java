@@ -18,6 +18,8 @@ public interface AppointmentService {
     void generateAppointmentsBySchedule(Long doctorId, int daysCount);
     Appointment updateAppointment(Long appointmentId, Appointment appointment);
 
+    boolean cancelAppointment(Long patientId, Long appointmentId);
+
     // find by doctor id list, roles? doctor/admin can also see patient id list
     // find by patient id list roles? patient can only see his appointments.
 
