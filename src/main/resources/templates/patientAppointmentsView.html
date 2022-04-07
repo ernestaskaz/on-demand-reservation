@@ -17,14 +17,9 @@
     </div>
 </nav>
 <div class="d-flex justify-content-center">
-    <div class="col-auto">
-        <h1>My Appointments</h1>
-    </div>
-</div>
-
+<div th:text="${reserveMsg}" class="d-flex justify-content-center"></div>
     <div class="d-flex justify-content-center">
-        <div th:text="${reserveMsg}"></div>
-        <div class="col-auto">
+         <div class="col-auto">
             <table class="table table-striped">
                 <thead>
                 <th scope="col">Appointment</th>
@@ -40,7 +35,7 @@
                     <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                     <td th:text="${appointment.doctor.specialty}"></td>
                     <td>
-                        <a th:href="@{/web/patient/appointments/cancel(id=${appointment.id})}">Cancel</a>
+                        <a th:href="@{/web/patient/appointments(id=${appointment.id})}">Cancel</a>
                     </td>
                 </tr>
                 </tbody>
