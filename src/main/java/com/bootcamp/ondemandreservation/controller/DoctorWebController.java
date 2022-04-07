@@ -84,6 +84,16 @@ public class DoctorWebController {
         return "doctorScheduleView";
     }
 
+    @GetMapping("/doctor/generate")
+    String generateDoctorAppointments(Model model){
+        Doctor doctor = doctorService.getLoggedInDoctor();
+        appointmentService.generateAppointmentsBySchedule(doctor.getId(), 15);
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("appointments", doctor.getAppointmentList());
+
+        return "doctorAllAppointmentsView";
+    }
+
 
 
 }
