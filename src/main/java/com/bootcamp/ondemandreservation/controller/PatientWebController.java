@@ -5,13 +5,12 @@ import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.PatientService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +19,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/web/")
 public class PatientWebController {
+    static final Logger log= LoggerFactory.getLogger(PatientWebController.class);
     //public static final String PATIENT_EDIT_URL = "/patient/edit";
     public static final String PATIENT_EDIT_TEMPLATE = "patientDetailsEdit";
     @Autowired
@@ -66,6 +66,8 @@ public class PatientWebController {
         return "patientAppointmentsView";
     }
 
+
+
     @GetMapping("/patient/available-appointments")
     String patientAppointmentsAvailable(Model model){
         List<Appointment>  appointments = appointmentService.findAvailableAndNotReserved();
@@ -73,6 +75,37 @@ public class PatientWebController {
 
         return "patientAvailableAppointmentsView";
     }
+    @RequestMapping("/patient/appointments/selfReserve")
+    String patientAppointmentsReserve(@RequestParam Long id, Model model){
+        Patient patient = patientService.getLoggedInPatient();
+        boolean updated=false;
+        try {
+            appointmentService.reserveAppointment(patient.getId(), id);
+            updated=true;
+        }catch(Throwable t){
+            log.error("reserve appointment:",t);
+            model.addAttribute("reserveMsg",t.getMessage());//TODO be less informative to end user
+        }
+        if(updated)model.addAttribute("reserveMsg","Appointment reserved");
+        return patientAppointmentsAvailable(model);//Not sure if this is good
+    }
+    @RequestMapping("/patient/appointments/cancel")
+    String patientAppointmentsCancel(@RequestParam Long id, Model model){
+        Patient patient = patientService.getLoggedInPatient();
+        boolean canceled=false;
+        try{
+            canceled=appointmentService.cancelAppointment(patient.getId(), id);
+        }catch(Throwable t){
+            log.error("cancellation error ",t);
+        }
+        if(canceled) {
+            model.addAttribute("reserveMsg", "Appointment canceled");
+        }else{
+            model.addAttribute("reserveMsg", "Appointment cancelation failed");
+        }
+        return patientAppointmentsAvailable(model);//Not sure if this is good
+    }
+
 
     @GetMapping("/patient/edit")
     String editLoggedInPatient(Model model){

@@ -23,6 +23,7 @@
 </div>
 
     <div class="d-flex justify-content-center">
+        <div th:text="${reserveMsg}"></div>
         <div class="col-auto">
             <table class="table table-striped">
                 <thead>
@@ -38,10 +39,8 @@
                     <td th:text="${appointment.appointmentTime}"></td>
                     <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                     <td th:text="${appointment.doctor.specialty}"></td>
-                    <td><form th:action="@{/web/patient/cancel}" th:object="${appointment}" method="post">
-                        <Input type="hidden" th:field="*{id}"/>
-                        <button type="button" class="btn btn-primary">Cancel Appointment</button></form>
-                        </form>
+                    <td>
+                        <a th:href="@{/web/patient/appointments/cancel(id=${appointment.id})}">Cancel</a>
                     </td>
                 </tr>
                 </tbody>

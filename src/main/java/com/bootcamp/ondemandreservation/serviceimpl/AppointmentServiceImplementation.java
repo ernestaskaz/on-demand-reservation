@@ -111,6 +111,16 @@ public class AppointmentServiceImplementation implements AppointmentService {
     }
 
     @Override
+    public boolean cancelAppointment(Long patientId, Long appointmentId) {
+        Appointment currentAppointment = getAppointmentById(appointmentId);
+        if(currentAppointment.getPatient().getId()==patientId){
+            cancelAppointment(appointmentId);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void deleteAppointment(Long appointmentId) {
         appointmentRepository.deleteById(appointmentId);
 
@@ -120,11 +130,12 @@ public class AppointmentServiceImplementation implements AppointmentService {
     public void reserveAppointment(Long patientId, Long appointmentId) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
         Patient currentPatient = patientRepository.findById(patientId).get();
-        currentAppointment.setReserved(true);
-        currentAppointment.setAvailable(false);
-        currentAppointment.setPatient(currentPatient);
-
-        saveAppointment(currentAppointment);
+        if(!currentAppointment.isReserved()){
+            currentAppointment.setReserved(true);
+            currentAppointment.setAvailable(false);
+            currentAppointment.setPatient(currentPatient);
+            saveAppointment(currentAppointment);
+        }else throw new IllegalArgumentException("Appointment already reserved.");
 
     }
 
@@ -181,4 +192,6 @@ public class AppointmentServiceImplementation implements AppointmentService {
        return saveAppointment(appointment);
 
     }
+
+
 }
