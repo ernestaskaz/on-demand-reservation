@@ -13,6 +13,7 @@
             <a class="nav-link" href="/web/doctor/all-appointments"> All Appointments </a>
             <a class="nav-link" href="/web/doctor/today-appointments">Appointments For Today</a>
             <a class="nav-link" href="/web/doctor/schedule">Schedule</a>
+            <a class="nav-link" href="/web/doctor/generate">Generate Appointments</a>
             <a class="nav-link" href="/logout_now">Log Out</a>
         </div>
     </div>
@@ -35,7 +36,7 @@
             <tr th:each="appointment : ${appointments}">
                 <td th:text="${appointment.id}"></td>
                 <td th:text="${appointment.appointmentTime}"></td>
-                <td th:text="${appointment.patient.firstName}+' '+${appointment.patient.lastName}"></td>
+                <td th:text="${appointment.patient != null} ? ${appointment.patient.firstName} +' '+${appointment.patient.lastName} : 'Free appointment '"></td>
                 <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                 <td th:text="${appointment.doctor.specialty}"></td>
                 <td><button type="button" class="btn btn-primary">Add Comment</button></td>
