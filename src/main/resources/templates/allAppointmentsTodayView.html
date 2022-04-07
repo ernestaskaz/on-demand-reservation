@@ -32,6 +32,7 @@
             <th scope="col">Price</th>
             <th scope="col">Specialty</th>
             <th scope="col">Edit</th>
+            <th scope="col">Edit</th>
             </thead>
             <tbody>
             <tr th:each="appointment : ${appointments}">
@@ -40,8 +41,10 @@
                 <td th:text="${appointment.patient.firstName}+' '+${appointment.patient.lastName}"></td>
                 <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                 <td th:text="${appointment.price}"></td>
-                <td><button type="button" class="btn btn-primary">Reserve Appointment</button></td>
                 <td th:text="${appointment.doctor.specialty}"></td>
+                <td><button type="button" class="btn btn-primary">Make Unavailable</button></td>
+                <td><button type="button" class="btn btn-primary">Cancel Appointment</button></td>
+
 
             </tr>
             </tbody>
