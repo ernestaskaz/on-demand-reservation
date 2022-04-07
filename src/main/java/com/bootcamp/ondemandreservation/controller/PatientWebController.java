@@ -84,7 +84,7 @@ public class PatientWebController {
             updated=true;
         }catch(Throwable t){
             log.error("reserve appointment:",t);
-            model.addAttribute("reserveMsg",t.getMessage());//TODO be less informative to end user
+            model.addAttribute("reserveMsg","Appointment reservation failed");//TODO be less informative to end user
         }
         if(updated)model.addAttribute("reserveMsg","Appointment reserved");
         return patientAppointmentsAvailable(model);//Not sure if this is good
@@ -101,9 +101,9 @@ public class PatientWebController {
         if(canceled) {
             model.addAttribute("reserveMsg", "Appointment canceled");
         }else{
-            model.addAttribute("reserveMsg", "Appointment cancelation failed");
+            model.addAttribute("reserveMsg", "Appointment cancellation failed");
         }
-        return patientAppointmentsAvailable(model);//Not sure if this is good
+        return patientAppointments(model);//Not sure if this is good
     }
 
 
