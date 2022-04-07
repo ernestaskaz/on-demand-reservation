@@ -1,6 +1,7 @@
 package com.bootcamp.ondemandreservation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import javax.persistence.*;
@@ -43,7 +44,19 @@ public class Patient extends ODRUser{
         this.appointmentList = appointmentList;
     }
 
-
+    /**
+     *
+     * @return semi-anonymous string for admin purposes
+     */
+    public String privacyName(){
+        StringBuilder stringBuilder = new StringBuilder();
+        String pLastName= Strings.padEnd(Strings.nullToEmpty(getLastName()),3,' ').substring(0,1);
+        String pPhone=Strings.padEnd(Strings.nullToEmpty(getPhoneNumber()),4,' ');
+        pPhone=pPhone.substring(pPhone.length()-3);
+        stringBuilder.append(getFirstName()).append(" ")
+                .append(pLastName).append(". ").append(pPhone);
+        return stringBuilder.toString();
+    }
 
     public void removePatientFromAppointmentList() {
         for (Appointment appointment: appointmentList) {
