@@ -68,5 +68,27 @@ class ODRInputSanitiserTest {
         assertFalse(ODRInputSanitiser.likelyIsEmail("hello@экзампле.com"));
     }
 
+    @Test
+    void isPhoneNumber(){
+        assertTrue(ODRInputSanitiser.seemsToBePhoneNumber("12345"));
+    }
+
+    @Test
+    void isPhoneNumberWithPlus(){
+        assertTrue(ODRInputSanitiser.seemsToBePhoneNumber("+123457777773"));
+    }
+    @Test
+    void isPhoneNumberWithPlusAndSpaces(){
+        assertTrue(ODRInputSanitiser.seemsToBePhoneNumber("+1 2345 7777 773"));
+    }
+    @Test
+    void notPhoneNumberTooManyPluses(){
+        assertFalse(ODRInputSanitiser.seemsToBePhoneNumber("++1 2345 7777 773"));
+    }
+    @Test
+    void notPhoneNumberPlusInWrongPlace(){
+        assertFalse(ODRInputSanitiser.seemsToBePhoneNumber("1 2345 7+777 773"));
+    }
+
 
 }
