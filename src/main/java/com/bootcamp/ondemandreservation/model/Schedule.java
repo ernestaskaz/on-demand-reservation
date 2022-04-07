@@ -38,6 +38,13 @@ public class Schedule {
         this.lunchTime = lunchTime;
     }
 
+    public Schedule(DayOfWeek dayOfWeek, int startHour, int endHour, int lunchTime) {
+        this.dayOfWeek = dayOfWeek;
+        this.startHour = startHour;
+        this.endHour = endHour;
+        this.lunchTime = lunchTime;
+    }
+
     public Long getId() {
         return id;
     }
