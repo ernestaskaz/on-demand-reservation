@@ -3,13 +3,16 @@ package com.bootcamp.ondemandreservation.serviceimpl;
 import com.bootcamp.ondemandreservation.model.*;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
+import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
+import com.bootcamp.ondemandreservation.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,15 +28,21 @@ public class DoctorServiceImplementation implements DoctorService {
     private ODRPasswordEncoder odrPasswordEncoder;
     @Autowired
     private ODRUserService odrUserService;
+    @Autowired
+    private ScheduleService scheduleService;
+    @Autowired
+    private AppointmentService appointmentService;
 
 
     public DoctorServiceImplementation() {
     }
 
-    public DoctorServiceImplementation(DoctorRepository doctorRepository, ODRPasswordEncoder odrPasswordEncoder, ODRUserService odrUserService) {
+    public DoctorServiceImplementation(DoctorRepository doctorRepository, ODRPasswordEncoder odrPasswordEncoder, ODRUserService odrUserService, ScheduleService scheduleService, AppointmentService appointmentService) {
         this.doctorRepository = doctorRepository;
         this.odrPasswordEncoder = odrPasswordEncoder;
         this.odrUserService = odrUserService;
+        this.scheduleService = scheduleService;
+        this.appointmentService = appointmentService;
     }
 
     @Override
@@ -156,6 +165,16 @@ public class DoctorServiceImplementation implements DoctorService {
     public Doctor saveDoctorAndPassword(Doctor doctor) {
         doctor.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
                 .encode(doctor.getPassword()));
+
+        Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 12, 19, 15);
+        Schedule scheduleFriday = new Schedule(DayOfWeek.FRIDAY, 12, 19, 15);
+
+        scheduleFriday.setDoctor(doctor);
+        scheduleMonday.setDoctor(doctor);
+
+    //    appointmentService.generateAppointmentsBySchedule(foundDoctor.getId(), 15);
+
+
         return saveDoctor(doctor);
     }
 }
