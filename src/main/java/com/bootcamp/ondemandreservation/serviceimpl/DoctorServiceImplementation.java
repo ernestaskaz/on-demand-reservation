@@ -130,7 +130,7 @@ public class DoctorServiceImplementation implements DoctorService {
 
         for (Appointment appointment: AllAppointments) {
 
-            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
+            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth() && appointment.getAppointmentTime().isAfter(LocalDateTime.now())) {
                 todaysAppointments.add(appointment);
             }
 
