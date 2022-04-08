@@ -67,7 +67,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Override
     public List<Appointment> findAvailableAndNotReserved() {
-        return appointmentRepository.findByIsAvailableTrueAndIsReservedFalse();
+        return appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now());
     }
 
     /**
