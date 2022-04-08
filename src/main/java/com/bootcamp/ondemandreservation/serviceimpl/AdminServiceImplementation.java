@@ -9,6 +9,7 @@ import com.bootcamp.ondemandreservation.service.AdminService;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -35,14 +36,14 @@ public class AdminServiceImplementation implements AdminService {
     public AdminServiceImplementation(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
-
+    @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
     public void changePassword(Long id, String plaintextPassword) {
         Admin theAdmin=findAdminById(id);
         theAdmin.setPassword(odrPasswordEncoder.defaultPasswordEncoder().encode(plaintextPassword));
         saveAdmin(theAdmin);
     }
-
+    @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
     public Admin saveAdmin(Admin admin) {
         return adminRepository.save(admin);
@@ -74,6 +75,7 @@ public class AdminServiceImplementation implements AdminService {
             return admin;
         }
 
+    @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
     public void deleteAdmin(Long id) {
         adminRepository.deleteById(id);
@@ -82,6 +84,7 @@ public class AdminServiceImplementation implements AdminService {
     /*
      * does not update the ID itself
      */
+    @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
     public Admin updateAdmin(Long id, Admin admin) {
         admin.setId(id);
@@ -102,6 +105,7 @@ public class AdminServiceImplementation implements AdminService {
         return odrUserService.validate(admin,matchPassword,forUpdate);
     }
 
+    @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
     public Admin saveAdminAndPassword(Admin admin) {
         admin.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
