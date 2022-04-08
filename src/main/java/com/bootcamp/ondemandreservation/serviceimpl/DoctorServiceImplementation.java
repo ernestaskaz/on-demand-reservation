@@ -118,19 +118,35 @@ public class DoctorServiceImplementation implements DoctorService {
     }
 
     @Override
+    public List<Appointment> getDoctorPastAppointments(Long id) {
+        List<Appointment> AllAppointments = getAllAppointments(id);
+        List<Appointment> pastAppointments = new ArrayList<>();
+
+        for (Appointment appointment: AllAppointments) {
+
+            if(appointment.getAppointmentTime().isBefore(LocalDateTime.now())) {
+                pastAppointments.add(appointment);
+            }
+
+        }
+
+        return pastAppointments;
+    }
+
+    @Override
     public Doctor updateDoctor(Long id, Doctor doctor) {
         doctor.setId(id);
         return saveDoctor(doctor);
     }
 
     @Override
-    public List<Appointment> getTodaysAppointments(Long id) {
+    public List<Appointment> getUpcomingAppointmentsForToday(Long id) {
         List<Appointment> AllAppointments = getAllAppointments(id);
         List<Appointment> todaysAppointments = new ArrayList<>();
 
         for (Appointment appointment: AllAppointments) {
 
-            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
+            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth() && appointment.getAppointmentTime().isAfter(LocalDateTime.now())) {
                 todaysAppointments.add(appointment);
             }
 
@@ -168,14 +184,24 @@ public class DoctorServiceImplementation implements DoctorService {
 
         Doctor savedDoctor = saveDoctor(doctor);
 
-        Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 12, 19, 15);
-        Schedule scheduleFriday = new Schedule(DayOfWeek.FRIDAY, 12, 19, 15);
+        Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 8, 19, 13);
+        Schedule scheduleTuesday = new Schedule(DayOfWeek.TUESDAY, 8, 19, 13);
+        Schedule scheduleWednesday = new Schedule(DayOfWeek.WEDNESDAY, 8, 19, 13);
+        Schedule scheduleThursday = new Schedule(DayOfWeek.THURSDAY, 8, 19, 13);
+        Schedule scheduleFriday = new Schedule(DayOfWeek.FRIDAY, 8, 19, 13);
 
-        scheduleFriday.setDoctor(savedDoctor);
         scheduleMonday.setDoctor(savedDoctor);
+        scheduleTuesday.setDoctor(savedDoctor);
+        scheduleWednesday.setDoctor(savedDoctor);
+        scheduleThursday.setDoctor(savedDoctor);
+        scheduleFriday.setDoctor(savedDoctor);
 
-        scheduleService.saveSchedule(scheduleFriday);
         scheduleService.saveSchedule(scheduleMonday);
+        scheduleService.saveSchedule(scheduleTuesday);
+        scheduleService.saveSchedule(scheduleWednesday);
+        scheduleService.saveSchedule(scheduleThursday);
+        scheduleService.saveSchedule(scheduleFriday);
+
 
         return savedDoctor;
     }

@@ -2,7 +2,6 @@ package com.bootcamp.ondemandreservation.service;
 
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
-import com.bootcamp.ondemandreservation.model.ODRUser;
 import com.bootcamp.ondemandreservation.model.Schedule;
 
 import java.util.List;
@@ -17,8 +16,9 @@ public interface DoctorService {
     void deleteDoctor(Long id);
     List<Appointment> getAllAppointments(Long id);
     List<Schedule> getDoctorSchedules(Long id);
+    List<Appointment> getDoctorPastAppointments(Long id);
     Doctor updateDoctor(Long id, Doctor doctor);
-    List<Appointment> getTodaysAppointments(Long id);
+    List<Appointment> getUpcomingAppointmentsForToday(Long id);
     Doctor getLoggedInDoctor();
     /**
      * Validates the doctor

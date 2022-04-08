@@ -67,8 +67,12 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Override
     public List<Appointment> findAvailableAndNotReserved() {
-        return appointmentRepository.findByIsAvailableTrueAndIsReservedFalse();
+        return appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now());
     }
+
+    /**
+     * Method generates all appointments for today for an Admin role view.
+     */
 
     @Override
     public List<Appointment> getTodaysAppointments() {
@@ -77,7 +81,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
         for (Appointment appointment: AllAppointments) {
 
-            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
+            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth() && appointment.getAppointmentTime().isAfter(LocalDateTime.now()) ) {
                 todaysAppointments.add(appointment);
             }
 
@@ -127,6 +131,27 @@ public class AppointmentServiceImplementation implements AppointmentService {
     }
 
     @Override
+    public void setAppointmentUnavailable(Long appointmentId) {
+        Appointment currentAppointment = getAppointmentById(appointmentId);
+        currentAppointment.setAvailable(false);
+        saveAppointment(currentAppointment);
+    }
+
+    @Override
+    public void setAppointmentWasAttended(Long appointmentId) {
+        Appointment currentAppointment = getAppointmentById(appointmentId);
+        currentAppointment.setWasAttended(true);
+        saveAppointment(currentAppointment);
+    }
+
+    @Override
+    public void addComment(Long appointmentId, String comment) {
+        Appointment currentAppointment = getAppointmentById(appointmentId);
+        currentAppointment.setComment(comment);
+        saveAppointment(currentAppointment);
+    }
+
+    @Override
     public void reserveAppointment(Long patientId, Long appointmentId) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
         Patient currentPatient = patientRepository.findById(patientId).get();
@@ -154,7 +179,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
         DateTimeFormatter toStringDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         DateTimeFormatter setHoursToZero = DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00");
         //start generating appointments from the next day.
-        LocalDateTime addOneDay = LocalDateTime.now().plusDays(1);
+        LocalDateTime addOneDay = LocalDateTime.now();
         // set generation at 00:00.
         String zeroHoursAndMinutes = addOneDay.format(setHoursToZero);
         // creates LocalDateTime start point for  appointment generation.
@@ -164,16 +189,17 @@ public class AppointmentServiceImplementation implements AppointmentService {
         LocalDateTime endPoint = startPoint.plusDays(daysCount);
 
 
+
         for (Schedule schedule : currentDoctor.getSchedulesList()) {
 
             startPoint = originalPoint;
             while(startPoint.isBefore(endPoint)) {
 
 
-                if (schedule.getDayOfWeek().equals(startPoint.getDayOfWeek()) && startPoint.getHour() >= schedule.getStartHour() && startPoint.getHour() <= schedule.getEndHour() && startPoint.getHour() != schedule.getLunchTime()) {
+                if (schedule.getDayOfWeek().equals(startPoint.getDayOfWeek()) && startPoint.getHour() >= schedule.getStartHour() && startPoint.getHour() < schedule.getEndHour() && startPoint.getHour() != schedule.getLunchTime()) {
                     Appointment appointment = new Appointment(startPoint, currentDoctor);
-                    currentDoctor.addAppointmentList(appointment);
-                    saveAppointment(appointment);
+                        currentDoctor.addAppointmentList(appointment);
+                        saveAppointment(appointment);
                 }
                 startPoint = startPoint.plusHours(1);
 
