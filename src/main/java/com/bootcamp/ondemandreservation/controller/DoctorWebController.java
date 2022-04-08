@@ -1,4 +1,5 @@
 package com.bootcamp.ondemandreservation.controller;
+import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
@@ -8,6 +9,7 @@ import com.bootcamp.ondemandreservation.service.ScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
+@PreAuthorize(Doctor.DOCTOR_ROLE)
 @SessionAttributes("doctor")
 public class DoctorWebController {
     static final Logger log= LoggerFactory.getLogger(DoctorWebController.class);
@@ -46,9 +49,8 @@ public class DoctorWebController {
         // values from the session
         dataBinder.setDisallowedFields("id", "email");
     }
-
     @GetMapping("/doctor/myDetails")
-    String patientDetails(Model model){
+    String doctorDetails(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
         return "doctorAccountView";
@@ -62,7 +64,6 @@ public class DoctorWebController {
 
         return "doctorAllAppointmentsView";
     }
-
     @GetMapping("/doctor/today-appointments")
     String doctorTodayAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -72,6 +73,7 @@ public class DoctorWebController {
         return "doctorTodayAppointmentView";
     }
 
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/edit")
     String editLoggedInDoctor(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
