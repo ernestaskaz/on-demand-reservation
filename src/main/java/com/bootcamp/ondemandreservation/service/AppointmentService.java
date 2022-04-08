@@ -14,10 +14,10 @@ public interface AppointmentService {
     Appointment getAppointmentById(Long appointmentId);
     void cancelAppointment(Long appointmentId);
     void deleteAppointment(Long appointmentId);
+    void makeAppointmentUnavailable(Long appointmentId);
     void reserveAppointment(Long patientId, Long appointmentId);
     void generateAppointmentsBySchedule(Long doctorId, int daysCount);
     Appointment updateAppointment(Long appointmentId, Appointment appointment);
-
     boolean cancelAppointment(Long patientId, Long appointmentId);
 
     // find by doctor id list, roles? doctor/admin can also see patient id list

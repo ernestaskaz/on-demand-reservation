@@ -127,6 +127,13 @@ public class AppointmentServiceImplementation implements AppointmentService {
     }
 
     @Override
+    public void makeAppointmentUnavailable(Long appointmentId) {
+        Appointment currentAppointment = getAppointmentById(appointmentId);
+        currentAppointment.setAvailable(false);
+        saveAppointment(currentAppointment);
+    }
+
+    @Override
     public void reserveAppointment(Long patientId, Long appointmentId) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
         Patient currentPatient = patientRepository.findById(patientId).get();
