@@ -4,15 +4,15 @@ package com.bootcamp.ondemandreservation.controller;
 import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
+import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,8 +20,10 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
+@SessionAttributes("admin")
 public class AdminWebController {
     public static final String DOCTOR_GET_ALL = "/admin/all-doctors";
+    public static final String ADMIN_DETAILS = "/admin/myDetails";
     public static final String APPOINTMENT_GET_ALL = "/admin/all-appointments";
     public static final String APPOINTMENT_GET_ALL_TODAY = "/admin/today-appointments";
     public static final String ADMIN_EDIT_TEMPLATE = "adminDetailsEdit";
@@ -39,14 +41,27 @@ public class AdminWebController {
     PatientService patientService;
     @Autowired
     private AppointmentService appointmentService;
+    @Autowired
+    private ODRPasswordEncoder odrPasswordEncoder;
 
-    public AdminWebController(AdminService adminService, ODRUserService odrUserService, DoctorService doctorService, PatientService patientService, AppointmentService appointmentService) {
+    public AdminWebController(AdminService adminService, ODRUserService odrUserService, DoctorService doctorService, PatientService patientService, AppointmentService appointmentService, ODRPasswordEncoder odrPasswordEncoder) {
         this.adminService = adminService;
         this.odrUserService = odrUserService;
         this.doctorService = doctorService;
         this.patientService = patientService;
         this.appointmentService = appointmentService;
+        this.odrPasswordEncoder = odrPasswordEncoder;
     }
+
+
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        // Disallow binding of sensitive fields - user can't override
+        // values from the session
+        dataBinder.setDisallowedFields("id", "email");
+    }
+
+
     @GetMapping(DOCTOR_CREATE_URL)
     @PreAuthorize(Admin.ADMIN_ROLE)
     String createDoctor(Model model){
@@ -136,14 +151,45 @@ public class AdminWebController {
         return "adminAccountView";
     }
 
-    @GetMapping("/admin/edit")
+    @GetMapping(ADMIN_EDIT_TEMPLATE)
     @PreAuthorize(Admin.ADMIN_ROLE)
     String editLoggedInAdmin(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         Admin admin = adminService.getLoggedInAdmin();
+        //admin.blankPasswords();
         model.addAttribute("admin",admin);
         return ADMIN_EDIT_TEMPLATE;
     }
+
+//    @PostMapping(ADMIN_EDIT_TEMPLATE)
+//    @PreAuthorize(Admin.ADMIN_ROLE)
+//    String editLoggedInAdmin(@ModelAttribute Admin admin, BindingResult result, Model model){
+//        //note matchPassword is true now.
+//        Map errors= adminService.validateAdmin(admin, true, true);
+//        model.addAttribute("admin", admin);
+//        model.addAttribute("errors", errors);
+//        if(errors.isEmpty()) {
+//            String currentPassword=adminService.getLoggedInAdmin().getPassword();
+//            if(odrPasswordEncoder.defaultPasswordEncoder().matches(admin.getPassword(),currentPassword)) {
+//
+//                if(admin.getNewPassword()!=null&&!admin.getNewPassword().isBlank()){
+//                    //user wants to change password
+//                    admin.setPassword(admin.getNewPassword());//plain text
+//                    adminService.saveAdminAndPassword(admin);
+//                }else {
+//                    //User doesn't want to change password
+//                    admin.setPassword(currentPassword);//encrypted
+//                    adminService.saveAdmin(admin);
+//                }
+//                model.addAttribute("successMsg","Your data were updated successfully.");
+//            }else{
+//                errors.put("password","Incorrect password");
+//            }//else of if passwords match
+//
+//        }//if validation errors empty
+//        admin.blankPasswords();
+//        return ADMIN_EDIT_TEMPLATE;
+//    }
 
 
 }
