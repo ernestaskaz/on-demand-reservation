@@ -20,6 +20,8 @@ public interface ODRUserService extends UserDetailsService {
      * to get common fields validated.
      * @param user user to be validated
      * @param matchPassword if we should check for password and confirmPassword to match.
+     * @param forUpdate false if creating new user (new email, match password and confirmPassword)
+     *                  true if updating existing user (same email, match newPassword and confirmPassword)
      * @return Map with fields (email, not getEmail) as keys and error messages as values
      */
     Map<String, String> validate(ODRUser user, boolean matchPassword, boolean forUpdate);
