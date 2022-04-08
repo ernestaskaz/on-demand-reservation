@@ -1,5 +1,6 @@
 package com.bootcamp.ondemandreservation.controller;
 import com.bootcamp.ondemandreservation.model.Doctor;
+import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
@@ -9,12 +10,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
+@SessionAttributes("doctor")
 public class DoctorWebController {
     static final Logger log= LoggerFactory.getLogger(DoctorWebController.class);
 
@@ -35,7 +40,12 @@ public class DoctorWebController {
         this.scheduleService = scheduleService;
     }
 
-
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        // Disallow binding of sensitive fields - user can't override
+        // values from the session
+        dataBinder.setDisallowedFields("id", "email");
+    }
 
     @GetMapping("/doctor/myDetails")
     String patientDetails(Model model){
@@ -63,10 +73,40 @@ public class DoctorWebController {
     }
 
     @GetMapping("/doctor/edit")
-    String editLoggedInPatient(Model model){
+    String editLoggedInDoctor(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         Doctor doctor = doctorService.getLoggedInDoctor();
-        model.addAttribute("doctor",doctor);
+        doctor.blankPasswords();
+        model.addAttribute("doctor", doctor);
+        return "doctorDetailsEdit";
+    }
+
+    @PostMapping("/doctor/edit")
+    String editLoggedInDoctor(@ModelAttribute Doctor doctor, BindingResult result, Model model){
+        //note matchPassword is true now.
+        Map errors=doctorService.validateDoctor(doctor,true,true);
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("errors", errors);
+        if(errors.isEmpty()) {
+            String currentPassword=doctorService.getLoggedInDoctor().getPassword();
+            if(odrPasswordEncoder.defaultPasswordEncoder().matches(doctor.getPassword(),currentPassword)) {
+
+                if(doctor.getNewPassword()!=null&&!doctor.getNewPassword().isBlank()){
+                    //user wants to change password
+                    doctor.setPassword(doctor.getNewPassword());//plain text
+                    doctorService.saveDoctorAndPassword(doctor);
+                }else {
+                    //User doesn't want to change password
+                    doctor.setPassword(currentPassword);//encrypted
+                    doctorService.saveDoctor(doctor);
+                }
+                model.addAttribute("successMsg","Your data were updated successfully.");
+            }else{
+                errors.put("password","Incorrect password");
+            }//else of if passwords match
+
+        }//if validation errors empty
+        doctor.blankPasswords();
         return DOCTOR_EDIT_TEMPLATE;
     }
 
