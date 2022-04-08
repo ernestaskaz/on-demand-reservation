@@ -38,14 +38,14 @@ public class AdminServiceImplementation implements AdminService {
         this.adminRepository = adminRepository;
     }
 
-    //@PreAuthorize(Admin.ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
     public void changePassword(Long id, String plaintextPassword) {
         Admin theAdmin=findAdminById(id);
         theAdmin.setPassword(odrPasswordEncoder.defaultPasswordEncoder().encode(plaintextPassword));
         saveAdmin(theAdmin);
     }
-    //@PreAuthorize(Admin.ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
     @Transactional
     public Admin saveAdmin(Admin admin) {
