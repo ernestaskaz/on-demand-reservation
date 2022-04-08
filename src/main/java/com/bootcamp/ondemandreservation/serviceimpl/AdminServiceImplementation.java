@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -36,15 +37,17 @@ public class AdminServiceImplementation implements AdminService {
     public AdminServiceImplementation(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
-    @PreAuthorize(Admin.ADMIN_ROLE)
+
+    //@PreAuthorize(Admin.ADMIN_ROLE)
     @Override
     public void changePassword(Long id, String plaintextPassword) {
         Admin theAdmin=findAdminById(id);
         theAdmin.setPassword(odrPasswordEncoder.defaultPasswordEncoder().encode(plaintextPassword));
         saveAdmin(theAdmin);
     }
-    @PreAuthorize(Admin.ADMIN_ROLE)
+    //@PreAuthorize(Admin.ADMIN_ROLE)
     @Override
+    @Transactional
     public Admin saveAdmin(Admin admin) {
         return adminRepository.save(admin);
     }
@@ -86,6 +89,7 @@ public class AdminServiceImplementation implements AdminService {
      */
     @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
+    @Transactional
     public Admin updateAdmin(Long id, Admin admin) {
         admin.setId(id);
         return saveAdmin(admin);
@@ -107,6 +111,7 @@ public class AdminServiceImplementation implements AdminService {
 
     @PreAuthorize(Admin.ADMIN_ROLE)
     @Override
+    @Transactional
     public Admin saveAdminAndPassword(Admin admin) {
         admin.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
                 .encode(admin.getPassword()));
