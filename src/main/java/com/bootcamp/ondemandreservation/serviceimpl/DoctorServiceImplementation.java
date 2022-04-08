@@ -179,27 +179,27 @@ public class DoctorServiceImplementation implements DoctorService {
         doctor.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
                 .encode(doctor.getPassword()));
 
-        //Doctor savedDoctor = saveDoctor(doctor);
+        Doctor savedDoctor = saveDoctor(doctor);
 
-//        Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 8, 19, 13);
-//        Schedule scheduleTuesday = new Schedule(DayOfWeek.TUESDAY, 8, 19, 13);
-//        Schedule scheduleWednesday = new Schedule(DayOfWeek.WEDNESDAY, 8, 19, 13);
-//        Schedule scheduleThursday = new Schedule(DayOfWeek.THURSDAY, 8, 19, 13);
-//        Schedule scheduleFriday = new Schedule(DayOfWeek.FRIDAY, 8, 19, 13);
-//
-//        scheduleMonday.setDoctor(doctor);
-//        scheduleTuesday.setDoctor(doctor);
-//        scheduleWednesday.setDoctor(doctor);
-//        scheduleThursday.setDoctor(doctor);
-//        scheduleFriday.setDoctor(doctor);
-//
-//        scheduleService.saveSchedule(scheduleMonday);
-//        scheduleService.saveSchedule(scheduleTuesday);
-//        scheduleService.saveSchedule(scheduleWednesday);
-//        scheduleService.saveSchedule(scheduleThursday);
-//        scheduleService.saveSchedule(scheduleFriday);
+        Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 8, 19, 13);
+        Schedule scheduleTuesday = new Schedule(DayOfWeek.TUESDAY, 8, 19, 13);
+        Schedule scheduleWednesday = new Schedule(DayOfWeek.WEDNESDAY, 8, 19, 13);
+        Schedule scheduleThursday = new Schedule(DayOfWeek.THURSDAY, 8, 19, 13);
+        Schedule scheduleFriday = new Schedule(DayOfWeek.FRIDAY, 8, 19, 13);
+
+        scheduleMonday.setDoctor(doctor);
+        scheduleTuesday.setDoctor(doctor);
+        scheduleWednesday.setDoctor(doctor);
+        scheduleThursday.setDoctor(doctor);
+        scheduleFriday.setDoctor(doctor);
+
+        scheduleService.saveSchedule(scheduleMonday);
+        scheduleService.saveSchedule(scheduleTuesday);
+        scheduleService.saveSchedule(scheduleWednesday);
+        scheduleService.saveSchedule(scheduleThursday);
+        scheduleService.saveSchedule(scheduleFriday);
 
 
-        return saveDoctor(doctor);
+        return savedDoctor;
     }
 }
