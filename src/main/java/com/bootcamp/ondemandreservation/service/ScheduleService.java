@@ -3,6 +3,7 @@ package com.bootcamp.ondemandreservation.service;
 import com.bootcamp.ondemandreservation.model.Schedule;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleService {
 
@@ -12,4 +13,5 @@ public interface ScheduleService {
     Schedule findScheduleById(Long id);
     void deleteScheduleById(Long id);
     void setDoctorToSchedule(Long scheduleId, Long doctorId);
+    Map<String, String> validateSchedule(Long doctorId, Schedule schedule);
 }

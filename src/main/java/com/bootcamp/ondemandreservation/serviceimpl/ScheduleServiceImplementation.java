@@ -1,13 +1,16 @@
 package com.bootcamp.ondemandreservation.serviceimpl;
 
 import com.bootcamp.ondemandreservation.model.Doctor;
+import com.bootcamp.ondemandreservation.model.ODRUser;
 import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.repository.ScheduleRepository;
+import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
 import com.bootcamp.ondemandreservation.service.ScheduleService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.DayOfWeek;
+import java.util.*;
 
 @Service
 public class ScheduleServiceImplementation implements ScheduleService {
@@ -70,5 +73,26 @@ public class ScheduleServiceImplementation implements ScheduleService {
         scheduleRepository.save(schedule);
         doctorRepository.save(currentDoctor);
 
+    }
+
+    @Override
+    public Map<String, String> validateSchedule(Long doctorId, Schedule schedule) {
+        Map<String,String> rv=new HashMap<>();
+        List<DayOfWeek> weekDays= new ArrayList<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
+        if(!weekDays.contains(schedule.getDayOfWeek())) {
+            rv.put("dayOfWeek", "Please enter correct day of week: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY");
+        }
+        if(schedule.getStartHour() >= 0 && schedule.getStartHour() <= 24) {
+            rv.put("startHour", "Please provide a start hour between 0 and 24");
+        }
+
+        if(schedule.getEndHour() >= 0 && schedule.getEndHour() <= 24) {
+            rv.put("endHour", "Please provide an end hour between 0 and 24");
+        }
+
+        if(schedule.getLunchTime() >= 0 && schedule.getLunchTime() <= 24) {
+            rv.put("endHour", "Please provide a lunch hour between 0 and 24");
+        }
+        return rv;
     }
 }
