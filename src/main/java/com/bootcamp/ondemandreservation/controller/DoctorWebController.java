@@ -44,7 +44,7 @@ public class DoctorWebController {
     public void setAllowedFields(WebDataBinder dataBinder) {
         // Disallow binding of sensitive fields - user can't override
         // values from the session
-        dataBinder.setAllowedFields("id", "email");
+        dataBinder.setDisallowedFields("id", "email");
     }
 
     @GetMapping("/doctor/myDetails")
