@@ -42,7 +42,7 @@
                 <td th:text="${appointment.doctor.specialty}"></td>
 
                 <td>
-                    <a th:href="@{/web/patient/appointments/selfReserve(id=${appointment.id})}">Reserve</a>
+                    <a th:href="@{/web/patient/appointments/selfReserve(id=${appointment.id})}" class="btn btn-primary">Reserve</a>
                 </td>
             </tr>
             </tbody>
