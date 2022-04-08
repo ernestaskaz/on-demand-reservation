@@ -5,6 +5,7 @@ import com.bootcamp.ondemandreservation.service.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,9 +40,10 @@ public class DataInit {
         Admin initialAdmin=new Admin(null,"admin@default.com","admind","Admin","Default");
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         Authentication authentication  = new UsernamePasswordAuthenticationToken(initialAdmin.getUsername(), initialAdmin.getPassword(), authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        //SecurityContextHolder.getContext().setAuthentication(initialAdmin);
 
         if(adminService.getAllAdmins().size()==0){
             log.warn("No admins in the database, creating default admin user "+initialAdmin.toString());
