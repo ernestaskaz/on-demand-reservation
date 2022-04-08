@@ -10,8 +10,6 @@ import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
 import com.bootcamp.ondemandreservation.service.ScheduleService;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -19,8 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -160,11 +156,11 @@ public class DoctorServiceImplementationTest {
 
     @Test
     @Order(7)
-    void canGetTodaysAppointments() {
+    void canGetUpcomingAppointmentsForToday() {
 
         List<Appointment> appointmentList = new ArrayList<>();
         List<Schedule> scheduleList = new ArrayList<>();
-        Appointment appointment = new Appointment(LocalDateTime.now());
+        Appointment appointment = new Appointment(LocalDateTime.now().plusHours(1));
         Appointment appointmentTwo = new Appointment(LocalDateTime.now().plusDays(1));
         Schedule schedule = new Schedule();
         appointmentList.add(appointment);
@@ -174,7 +170,7 @@ public class DoctorServiceImplementationTest {
 
         Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
 
-        List<Appointment> foundAppointments = doctorService.getTodaysAppointments(1L);
+        List<Appointment> foundAppointments = doctorService.getUpcomingAppointmentsForToday(1L);
 
 
         assertEquals("size is " + foundAppointments.size(), 1, foundAppointments.size());
