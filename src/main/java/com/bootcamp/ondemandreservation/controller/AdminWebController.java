@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
-@SessionAttributes("admin")
+@SessionAttributes({"admin","doctor"})
 public class AdminWebController {
     public static final String DOCTOR_GET_ALL = "/admin/all-doctors";
     public static final String ADMIN_DETAILS_URL = "/admin/myDetails";
@@ -55,11 +55,17 @@ public class AdminWebController {
     }
 
 
-    @InitBinder
-    public void setAllowedFields(WebDataBinder dataBinder) {
+    @InitBinder("admin")
+    public void setAllowedFieldsAdminEdit(WebDataBinder dataBinder) {
         // Disallow binding of sensitive fields - user can't override
         // values from the session
         dataBinder.setDisallowedFields("id", "email");
+    }
+    @InitBinder("doctor")
+    public void setAllowedFieldsDoctorCreate(WebDataBinder dataBinder) {
+        // Disallow binding of sensitive fields - user can't override
+        // values from the session
+        dataBinder.setDisallowedFields("id");
     }
 
 
