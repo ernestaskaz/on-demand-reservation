@@ -19,12 +19,12 @@
             <div class="mb-3">
                 <label for="inputName" class="form-label">First Name</label>
                 <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
-                <p th:text="${errors.get('firstName')}"></p>
+                <p style="color:red" th:text="${errors.get('firstName')}"></p>
             </div>
             <div class="mb-3">
                 <label for="inputLastName" class="form-label">Last Name</label>
                 <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName" value="lastName">
-                <p th:text="${errors.get('lastName')}"></p>
+                <p style="color:red" th:text="${errors.get('lastName')}"></p>
             </div>
             <div class="mb-3">
                 <label for="inputCity" class="form-label">City</label>
@@ -33,12 +33,12 @@
             <div class="mb-3">
                 <label for="inputPhoneNumber" class="form-label">Phone Number</label>
                 <input type="text" th:field="*{phoneNumber}" class="form-control" id="inputPhoneNumber" value="phoneNumber">
-                <p th:text="${errors.get('phoneNumber')}"></p>
+                <p style="color:red" th:text="${errors.get('phoneNumber')}"></p>
             </div>
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Your current password</label>
                 <input type="password" th:field="*{password}" class="form-control" id="inputPassword" >
-                <p th:text="${errors.get('password')}"></p>
+                <p style="color:red" th:text="${errors.get('password')}"></p>
             </div>
             <div class="mb-3">
                 Leave blank if you don't wish to change password.
@@ -46,12 +46,12 @@
             <div class="mb-3">
                 <label for="newPassword" class="form-label">New Password</label>
                 <input type="password" th:field="*{newPassword}" class="form-control" id="newPassword" value="password">
-                <p th:text="${errors.get('newPassword')}"></p>
+                <p style="color:red" th:text="${errors.get('newPassword')}"></p>
             </div>
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm new password</label>
                 <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword" value="password">
-                <p th:text="${errors.get('confirmPassword')}"></p>
+                <p style="color:red" th:text="${errors.get('confirmPassword')}"></p>
             </div>
 
 
