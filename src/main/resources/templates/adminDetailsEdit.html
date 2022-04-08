@@ -27,9 +27,22 @@
                 <p th:text="${errors.get('lastName')}"></p>
             </div>
             <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Password</label>
-                <input type="text" th:field="*{password}" class="form-control" id="confirmPassword" value="password">
+                <label for="inputPassword" class="form-label">Your current password</label>
+                <input type="password" th:field="*{password}" class="form-control" id="inputPassword" >
                 <p th:text="${errors.get('password')}"></p>
+            </div>
+            <div class="mb-3">
+                Leave blank if you don't wish to change password.
+            </div>
+            <div class="mb-3">
+                <label for="newPassword" class="form-label">New Password</label>
+                <input type="password" th:field="*{newPassword}" class="form-control" id="newPassword" value="password">
+                <p th:text="${errors.get('newPassword')}"></p>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm new password</label>
+                <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword" value="password">
+                <p th:text="${errors.get('confirmPassword')}"></p>
             </div>
 
             <input type="submit" value="Submit" class="btn btn-primary" role="button"/>

@@ -23,7 +23,8 @@ import java.util.Map;
 @SessionAttributes("admin")
 public class AdminWebController {
     public static final String DOCTOR_GET_ALL = "/admin/all-doctors";
-    public static final String ADMIN_DETAILS = "/admin/myDetails";
+    public static final String ADMIN_DETAILS_URL = "/admin/myDetails";
+    public static final String ADMIN_EDIT_URL = "/admin/edit";
     public static final String APPOINTMENT_GET_ALL = "/admin/all-appointments";
     public static final String APPOINTMENT_GET_ALL_TODAY = "/admin/today-appointments";
     public static final String ADMIN_EDIT_TEMPLATE = "adminDetailsEdit";
@@ -145,51 +146,51 @@ public class AdminWebController {
 
     @GetMapping("/admin/myDetails")
     @PreAuthorize(Admin.ADMIN_ROLE)
-    String patientDetails(Model model){
+    String adminDetails(Model model){
         Admin admin = adminService.getLoggedInAdmin();
         model.addAttribute("admin", admin);
         return "adminAccountView";
     }
 
-    @GetMapping(ADMIN_EDIT_TEMPLATE)
+    @GetMapping(ADMIN_EDIT_URL)
     @PreAuthorize(Admin.ADMIN_ROLE)
     String editLoggedInAdmin(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         Admin admin = adminService.getLoggedInAdmin();
-        //admin.blankPasswords();
+        admin.blankPasswords();
         model.addAttribute("admin",admin);
         return ADMIN_EDIT_TEMPLATE;
     }
 
-//    @PostMapping(ADMIN_EDIT_TEMPLATE)
-//    @PreAuthorize(Admin.ADMIN_ROLE)
-//    String editLoggedInAdmin(@ModelAttribute Admin admin, BindingResult result, Model model){
-//        //note matchPassword is true now.
-//        Map errors= adminService.validateAdmin(admin, true, true);
-//        model.addAttribute("admin", admin);
-//        model.addAttribute("errors", errors);
-//        if(errors.isEmpty()) {
-//            String currentPassword=adminService.getLoggedInAdmin().getPassword();
-//            if(odrPasswordEncoder.defaultPasswordEncoder().matches(admin.getPassword(),currentPassword)) {
-//
-//                if(admin.getNewPassword()!=null&&!admin.getNewPassword().isBlank()){
-//                    //user wants to change password
-//                    admin.setPassword(admin.getNewPassword());//plain text
-//                    adminService.saveAdminAndPassword(admin);
-//                }else {
-//                    //User doesn't want to change password
-//                    admin.setPassword(currentPassword);//encrypted
-//                    adminService.saveAdmin(admin);
-//                }
-//                model.addAttribute("successMsg","Your data were updated successfully.");
-//            }else{
-//                errors.put("password","Incorrect password");
-//            }//else of if passwords match
-//
-//        }//if validation errors empty
-//        admin.blankPasswords();
-//        return ADMIN_EDIT_TEMPLATE;
-//    }
+    @PostMapping(ADMIN_EDIT_URL)
+    @PreAuthorize(Admin.ADMIN_ROLE)
+    String editLoggedInAdmin(@ModelAttribute Admin admin, BindingResult result, Model model){
+        //note matchPassword is true now.
+        Map errors= adminService.validateAdmin(admin, true, true);
+        model.addAttribute("admin", admin);
+        model.addAttribute("errors", errors);
+        if(errors.isEmpty()) {
+            String currentPassword=adminService.getLoggedInAdmin().getPassword();
+            if(odrPasswordEncoder.defaultPasswordEncoder().matches(admin.getPassword(),currentPassword)) {
+
+                if(admin.getNewPassword()!=null&&!admin.getNewPassword().isBlank()){
+                    //user wants to change password
+                    admin.setPassword(admin.getNewPassword());//plain text
+                    adminService.saveAdminAndPassword(admin);
+                }else {
+                    //User doesn't want to change password
+                    admin.setPassword(currentPassword);//encrypted
+                    adminService.saveAdmin(admin);
+                }
+                model.addAttribute("successMsg","Your data were updated successfully.");
+            }else{
+                errors.put("password","Incorrect password");
+            }//else of if passwords match
+
+        }//if validation errors empty
+        admin.blankPasswords();
+        return ADMIN_EDIT_TEMPLATE;
+    }
 
 
 }
