@@ -191,7 +191,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
             while(startPoint.isBefore(endPoint)) {
 
 
-                if (schedule.getDayOfWeek().equals(startPoint.getDayOfWeek()) && startPoint.getHour() >= schedule.getStartHour() && startPoint.getHour() <= schedule.getEndHour() && startPoint.getHour() != schedule.getLunchTime()) {
+                if (schedule.getDayOfWeek().equals(startPoint.getDayOfWeek()) && startPoint.getHour() >= schedule.getStartHour() && startPoint.getHour() < schedule.getEndHour() && startPoint.getHour() != schedule.getLunchTime()) {
                     Appointment appointment = new Appointment(startPoint, currentDoctor);
                     currentDoctor.addAppointmentList(appointment);
                     saveAppointment(appointment);
