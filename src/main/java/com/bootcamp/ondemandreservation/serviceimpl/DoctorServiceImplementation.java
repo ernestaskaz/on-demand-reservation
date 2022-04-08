@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -164,7 +161,7 @@ public class DoctorServiceImplementation implements DoctorService {
      */
     @Override
     public Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword,boolean forUpdate) {
-        Map rv=odrUserService.validate(doctor,matchPassword,forUpdate);
+        Map<String, String> rv = new HashMap<>(odrUserService.validate(doctor,matchPassword,forUpdate));
         if(doctor.getSpecialty()!=null&&!ODRInputSanitiser.seemsToBeSafe(doctor.getSpecialty())){
             rv.put("specialty", "unsuitable");
         }
@@ -182,27 +179,27 @@ public class DoctorServiceImplementation implements DoctorService {
         doctor.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
                 .encode(doctor.getPassword()));
 
-        Doctor savedDoctor = saveDoctor(doctor);
+        //Doctor savedDoctor = saveDoctor(doctor);
 
-        Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 8, 19, 13);
-        Schedule scheduleTuesday = new Schedule(DayOfWeek.TUESDAY, 8, 19, 13);
-        Schedule scheduleWednesday = new Schedule(DayOfWeek.WEDNESDAY, 8, 19, 13);
-        Schedule scheduleThursday = new Schedule(DayOfWeek.THURSDAY, 8, 19, 13);
-        Schedule scheduleFriday = new Schedule(DayOfWeek.FRIDAY, 8, 19, 13);
+//        Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 8, 19, 13);
+//        Schedule scheduleTuesday = new Schedule(DayOfWeek.TUESDAY, 8, 19, 13);
+//        Schedule scheduleWednesday = new Schedule(DayOfWeek.WEDNESDAY, 8, 19, 13);
+//        Schedule scheduleThursday = new Schedule(DayOfWeek.THURSDAY, 8, 19, 13);
+//        Schedule scheduleFriday = new Schedule(DayOfWeek.FRIDAY, 8, 19, 13);
+//
+//        scheduleMonday.setDoctor(doctor);
+//        scheduleTuesday.setDoctor(doctor);
+//        scheduleWednesday.setDoctor(doctor);
+//        scheduleThursday.setDoctor(doctor);
+//        scheduleFriday.setDoctor(doctor);
+//
+//        scheduleService.saveSchedule(scheduleMonday);
+//        scheduleService.saveSchedule(scheduleTuesday);
+//        scheduleService.saveSchedule(scheduleWednesday);
+//        scheduleService.saveSchedule(scheduleThursday);
+//        scheduleService.saveSchedule(scheduleFriday);
 
-        scheduleMonday.setDoctor(savedDoctor);
-        scheduleTuesday.setDoctor(savedDoctor);
-        scheduleWednesday.setDoctor(savedDoctor);
-        scheduleThursday.setDoctor(savedDoctor);
-        scheduleFriday.setDoctor(savedDoctor);
 
-        scheduleService.saveSchedule(scheduleMonday);
-        scheduleService.saveSchedule(scheduleTuesday);
-        scheduleService.saveSchedule(scheduleWednesday);
-        scheduleService.saveSchedule(scheduleThursday);
-        scheduleService.saveSchedule(scheduleFriday);
-
-
-        return savedDoctor;
+        return saveDoctor(doctor);
     }
 }
