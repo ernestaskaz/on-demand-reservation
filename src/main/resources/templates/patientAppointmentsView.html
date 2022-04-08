@@ -8,7 +8,10 @@
 <body>
 <div th:insert="fragments :: patientNav"></div>
 <div class="d-flex justify-content-center">
+    <h1>My Appointments</h1>
+</div>
 <div th:text="${reserveMsg}" class="d-flex justify-content-center"></div>
+<div class="d-flex justify-content-center">
     <div class="d-flex justify-content-center">
          <div class="col-auto">
             <table class="table table-striped">
@@ -26,7 +29,7 @@
                     <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                     <td th:text="${appointment.doctor.specialty}"></td>
                     <td>
-                        <a th:href="@{/web/patient/appointments/cancel(id=${appointment.id})}">Cancel</a>
+                        <a th:href="@{/web/patient/appointments/cancel(id=${appointment.id})}" class="btn btn-primary">Cancel</a>
                     </td>
                 </tr>
                 </tbody>
