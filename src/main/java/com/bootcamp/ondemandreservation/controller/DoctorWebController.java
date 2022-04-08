@@ -1,11 +1,8 @@
 package com.bootcamp.ondemandreservation.controller;
-import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
-import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
-import com.bootcamp.ondemandreservation.service.PatientService;
 import com.bootcamp.ondemandreservation.service.ScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
@@ -62,7 +57,7 @@ public class DoctorWebController {
     String doctorTodayAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
-        model.addAttribute("appointments", doctorService.getTodaysAppointments(doctor.getId()));
+        model.addAttribute("appointments", doctorService.getUpcomingAppointmentsForToday(doctor.getId()));
 
         return "doctorTodayAppointmentView";
     }

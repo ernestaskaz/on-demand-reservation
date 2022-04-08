@@ -118,13 +118,29 @@ public class DoctorServiceImplementation implements DoctorService {
     }
 
     @Override
+    public List<Appointment> getDoctorPastAppointments(Long id) {
+        List<Appointment> AllAppointments = getAllAppointments(id);
+        List<Appointment> pastAppointments = new ArrayList<>();
+
+        for (Appointment appointment: AllAppointments) {
+
+            if(appointment.getAppointmentTime().isBefore(LocalDateTime.now())) {
+                pastAppointments.add(appointment);
+            }
+
+        }
+
+        return pastAppointments;
+    }
+
+    @Override
     public Doctor updateDoctor(Long id, Doctor doctor) {
         doctor.setId(id);
         return saveDoctor(doctor);
     }
 
     @Override
-    public List<Appointment> getTodaysAppointments(Long id) {
+    public List<Appointment> getUpcomingAppointmentsForToday(Long id) {
         List<Appointment> AllAppointments = getAllAppointments(id);
         List<Appointment> todaysAppointments = new ArrayList<>();
 

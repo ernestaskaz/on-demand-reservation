@@ -42,7 +42,7 @@ public class DoctorController {
 
     @GetMapping("/today/{id}")
     public List<Appointment> getTodaysAppointments(@PathVariable("id") Long id) {
-        return doctorService.getTodaysAppointments(id);
+        return doctorService.getUpcomingAppointmentsForToday(id);
     }
 
     @GetMapping ("{id}")
