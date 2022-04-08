@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 public class Doctor extends ODRUser{
+    public static final String DOCTOR_ROLE = "hasRole('ROLE_DOCTOR')";
 
     private String specialty;
 
