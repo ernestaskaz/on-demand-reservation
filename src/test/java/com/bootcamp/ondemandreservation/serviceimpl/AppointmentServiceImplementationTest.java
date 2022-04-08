@@ -102,7 +102,7 @@ public class AppointmentServiceImplementationTest {
         List<Appointment> appointmentList = new ArrayList<>();
         appointmentList.add(savedAppointment);
 
-        Mockito.when(appointmentRepository.findByIsAvailableTrueAndIsReservedFalse()).thenReturn(appointmentList);
+        Mockito.when(appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now())).thenReturn(appointmentList);
 
         List<Appointment> foundAppointments = appointmentService.findAvailableAndNotReserved();
 
@@ -114,9 +114,9 @@ public class AppointmentServiceImplementationTest {
 
     @Test
     @Order(3)
-    void canGetTodaysAppointments() {
+    void canGetTodayUpcomingAppointments() {
 
-        Appointment firstAppointment = new Appointment(LocalDateTime.now());
+        Appointment firstAppointment = new Appointment(LocalDateTime.now().plusHours(1));
         Appointment secondAppointment = new Appointment(LocalDateTime.now().plusDays(1));
         Appointment thirAppointment = new Appointment(LocalDateTime.now().plusDays(2));
 
@@ -225,7 +225,7 @@ public class AppointmentServiceImplementationTest {
 
         Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
 
-        appointmentService.generateAppointmentsBySchedule(1L, 10);
+        appointmentService.generateAppointmentsBySchedule(1L, 30);
 
         assertTrue("actual size is " + doctor.getAppointmentList().size(), doctor.getAppointmentList().size() > 5 );
 

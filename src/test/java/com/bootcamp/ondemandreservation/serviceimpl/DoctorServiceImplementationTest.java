@@ -156,11 +156,11 @@ public class DoctorServiceImplementationTest {
 
     @Test
     @Order(7)
-    void canGetTodaysAppointments() {
+    void canGetUpcomingAppointmentsForToday() {
 
         List<Appointment> appointmentList = new ArrayList<>();
         List<Schedule> scheduleList = new ArrayList<>();
-        Appointment appointment = new Appointment(LocalDateTime.now());
+        Appointment appointment = new Appointment(LocalDateTime.now().plusHours(1));
         Appointment appointmentTwo = new Appointment(LocalDateTime.now().plusDays(1));
         Schedule schedule = new Schedule();
         appointmentList.add(appointment);
