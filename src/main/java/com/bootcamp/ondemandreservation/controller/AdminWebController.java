@@ -4,7 +4,6 @@ package com.bootcamp.ondemandreservation.controller;
 import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
-import com.bootcamp.ondemandreservation.model.Patient;
 import com.bootcamp.ondemandreservation.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +29,6 @@ public class AdminWebController {
     public static final String DOCTOR_CREATE_TEMPLATE = "doctorCreate";
     public static final String ADMIN_CREATE_URL = "/admin/create";
     public static final String ADMIN_CREATE_TEMPLATE = "adminCreate";
-    public static final String ADMIN_ROLE = "hasRole('ROLE_ADMIN')";
     @Autowired
     private AdminService adminService;
     @Autowired
@@ -50,14 +48,14 @@ public class AdminWebController {
         this.appointmentService = appointmentService;
     }
     @GetMapping(DOCTOR_CREATE_URL)
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String createDoctor(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         model.addAttribute("doctor",new Doctor());
         return DOCTOR_CREATE_TEMPLATE;
     }
     @PostMapping(DOCTOR_CREATE_URL)
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String createDoctor(@ModelAttribute Doctor doctor, Model model) {
         Map errors = doctorService.validateDoctor(doctor, true,false);
         model.addAttribute("doctor", doctor);
@@ -78,14 +76,14 @@ public class AdminWebController {
 
 
     @GetMapping(ADMIN_CREATE_URL)
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String createAdmin(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         model.addAttribute("admin",new Admin());
         return ADMIN_CREATE_TEMPLATE;
     }
     @PostMapping(ADMIN_CREATE_URL)
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String createAdmin(@ModelAttribute Admin admin, Model model) {
         Map errors = adminService.validateAdmin(admin, true,false);
         model.addAttribute("admin", admin);
@@ -106,7 +104,7 @@ public class AdminWebController {
 
 
     @GetMapping(DOCTOR_GET_ALL)
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String getAllDoctors(Model model) {
         List<Doctor> doctors = doctorService.getAllDoctors();
         model.addAttribute("doctors", doctors);
@@ -114,7 +112,7 @@ public class AdminWebController {
     }
 
     @GetMapping(APPOINTMENT_GET_ALL)
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String getAllAppointments(Model model) {
         List<Appointment> appointments = appointmentService.getAllAppointments();
         model.addAttribute("appointments", appointments);
@@ -122,7 +120,7 @@ public class AdminWebController {
     }
 
     @GetMapping(APPOINTMENT_GET_ALL_TODAY)
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String getAllTodayAppointments(Model model) {
         List<Appointment> appointments = appointmentService.getTodaysAppointments();
         model.addAttribute("appointments", appointments);
@@ -131,7 +129,7 @@ public class AdminWebController {
 
 
     @GetMapping("/admin/myDetails")
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String patientDetails(Model model){
         Admin admin = adminService.getLoggedInAdmin();
         model.addAttribute("admin", admin);
@@ -139,7 +137,7 @@ public class AdminWebController {
     }
 
     @GetMapping("/admin/edit")
-    @PreAuthorize(ADMIN_ROLE)
+    @PreAuthorize(Admin.ADMIN_ROLE)
     String editLoggedInAdmin(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         Admin admin = adminService.getLoggedInAdmin();

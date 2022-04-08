@@ -8,6 +8,7 @@ import com.bootcamp.ondemandreservation.service.PatientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -61,13 +62,15 @@ public class PatientWebController {
         return "patientView";
     }
 
+    @PreAuthorize(Patient.PATIENT_ROLE)
     @GetMapping("/patient/myDetails")
     String patientDetails(Model model){
         Patient patient = patientService.getLoggedInPatient();
         model.addAttribute("patient", patient);
         return "patientAccountView";
     }
-    
+
+    @PreAuthorize(Patient.PATIENT_ROLE)
     @GetMapping("/patient/appointments")
     String patientAppointments(Model model){
         Patient patient = patientService.getLoggedInPatient();
@@ -77,7 +80,7 @@ public class PatientWebController {
     }
 
 
-
+    @PreAuthorize(Patient.PATIENT_ROLE)
     @GetMapping("/patient/available-appointments")
     String patientAppointmentsAvailable(Model model){
         List<Appointment>  appointments = appointmentService.findAvailableAndNotReserved();
@@ -85,6 +88,7 @@ public class PatientWebController {
 
         return "patientAvailableAppointmentsView";
     }
+    @PreAuthorize(Patient.PATIENT_ROLE)
     @RequestMapping("/patient/appointments/selfReserve")
     String patientAppointmentsReserve(@RequestParam Long id, Model model){
         Patient patient = patientService.getLoggedInPatient();
@@ -99,6 +103,8 @@ public class PatientWebController {
         if(updated)model.addAttribute("reserveMsg","Appointment reserved");
         return patientAppointmentsAvailable(model);//Not sure if this is good
     }
+
+    @PreAuthorize(Patient.PATIENT_ROLE)
     @RequestMapping("/patient/appointments/cancel")
     String patientAppointmentsCancel(@RequestParam Long id, Model model){
         Patient patient = patientService.getLoggedInPatient();
@@ -116,7 +122,7 @@ public class PatientWebController {
         return patientAppointments(model);//Not sure if this is good
     }
 
-
+    @PreAuthorize(Patient.PATIENT_ROLE)
     @GetMapping("/patient/edit")
     String editLoggedInPatient(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
@@ -125,6 +131,7 @@ public class PatientWebController {
         model.addAttribute("patient",patient);
         return PATIENT_EDIT_TEMPLATE;
     }
+    @PreAuthorize(Patient.PATIENT_ROLE_SAME_ID)
     @PostMapping("/patient/edit")
     String editLoggedInPatient(@ModelAttribute Patient patient, BindingResult result, Model model){
         //note matchPassword is true now.

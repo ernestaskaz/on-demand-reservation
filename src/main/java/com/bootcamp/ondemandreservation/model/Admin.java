@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 
 @Entity
 public class Admin extends ODRUser{
+    public static final String ADMIN_ROLE = "hasRole('ROLE_ADMIN')";
+
     {
         setAccountType("ADMIN");
     }

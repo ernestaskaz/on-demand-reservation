@@ -18,6 +18,9 @@ public class Patient extends ODRUser{
     @JsonIgnoreProperties("doctor")
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointmentList = new ArrayList<Appointment>();
+
+    public static final String PATIENT_ROLE = "hasRole('ROLE_PATIENT')";
+    public static final String PATIENT_ROLE_SAME_ID = "hasRole('ROLE_PATIENT') and #patient.id == authentication.principal.id";
     {
         setAccountType("PATIENT");
     }
