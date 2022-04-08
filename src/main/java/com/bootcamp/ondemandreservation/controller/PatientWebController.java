@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
+@SessionAttributes("patient")
 public class PatientWebController {
     static final Logger log= LoggerFactory.getLogger(PatientWebController.class);
     //public static final String PATIENT_EDIT_URL = "/patient/edit";
@@ -35,6 +38,13 @@ public class PatientWebController {
         this.patientService = patientService;
         this.odrPasswordEncoder = odrPasswordEncoder;
         this.appointmentService = appointmentService;
+    }
+
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        // Disallow binding of sensitive fields - user can't override
+        // values from the session
+        dataBinder.setDisallowedFields("id","email");
     }
 
     @GetMapping("/patient/all-patients")
@@ -111,26 +121,36 @@ public class PatientWebController {
     String editLoggedInPatient(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         Patient patient=patientService.getLoggedInPatient();
+        patient.blankPasswords();
         model.addAttribute("patient",patient);
         return PATIENT_EDIT_TEMPLATE;
     }
     @PostMapping("/patient/edit")
-    String editLoggedInPatient(@ModelAttribute Patient patient, Model model){
-        //TODO Add change password functionality
-        Map errors=patientService.validatePatient(patient,false,true);
+    String editLoggedInPatient(@ModelAttribute Patient patient, BindingResult result, Model model){
+        //note matchPassword is true now.
+        Map errors=patientService.validatePatient(patient,true,true);
         model.addAttribute("patient", patient);
         model.addAttribute("errors", errors);
         if(errors.isEmpty()) {
             String currentPassword=patientService.getLoggedInPatient().getPassword();
             if(odrPasswordEncoder.defaultPasswordEncoder().matches(patient.getPassword(),currentPassword)) {
-                patient.setPassword(currentPassword);
-                patientService.savePatient(patient);
+
+                if(patient.getNewPassword()!=null&&!patient.getNewPassword().isBlank()){
+                    //user wants to change password
+                    patient.setPassword(patient.getNewPassword());//plain text
+                    patientService.savePatientAndPassword(patient);
+                }else {
+                    //User doesn't want to change password
+                    patient.setPassword(currentPassword);//encrypted
+                    patientService.savePatient(patient);
+                }
                 model.addAttribute("successMsg","Your data were updated successfully.");
             }else{
                 errors.put("password","Incorrect password");
-            }
+            }//else of if passwords match
 
-        }
+        }//if validation errors empty
+        patient.blankPasswords();
         return PATIENT_EDIT_TEMPLATE;
     }
 }

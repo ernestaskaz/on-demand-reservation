@@ -1,7 +1,6 @@
 package com.bootcamp.ondemandreservation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.Objects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +31,8 @@ public class ODRUser implements UserDetails {
     private String firstName;
     private String lastName;
     private String accountType;
+    @Transient
+    private String newPassword;
     @Transient
     private String confirmPassword;
     @Transient
@@ -116,9 +117,24 @@ public class ODRUser implements UserDetails {
         this.confirmPassword = confirmPassword;
     }
 
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    /**
+     *
+     * Will contain encrypted (hashed&salted) password if read from the DB
+     * but can be used to temporarily store plain text password during form validation.
+     * @param password password to set
+     */
     public void setPassword(String password) {
         this.password = password;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -158,7 +174,8 @@ public class ODRUser implements UserDetails {
 
     /**
      * Returns the password used to authenticate the user.
-     *
+     * Will contain encrypted (hashed&salted) password if read from the DB
+     * but can be used to temporarily store plain text password during form validation.
      * @return the password
      */
     @Override
@@ -223,6 +240,18 @@ public class ODRUser implements UserDetails {
         return true;
     }
 
+    public void blankPasswords() {
+        allPasswordsTo("");
+    }
 
-
+    /**
+     * Sets all password-related fields to the same value.
+     * a bit paranoid about calling a method "setSomething" if it's not an actual setter...
+     * @param password password string to set.
+     */
+    public void allPasswordsTo(String password) {
+        setPassword(password);
+        setConfirmPassword(password);
+        setNewPassword(password);
+    }
 }
