@@ -70,6 +70,10 @@ public class AppointmentServiceImplementation implements AppointmentService {
         return appointmentRepository.findByIsAvailableTrueAndIsReservedFalse();
     }
 
+    /**
+     * Method generates all appointments for today for an Admin role view.
+     */
+
     @Override
     public List<Appointment> getTodaysAppointments() {
         List<Appointment> AllAppointments = getAllAppointments();
@@ -77,7 +81,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
         for (Appointment appointment: AllAppointments) {
 
-            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth()) {
+            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth() && appointment.getAppointmentTime().isAfter(LocalDateTime.now()) ) {
                 todaysAppointments.add(appointment);
             }
 
@@ -175,7 +179,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
         DateTimeFormatter toStringDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         DateTimeFormatter setHoursToZero = DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00");
         //start generating appointments from the next day.
-        LocalDateTime addOneDay = LocalDateTime.now().plusDays(1);
+        LocalDateTime addOneDay = LocalDateTime.now();
         // set generation at 00:00.
         String zeroHoursAndMinutes = addOneDay.format(setHoursToZero);
         // creates LocalDateTime start point for  appointment generation.
