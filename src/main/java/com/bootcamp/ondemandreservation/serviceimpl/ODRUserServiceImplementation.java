@@ -101,12 +101,22 @@ public class ODRUserServiceImplementation implements  ODRUserService {
             if ((user.getPassword().length() < 6)) {
                 rv.put("password", "too short");
             }
-            if (!ODRInputSanitiser.seemsToBeSafe(user.getPassword())) {
-                rv.put("password", "invalid");
+            //new password must be either blank or obey the same rules as password, except required.
+            if(forUpdate&&user.getNewPassword()!=null&&!user.getNewPassword().isBlank()){
+                if ((user.getNewPassword().length() < 6)) {
+                    rv.put("newPassword", "too short");
+                }
             }
-            if (matchPassword && !user.getPassword().equals(user.getConfirmPassword())) {
+            //no seemsToBeSafe check for password -- we store it as a hash anyway,
+            //and if user wants <>`' or other unusual characters in the password, it actually makes it
+            //more safe.
+            if (matchPassword &&!forUpdate&& !user.getPassword().equals(user.getConfirmPassword())) {
                 rv.put("confirmPassword", "does not match");
             }
+            if (matchPassword &&forUpdate&& !user.getNewPassword().equals(user.getConfirmPassword())) {
+                rv.put("confirmPassword", "does not match");
+            }
+
         }
 
         return rv;
