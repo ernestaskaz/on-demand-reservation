@@ -141,6 +141,13 @@ public class AppointmentServiceImplementation implements AppointmentService {
     }
 
     @Override
+    public void addComment(Long appointmentId, String comment) {
+        Appointment currentAppointment = getAppointmentById(appointmentId);
+        currentAppointment.setComment(comment);
+        saveAppointment(currentAppointment);
+    }
+
+    @Override
     public void reserveAppointment(Long patientId, Long appointmentId) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
         Patient currentPatient = patientRepository.findById(patientId).get();

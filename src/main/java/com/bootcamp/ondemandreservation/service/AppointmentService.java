@@ -16,6 +16,7 @@ public interface AppointmentService {
     void deleteAppointment(Long appointmentId);
     void setAppointmentUnavailable(Long appointmentId);
     void setAppointmentWasAttended(Long appointmentId);
+    void addComment(Long appointmentId, String comment);
     void reserveAppointment(Long patientId, Long appointmentId);
     void generateAppointmentsBySchedule(Long doctorId, int daysCount);
     Appointment updateAppointment(Long appointmentId, Appointment appointment);
