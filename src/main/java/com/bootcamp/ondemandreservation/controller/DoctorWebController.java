@@ -2,6 +2,7 @@ package com.bootcamp.ondemandreservation.controller;
 import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.model.Patient;
+import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
@@ -27,6 +28,7 @@ public class DoctorWebController {
     static final Logger log= LoggerFactory.getLogger(DoctorWebController.class);
 
     public static final String DOCTOR_EDIT_TEMPLATE = "doctorDetailsEdit";
+    public static final String SCHEDULE_EDIT_TEMPLATE = "scheduleEditView";
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
     @Autowired
@@ -73,6 +75,35 @@ public class DoctorWebController {
         return "doctorTodayAppointmentView";
     }
 
+    @GetMapping("/doctor/schedule/edit")
+    String getSchedule(@RequestParam Long id, Model model){
+       // model.addAttribute("errors", Collections.EMPTY_MAP);
+        Schedule schedule = scheduleService.findScheduleById(id);
+        model.addAttribute("schedule", schedule);
+        return "schedule";
+    }
+
+
+    @GetMapping("/doctor/schedule/edit/test")
+    String editScheduleTest(@RequestParam Long id, Model model){
+        // model.addAttribute("errors", Collections.EMPTY_MAP);
+        Schedule schedule = scheduleService.findScheduleById(id);
+        System.out.println(schedule.getId());
+        System.out.println(schedule.getDoctor().getSpecialty());
+        model.addAttribute("schedule", schedule);
+        return SCHEDULE_EDIT_TEMPLATE;
+    }
+
+    @PostMapping("/doctor/schedule/edit/test")
+    String editScheduleTest(@RequestParam Long id, @ModelAttribute Schedule schedule, BindingResult result, Model model){
+        model.addAttribute("schedule", schedule);
+        System.out.println(schedule.getId());
+//        System.out.println(schedule.getDoctor().getSpecialty());
+        scheduleService.updateSchedule(id, schedule);
+        return SCHEDULE_EDIT_TEMPLATE;
+    }
+
+
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/edit")
     String editLoggedInDoctor(Model model){
@@ -82,6 +113,10 @@ public class DoctorWebController {
         model.addAttribute("doctor", doctor);
         return "doctorDetailsEdit";
     }
+
+
+
+
 
     @PostMapping("/doctor/edit")
     String editLoggedInDoctor(@ModelAttribute Doctor doctor, BindingResult result, Model model){
@@ -112,6 +147,7 @@ public class DoctorWebController {
         return DOCTOR_EDIT_TEMPLATE;
     }
 
+
     @GetMapping("/doctor/schedule")
     String getDoctorSchedule(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -120,6 +156,7 @@ public class DoctorWebController {
 
         return "doctorScheduleView";
     }
+
 
     @GetMapping("/doctor/generate")
     String generateDoctorAppointments(Model model){

@@ -28,12 +28,25 @@
                 <td th:text="${schedule.startHour}"></td>
                 <td th:text="${schedule.endHour}"></td>
                 <td th:text="${schedule.lunchTime}"></td>
-                <td><button type="button" class="btn btn-primary">Edit Schedule</button></td>
+                <td>
+                    <a th:href="@{/web/doctor/schedule/edit(id=${schedule.id})}" class="btn btn-primary">Edit Schedule</a>
+                </td>
+                <td>
+                    <a th:href="@{/web/doctor/schedule/delete(id=${schedule.id})}" class="btn btn-primary">Delete Schedule </a>
+                </td>
 
             </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <a href="/schedule/create" class="btn btn-primary" role="button">Add New Schedule</a>
+    </div>
+</div>
+
+
 </body>
 </html>
