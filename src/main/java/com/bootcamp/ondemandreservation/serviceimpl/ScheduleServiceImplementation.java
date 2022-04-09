@@ -82,16 +82,28 @@ public class ScheduleServiceImplementation implements ScheduleService {
         if(!weekDays.contains(schedule.getDayOfWeek())) {
             rv.put("dayOfWeek", "Please enter correct day of week: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY");
         }
-        if(schedule.getStartHour() >= 0 && schedule.getStartHour() <= 24) {
-            rv.put("startHour", "Please provide a start hour between 0 and 24");
+        if(schedule.getDayOfWeek() == null) {
+            rv.put("dayOfWeek", "Required");
+        }
+        if(schedule.getStartHour() >= 1 && schedule.getStartHour() < 24) {
+            rv.put("startHour", "Please provide a start hour(number) between 1 and 23");
+        }
+//        if(schedule.getStartHour() == 0 ) {
+//            rv.put("startHour", "Please provide a start hour(number) between 1 and 23");
+//        }
+
+        if(schedule.getEndHour() >= 1 && schedule.getEndHour() < 24) {
+            rv.put("endHour", "Please provide an end hour(number) between 1 and 23");
         }
 
-        if(schedule.getEndHour() >= 0 && schedule.getEndHour() <= 24) {
-            rv.put("endHour", "Please provide an end hour between 0 and 24");
+
+        if(schedule.getLunchTime() >= 1 && schedule.getLunchTime() < 24) {
+            rv.put("endHour", "Please provide a lunch hour between 1 and 23");
         }
 
-        if(schedule.getLunchTime() >= 0 && schedule.getLunchTime() <= 24) {
-            rv.put("endHour", "Please provide a lunch hour between 0 and 24");
+
+        if(schedule.getLunchTime() <= schedule.getStartHour() && schedule.getLunchTime() >= 24) {
+            rv.put("lunchTime", "Please provide a lunch hour that is between Start Hour and End Hour");
         }
         return rv;
     }

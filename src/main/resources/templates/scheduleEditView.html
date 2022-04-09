@@ -15,7 +15,7 @@
 
 <div class="container">
     <div class="d-flex justify-content-center">
-        <form action="#" th:action="@{/web/doctor/schedule/edit/test(id=${schedule.id})}" th:object="${schedule}" method="post">
+        <form action="#" th:action="@{/web/doctor/schedule/edit(id=${schedule.id})}" th:object="${schedule}" method="post">
             <div class="mb-3">
                 <label for="inputDayOfWeek" class="form-label">Day Of Week</label>
                 <input type="text" th:field="*{dayOfWeek}"  class="form-control" id="inputDayOfWeek" value="dayOfWeek" >

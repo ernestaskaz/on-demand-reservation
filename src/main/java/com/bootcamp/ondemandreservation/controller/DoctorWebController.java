@@ -75,30 +75,32 @@ public class DoctorWebController {
         return "doctorTodayAppointmentView";
     }
 
+//    @GetMapping("/doctor/schedule/edit")
+//    String getSchedule(@RequestParam Long id, Model model){
+//       // model.addAttribute("errors", Collections.EMPTY_MAP);
+//        Schedule schedule = scheduleService.findScheduleById(id);
+//        model.addAttribute("schedule", schedule);
+//        return "schedule";
+//    }
+
+
     @GetMapping("/doctor/schedule/edit")
-    String getSchedule(@RequestParam Long id, Model model){
-       // model.addAttribute("errors", Collections.EMPTY_MAP);
-        Schedule schedule = scheduleService.findScheduleById(id);
-        model.addAttribute("schedule", schedule);
-        return "schedule";
-    }
-
-
-    @GetMapping("/doctor/schedule/edit/test")
-    String editScheduleTest(@RequestParam Long id, Model model){
+    String editSchedule(@RequestParam Long id, Model model){
         // model.addAttribute("errors", Collections.EMPTY_MAP);
         Schedule schedule = scheduleService.findScheduleById(id);
-        System.out.println(schedule.getId());
-        System.out.println(schedule.getDoctor().getSpecialty());
         model.addAttribute("schedule", schedule);
         return SCHEDULE_EDIT_TEMPLATE;
     }
 
-    @PostMapping("/doctor/schedule/edit/test")
-    String editScheduleTest(@RequestParam Long id, @ModelAttribute Schedule schedule, BindingResult result, Model model){
+    @GetMapping("/doctor/schedule/delete")
+    String deleteSchedule(@RequestParam Long id, Model model){
+        scheduleService.deleteScheduleById(id);
+        return getDoctorSchedule(model);
+    }
+
+    @PostMapping("/doctor/schedule/edit")
+    String editSchedule(@RequestParam Long id, @ModelAttribute Schedule schedule, BindingResult result, Model model){
         model.addAttribute("schedule", schedule);
-        System.out.println(schedule.getId());
-//        System.out.println(schedule.getDoctor().getSpecialty());
         scheduleService.updateSchedule(id, schedule);
         return SCHEDULE_EDIT_TEMPLATE;
     }
