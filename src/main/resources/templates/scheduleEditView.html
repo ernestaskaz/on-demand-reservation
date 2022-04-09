@@ -19,21 +19,27 @@
             <div class="mb-3">
                 <label for="inputDayOfWeek" class="form-label">Day Of Week</label>
                 <input type="text" th:field="*{dayOfWeek}"  class="form-control" id="inputDayOfWeek" value="dayOfWeek" >
+                <p th:text="${errors.get('dayOfWeek')}"></p>
             </div>
             <div class="mb-3">
                     <label for="inputStartHour" class="form-label">Start Hour</label>
                     <input type="text" th:field="*{startHour}" class="form-control" id="inputStartHour" value="startHour">
+                <p th:text="${errors.get('startHour')}"></p>
                 </div>
                 <div class="mb-3">
                     <label for="inputEndHour" class="form-label">End Hour</label>
                     <input type="text" th:field="*{endHour}" class="form-control" id="inputEndHour" value="endHour">
+                    <p th:text="${errors.get('endHour')}"></p>
                 </div>
                 <div class="mb-3">
                     <label for="inputLunchTime" class="form-label">Lunch Time</label>
                     <input type="text" th:field="*{lunchTime}" class="form-control" id="inputLunchTime" value="lunchTime">
+                    <p th:text="${errors.get('lunchTime')}"></p>
                 </div>
 
             <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
+
+            <p th:text="${successMsg}"></p>
 
 
         </form>
