@@ -39,12 +39,12 @@
             </div>
             <div class="mb-3">
                 <label for="inputPassword" class="form-label">Password</label>
-                <input type="text" th:field="*{password}" class="form-control"  id="inputPassword">
+                <input type="password" th:field="*{password}" class="form-control"  id="inputPassword">
                 <p style="color:red" th:text="${errors.get('password')}"></p>
             </div>
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm password</label>
-                <input type="text" th:field="*{confirmPassword}" class="form-control" id="confirmPassword">
+                <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword">
                 <p style="color:red" th:text="${errors.get('confirmPassword')}"></p>
             </div>
             <input type="submit" value="Create" class="btn btn-primary"/>
