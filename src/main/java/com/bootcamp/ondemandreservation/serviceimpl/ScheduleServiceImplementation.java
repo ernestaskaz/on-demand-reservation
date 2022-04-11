@@ -76,22 +76,25 @@ public class ScheduleServiceImplementation implements ScheduleService {
     }
 
     @Override
-    public Map<String, String> validateSchedule(Long doctorId, Schedule schedule) {
+    public Map<String, String> validateSchedule(Schedule schedule) {
         Map<String,String> rv=new HashMap<>();
         List<DayOfWeek> weekDays= new ArrayList<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
         if(!weekDays.contains(schedule.getDayOfWeek())) {
             rv.put("dayOfWeek", "Please enter correct day of week: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY");
         }
-        if(schedule.getStartHour() >= 0 && schedule.getStartHour() <= 24) {
-            rv.put("startHour", "Please provide a start hour between 0 and 24");
+        if(schedule.getDayOfWeek() == null) {
+            rv.put("dayOfWeek", "Please enter correct day of week: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY");
+        }
+        if(schedule.getStartHour() < 1 || schedule.getStartHour() > 23) {
+            rv.put("startHour", "Please provide a start hour(number) between 1 and 23");
         }
 
-        if(schedule.getEndHour() >= 0 && schedule.getEndHour() <= 24) {
-            rv.put("endHour", "Please provide an end hour between 0 and 24");
+        if(schedule.getEndHour() < 1 || schedule.getEndHour() > 23) {
+            rv.put("endHour", "Please provide an end hour(number) between 1 and 23");
         }
 
-        if(schedule.getLunchTime() >= 0 && schedule.getLunchTime() <= 24) {
-            rv.put("endHour", "Please provide a lunch hour between 0 and 24");
+        if(schedule.getLunchTime() <= schedule.getStartHour() || schedule.getLunchTime() >= schedule.getEndHour()) {
+            rv.put("lunchTime", "Please provide a lunch hour that is between Start Hour and End Hour");
         }
         return rv;
     }

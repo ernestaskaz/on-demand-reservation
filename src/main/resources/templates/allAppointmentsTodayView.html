@@ -27,7 +27,7 @@
                 <tbody>
                 <tr th:each="appointment : ${appointments}">
                     <td th:text="${appointment.id}"></td>
-                    <td th:text="${appointment.appointmentTime}"></td>
+                    <td th:text="${#temporals.format(appointment.appointmentTime,'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${appointment.patient != null} ? ${appointment.patient.firstName} +' '+${appointment.patient.lastName} : 'Free appointment '"></td>
                     <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                     <td th:text="${appointment.doctor.specialty}"></td>

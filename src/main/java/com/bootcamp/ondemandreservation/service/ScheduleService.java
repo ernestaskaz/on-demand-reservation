@@ -13,5 +13,5 @@ public interface ScheduleService {
     Schedule findScheduleById(Long id);
     void deleteScheduleById(Long id);
     void setDoctorToSchedule(Long scheduleId, Long doctorId);
-    Map<String, String> validateSchedule(Long doctorId, Schedule schedule);
+    Map<String, String> validateSchedule(Schedule schedule);
 }

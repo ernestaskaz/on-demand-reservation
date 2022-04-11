@@ -2,6 +2,7 @@ package com.bootcamp.ondemandreservation.controller;
 import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.model.Patient;
+import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
@@ -22,11 +23,14 @@ import java.util.Map;
 @Controller
 @RequestMapping("/web/")
 @PreAuthorize(Doctor.DOCTOR_ROLE)
-@SessionAttributes("doctor")
+@SessionAttributes({"doctor", "schedule"})
 public class DoctorWebController {
     static final Logger log= LoggerFactory.getLogger(DoctorWebController.class);
 
     public static final String DOCTOR_EDIT_TEMPLATE = "doctorDetailsEdit";
+    public static final String SCHEDULE_EDIT_TEMPLATE = "scheduleEditView";
+    public static final String SCHEDULE_CREATE_TEMPLATE = "scheduleCreateView";
+    public static final String SCHEDULE_CREATE_URL = "/doctor/schedule/create";
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
     @Autowired
@@ -73,6 +77,58 @@ public class DoctorWebController {
         return "doctorTodayAppointmentView";
     }
 
+
+    @GetMapping("/doctor/schedule/edit")
+    String editSchedule(@RequestParam Long id, Model model){
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        Schedule schedule = scheduleService.findScheduleById(id);
+        model.addAttribute("schedule", schedule);
+        return SCHEDULE_EDIT_TEMPLATE;
+    }
+
+
+    @PostMapping("/doctor/schedule/edit")
+    String editSchedule(@RequestParam Long id, @ModelAttribute Schedule schedule, BindingResult result, Model model){
+        Map<String, String> errors = scheduleService.validateSchedule(schedule);
+        model.addAttribute("schedule", schedule);
+        model.addAttribute("errors", errors);
+
+        if(errors.isEmpty()) {
+            scheduleService.updateSchedule(id, schedule);
+            model.addAttribute("successMsg","Your data was updated successfully.");
+        }
+        return SCHEDULE_EDIT_TEMPLATE;
+    }
+
+
+    @GetMapping(SCHEDULE_CREATE_URL)
+    String createDoctor(Model model){
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        model.addAttribute("schedule",new Schedule());
+        return SCHEDULE_CREATE_TEMPLATE;
+    }
+
+
+    @PostMapping(SCHEDULE_CREATE_URL)
+    String createSchedule(@ModelAttribute Schedule schedule, @SessionAttribute Doctor doctor, Model model) {
+        Map<String, String> errors = scheduleService.validateSchedule(schedule);
+        model.addAttribute("schedule", schedule);
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("errors", errors);
+        if (errors.isEmpty()) {
+            schedule.setDoctor(doctor);
+            schedule = scheduleService.saveSchedule(schedule);
+            model.addAttribute("successMsg", String.format( "Schedule %s %s <%s> created with ID %d",
+                    schedule.getDayOfWeek(),
+                    schedule.getStartHour(),
+                    schedule.getEndHour(),
+                    schedule.getId()));
+        }
+        return SCHEDULE_CREATE_TEMPLATE;
+    }
+
+
+
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/edit")
     String editLoggedInDoctor(Model model){
@@ -83,9 +139,14 @@ public class DoctorWebController {
         return "doctorDetailsEdit";
     }
 
+
+
+
+
     @PostMapping("/doctor/edit")
     String editLoggedInDoctor(@ModelAttribute Doctor doctor, BindingResult result, Model model){
         //note matchPassword is true now.
+        System.out.println(doctor.getId());
         Map errors=doctorService.validateDoctor(doctor,true,true);
         model.addAttribute("doctor", doctor);
         model.addAttribute("errors", errors);
@@ -112,6 +173,7 @@ public class DoctorWebController {
         return DOCTOR_EDIT_TEMPLATE;
     }
 
+
     @GetMapping("/doctor/schedule")
     String getDoctorSchedule(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -120,6 +182,7 @@ public class DoctorWebController {
 
         return "doctorScheduleView";
     }
+
 
     @GetMapping("/doctor/generate")
     String generateDoctorAppointments(Model model){
@@ -146,6 +209,12 @@ public class DoctorWebController {
             model.addAttribute("reserveMsg", "Appointment cancellation failed");
         }
         return doctorAllAppointments(model);//Not sure if this is good
+    }
+
+    @GetMapping("/doctor/schedule/delete")
+    String deleteSchedule(@RequestParam Long id, Model model){
+        scheduleService.deleteScheduleById(id);
+        return getDoctorSchedule(model);
     }
 
 
