@@ -158,7 +158,7 @@ public class DoctorWebController {
                 if(doctor.getNewPassword()!=null&&!doctor.getNewPassword().isBlank()){
                     //user wants to change password
                     doctor.setPassword(doctor.getNewPassword());//plain text
-                    doctorService.saveDoctorAndPassword(doctor);
+                    doctorService.saveDoctorAndPassword(doctor, false);
                 }else {
                     //User doesn't want to change password
                     doctor.setPassword(currentPassword);//encrypted

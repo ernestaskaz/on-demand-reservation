@@ -8,6 +8,7 @@ import com.bootcamp.ondemandreservation.repository.ScheduleRepository;
 import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
 import com.bootcamp.ondemandreservation.service.ScheduleService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.util.*;
@@ -28,6 +29,7 @@ public class ScheduleServiceImplementation implements ScheduleService {
         return scheduleRepository.findById(id).get();
     }
 
+    @Transactional
     @Override
     public Schedule saveSchedule(Schedule schedule) {
         return scheduleRepository.save(schedule);
@@ -38,7 +40,7 @@ public class ScheduleServiceImplementation implements ScheduleService {
         return scheduleRepository.findAll();
     }
 
-
+    @Transactional
     @Override
     public Schedule updateSchedule(Long id, Schedule schedule) {
         Schedule dbSchedule = findScheduleById(id);
@@ -49,7 +51,7 @@ public class ScheduleServiceImplementation implements ScheduleService {
 
 
     }
-
+    @Transactional
     @Override
     public void deleteScheduleById(Long id) {
         Schedule schedule = scheduleRepository.findById(id).get();
@@ -63,7 +65,7 @@ public class ScheduleServiceImplementation implements ScheduleService {
      * @param scheduleId takes in already exististing schedule (day). has to be created before hand.
      * maps doctor to schedule.
      */
-
+    @Transactional
     @Override
     public void setDoctorToSchedule(Long scheduleId, Long doctorId) {
         Doctor currentDoctor =  doctorRepository.findById(doctorId).get();

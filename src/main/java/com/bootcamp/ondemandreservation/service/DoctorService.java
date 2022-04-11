@@ -10,6 +10,7 @@ import java.util.Map;
 public interface DoctorService {
 
     void changePassword(Long id, String plaintextPassword);
+    Doctor saveDoctor(Doctor doctor, boolean createSchedules);
     Doctor saveDoctor(Doctor doctor);
     List<Doctor> getAllDoctors();
     Doctor findDoctorById(Long id);
@@ -29,5 +30,5 @@ public interface DoctorService {
     Map<String, String> validateDoctor(Doctor doctor, boolean matchPassword, boolean forUpdate);
 
 
-    Doctor saveDoctorAndPassword(Doctor doctor);
+    Doctor saveDoctorAndPassword(Doctor doctor, boolean createSchedules);
 }

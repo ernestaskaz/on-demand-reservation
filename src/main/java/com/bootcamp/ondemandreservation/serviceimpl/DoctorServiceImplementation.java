@@ -11,6 +11,7 @@ import com.bootcamp.ondemandreservation.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -41,7 +42,7 @@ public class DoctorServiceImplementation implements DoctorService {
         this.scheduleService = scheduleService;
         this.appointmentService = appointmentService;
     }
-
+    @Transactional
     @Override
     public void changePassword(Long id, String plaintextPassword) {
         Doctor theDoctor=findDoctorById(id);
@@ -52,12 +53,33 @@ public class DoctorServiceImplementation implements DoctorService {
     /**
      * Save doctor method
      * @param doctor doctor to save
+     * @param createSchedule true if need to create default schedule for new doctor
      * @return Doctor as saved in the DB, nul;l if error
      */
+    @Transactional
+    @Override
+    public Doctor saveDoctor(Doctor doctor, boolean createSchedule) {
+        Doctor newDoctor=doctorRepository.save(doctor);
+        if(createSchedule)
+            generateDefaultSchedules(newDoctor);
+        return newDoctor;
+    }
+
+    /**
+     * Save doctor method
+     * note that b/c we're using an interface
+     * \@Transactional of methods we call is ignored, so we need a separate one.
+     * @param doctor doctor to save
+     * @return Doctor as saved in the DB, nul;l if error
+     */
+    @Transactional
     @Override
     public Doctor saveDoctor(Doctor doctor) {
-        return doctorRepository.save(doctor);
+        return saveDoctor(doctor,false);
     }
+
+
+
 
     @Override
     public List<Doctor> getAllDoctors() {
@@ -93,7 +115,7 @@ public class DoctorServiceImplementation implements DoctorService {
      *  This method removes relations to any Appointment list that a doctor might have relations to.
      *  Deletes doctor.
      */
-
+    @Transactional
     @Override
     public void deleteDoctor(Long id) {
         Doctor currentDoctor = findDoctorById(id);
@@ -129,11 +151,11 @@ public class DoctorServiceImplementation implements DoctorService {
 
         return pastAppointments;
     }
-
+    @Transactional
     @Override
     public Doctor updateDoctor(Long id, Doctor doctor) {
         doctor.setId(id);
-        return saveDoctor(doctor);
+        return saveDoctor(doctor, false);
     }
 
     @Override
@@ -173,14 +195,23 @@ public class DoctorServiceImplementation implements DoctorService {
      * @param doctor Doctor model to save
      * @return doctor with hashed password
      */
-
+    @Transactional
     @Override
-    public Doctor saveDoctorAndPassword(Doctor doctor) {
+    public Doctor saveDoctorAndPassword(Doctor doctor, boolean createSchedule) {
         doctor.setPassword(odrPasswordEncoder.defaultPasswordEncoder()
                 .encode(doctor.getPassword()));
 
         Doctor savedDoctor = saveDoctor(doctor);
+        if(createSchedule)
+            generateDefaultSchedules(savedDoctor);
 
+        return savedDoctor;
+    }
+
+    /**
+     * should only be called from @Transactional methods as non-public methods ignore @Transactional by themselves
+     */
+    protected void generateDefaultSchedules(Doctor doctor) {
         Schedule scheduleMonday = new Schedule(DayOfWeek.MONDAY, 8, 19, 13);
         Schedule scheduleTuesday = new Schedule(DayOfWeek.TUESDAY, 8, 19, 13);
         Schedule scheduleWednesday = new Schedule(DayOfWeek.WEDNESDAY, 8, 19, 13);
@@ -198,8 +229,5 @@ public class DoctorServiceImplementation implements DoctorService {
         scheduleService.saveSchedule(scheduleWednesday);
         scheduleService.saveSchedule(scheduleThursday);
         scheduleService.saveSchedule(scheduleFriday);
-
-
-        return savedDoctor;
     }
 }
