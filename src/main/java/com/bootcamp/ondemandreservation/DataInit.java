@@ -43,7 +43,6 @@ public class DataInit {
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         Authentication authentication  = new UsernamePasswordAuthenticationToken(initialAdmin.getUsername(), initialAdmin.getPassword(), authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        //SecurityContextHolder.getContext().setAuthentication(initialAdmin);
 
         if(adminService.getAllAdmins().size()==0){
             log.warn("No admins in the database, creating default admin user "+initialAdmin.toString());

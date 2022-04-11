@@ -68,6 +68,7 @@ public class DoctorWebController {
 
         return "doctorAllAppointmentsView";
     }
+
     @GetMapping("/doctor/today-appointments")
     String doctorTodayAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -77,7 +78,7 @@ public class DoctorWebController {
         return "doctorTodayAppointmentView";
     }
 
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/schedule/edit")
     String editSchedule(@RequestParam Long id, Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
@@ -86,7 +87,7 @@ public class DoctorWebController {
         return SCHEDULE_EDIT_TEMPLATE;
     }
 
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @PostMapping("/doctor/schedule/edit")
     String editSchedule(@RequestParam Long id, @ModelAttribute Schedule schedule, BindingResult result, Model model){
         Map<String, String> errors = scheduleService.validateSchedule(schedule);
@@ -100,7 +101,7 @@ public class DoctorWebController {
         return SCHEDULE_EDIT_TEMPLATE;
     }
 
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping(SCHEDULE_CREATE_URL)
     String createDoctor(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
@@ -108,7 +109,7 @@ public class DoctorWebController {
         return SCHEDULE_CREATE_TEMPLATE;
     }
 
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @PostMapping(SCHEDULE_CREATE_URL)
     String createSchedule(@ModelAttribute Schedule schedule, @SessionAttribute Doctor doctor, Model model) {
         Map<String, String> errors = scheduleService.validateSchedule(schedule);
@@ -142,7 +143,7 @@ public class DoctorWebController {
 
 
 
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @PostMapping("/doctor/edit")
     String editLoggedInDoctor(@ModelAttribute Doctor doctor, BindingResult result, Model model){
         //note matchPassword is true now.
@@ -193,13 +194,13 @@ public class DoctorWebController {
 
         return "doctorAllAppointmentsView";
     }
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @RequestMapping("/doctor/appointments/cancel")
-    String doctorAppointmentCancel(@RequestParam Long id, @RequestParam Long patientId, Model model){
+    String doctorAppointmentCancel(@RequestParam Long id, @RequestParam Long patientId,@RequestParam String from, Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
         boolean canceled=false;
         try{
-            canceled=appointmentService.cancelAppointment(appointmentService.getAppointmentById(id).getPatient().getId(), patientId);
+            canceled=appointmentService.cancelAppointment(patientId,id);
         }catch(Throwable t){
             log.error("cancellation error ",t);
         }
@@ -208,7 +209,14 @@ public class DoctorWebController {
         }else{
             model.addAttribute("reserveMsg", "Appointment cancellation failed");
         }
-        return doctorAllAppointments(model);//Not sure if this is good
+        if("today".equals(from)) //"literal".equals(variable)
+                                 // is preferred as you can't call .equals() on null variables,
+                                 // but you always can on literals.
+            return doctorTodayAppointments(model);
+        else if("all".equals(from)){
+            return doctorAllAppointments(model);
+        }else
+            return doctorAllAppointments(model);//falback if nothing passed/error
     }
 
     @GetMapping("/doctor/schedule/delete")
