@@ -18,23 +18,23 @@
         <form action="#" th:action="@{/web/appointment/edit(id=${appointment.id})}" th:object="${appointment}" method="post">
             <div class="mb-3">
                 <label for="inputId" class="form-label">Id</label>
-                <input type="text" th:field="*{Id}"  class="form-control" id="inputId" value="Id">
+                <input type="text" th:placeholder="*{Id}" class="form-control" id="inputId" disabled>
             </div>
             <div class="mb-3">
                 <label for="inputAppointmentTime" class="form-label">Appointment Time</label>
-                <input type="text" th:field="*{appointmentTime}" class="form-control" id="inputAppointmentTime" value="appointmentTime">
+                <input type="text" th:placeholder="*{#temporals.format(appointmentTime,'yyyy-MM-dd HH:mm')}" class="form-control" id="inputAppointmentTime" disabled>
             </div>
             <div class="mb-3">
                     <label for="inputIsAvailable" class="form-label">Is Available</label>
-                    <input type="text" th:field="*{available}" class="form-control" id="inputIsAvailable" value="isAvailable">
+                    <input type="text" th:placeholder="*{available}" class="form-control" id="inputIsAvailable" disabled>
                 </div>
             <div class="mb-3">
                 <label for="inputIsConfirmed" class="form-label">Is Confirmed</label>
-                <input type="text" th:field="*{confirmed}" class="form-control" id="inputIsConfirmed" value="isConfirmed">
+                <input type="text" th:placeholder="*{confirmed}" class="form-control" id="inputIsConfirmed" disabled>
             </div>
             <div class="mb-3">
                 <label for="inputIsReserved" class="form-label">Is Reserved</label>
-                <input type="text" th:field="*{reserved}" class="form-control" id="inputIsReserved" value="isReserved">
+                <input type="text" th:placeholder="*{reserved}" class="form-control" id="inputIsReserved" disabled>
             </div>
             <div class="mb-3">
                 <label for="inputWasAttended" class="form-label">Was Attended</label>
