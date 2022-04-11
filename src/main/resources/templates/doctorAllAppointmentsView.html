@@ -28,7 +28,9 @@
                 <td th:text="${appointment.patient != null} ? ${appointment.patient.firstName} +' '+${appointment.patient.lastName} : 'Free appointment '"></td>
                 <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                 <td th:text="${appointment.doctor.specialty}"></td>
-                <td><button type="button" class="btn btn-primary">Cancel Appointment</button></td>
+                <td><a th:if="${appointment.patient!=null}" th:href="@{/web/doctor/appointments/cancel(id=${appointment.id},patientId=${appointment.patient.id}, from=all)}" class="btn btn-primary">Cancel</a>
+                    <a th:if="${appointment.patient==null&&appointment.available}" th:href="@{/web/doctor/appointments/avail(id=${appointment.id}, from=all)}" class="btn btn-primary">Make Unavailable</a>
+                    <a th:if="${appointment.patient==null&&!appointment.available}" th:href="@{/web/doctor/appointments/avail(id=${appointment.id}, from=all)}" class="btn btn-primary">Make Available</a></td>
             </tr>
             </tbody>
         </table>

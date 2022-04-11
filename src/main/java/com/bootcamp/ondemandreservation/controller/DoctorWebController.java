@@ -114,7 +114,7 @@ public class DoctorWebController {
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping(SCHEDULE_CREATE_URL)
-    String createDoctor(Model model){
+    String createSchedule(Model model){
         model.addAttribute("errors", Collections.EMPTY_MAP);
         model.addAttribute("schedule",new Schedule());
         return SCHEDULE_CREATE_TEMPLATE;
@@ -216,7 +216,6 @@ public class DoctorWebController {
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @RequestMapping("/doctor/appointments/avail")
     String doctorAppointmentAvail(@RequestParam Long id, @RequestParam String from, Model model){
-        Doctor doctor = doctorService.getLoggedInDoctor();
         boolean avail=false;// it's the same code as for cancellation, but it does a different thing.
         try{
             avail=appointmentService.flipAppointmentAvailable(id);
@@ -242,7 +241,6 @@ public class DoctorWebController {
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @RequestMapping("/doctor/appointments/cancel")
     String doctorAppointmentCancel(@RequestParam Long id, @RequestParam Long patientId,@RequestParam String from, Model model){
-        Doctor doctor = doctorService.getLoggedInDoctor();
         boolean canceled=false;
         try{
             canceled=appointmentService.cancelAppointment(patientId,id);

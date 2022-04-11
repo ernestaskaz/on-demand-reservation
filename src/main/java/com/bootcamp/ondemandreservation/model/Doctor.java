@@ -14,8 +14,8 @@ public class Doctor extends ODRUser{
 
     private String specialty;
 
-    @OneToMany(mappedBy = "doctor")
-    private List<Appointment> appointmentList = new ArrayList<Appointment>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor")
+    private List<Appointment> appointmentList;//new ArrayList<> is misleading, as it's actually PersistentList with lazy fetch.
 
     @OneToMany(mappedBy = "doctor")
     @JsonIgnoreProperties({"doctor"})
