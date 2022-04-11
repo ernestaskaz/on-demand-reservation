@@ -31,6 +31,8 @@ public class DoctorWebController {
     public static final String SCHEDULE_EDIT_TEMPLATE = "scheduleEditView";
     public static final String SCHEDULE_CREATE_TEMPLATE = "scheduleCreateView";
     public static final String SCHEDULE_CREATE_URL = "/doctor/schedule/create";
+    public static final String DOCTOR_PAST_APPOINTMENTS_URL = "/doctor/past-appointments";
+    public static final String DOCTOR_PAST_APPOINTMENTS_TEMPLATE = "doctorPastAppointmentsView";
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
     @Autowired
@@ -75,6 +77,15 @@ public class DoctorWebController {
         model.addAttribute("appointments", doctorService.getUpcomingAppointmentsForToday(doctor.getId()));
 
         return "doctorTodayAppointmentView";
+    }
+
+    @GetMapping(DOCTOR_PAST_APPOINTMENTS_URL)
+    String doctorPastAPpointments(Model model){
+        Doctor doctor = doctorService.getLoggedInDoctor();
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("appointments", doctorService.getDoctorPastAppointments(doctor.getId()));
+
+        return "doctorPastAppointmentsView";
     }
 
 
