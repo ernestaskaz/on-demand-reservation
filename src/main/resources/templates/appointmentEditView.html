@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Appointment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<div th:insert="fragments :: doctorNav"></div>
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <h1>Edit Appointment</h1>
+    </div>
+</div>
+
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <form action="#" th:action="@{/web/appointment/edit(id=${appointment.id})}" th:object="${appointment}" method="post">
+            <div class="mb-3">
+                <label for="inputId" class="form-label">Id</label>
+                <input type="text" th:placeholder="*{Id}" class="form-control" id="inputId" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="inputAppointmentTime" class="form-label">Appointment Time</label>
+                <input type="text" th:placeholder="*{#temporals.format(appointmentTime,'yyyy-MM-dd HH:mm')}" class="form-control" id="inputAppointmentTime" disabled>
+            </div>
+            <div class="mb-3">
+                    <label for="inputIsAvailable" class="form-label">Is Available</label>
+                    <input type="text" th:placeholder="*{available}" class="form-control" id="inputIsAvailable" disabled>
+                </div>
+            <div class="mb-3">
+                <label for="inputIsConfirmed" class="form-label">Is Confirmed</label>
+                <input type="text" th:placeholder="*{confirmed}" class="form-control" id="inputIsConfirmed" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="inputIsReserved" class="form-label">Is Reserved</label>
+                <input type="text" th:placeholder="*{reserved}" class="form-control" id="inputIsReserved" disabled>
+            </div>
+            <div class="mb-3">
+                <label for="inputWasAttended" class="form-label">Was Attended</label>
+                <input type="text" th:field="*{wasAttended}" class="form-control" id="inputWasAttended" value="wasAttended">
+            </div>
+            <div class="mb-3">
+                <label for="inputComment" class="form-label">Comment</label>
+                <input type="text" th:field="*{comment}" class="form-control" id="inputComment" value="comment">
+            </div>
+
+            <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
+
+
+            <p th:text="${successMsg}"></p>
+
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,8 +1,5 @@
 package com.bootcamp.ondemandreservation.controller;
-import com.bootcamp.ondemandreservation.model.Admin;
-import com.bootcamp.ondemandreservation.model.Doctor;
-import com.bootcamp.ondemandreservation.model.Patient;
-import com.bootcamp.ondemandreservation.model.Schedule;
+import com.bootcamp.ondemandreservation.model.*;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
@@ -23,7 +20,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/web/")
 @PreAuthorize(Doctor.DOCTOR_ROLE)
-@SessionAttributes({"doctor", "schedule"})
+@SessionAttributes({"doctor", "schedule", "appointment"})
 public class DoctorWebController {
     static final Logger log= LoggerFactory.getLogger(DoctorWebController.class);
 
@@ -31,6 +28,8 @@ public class DoctorWebController {
     public static final String SCHEDULE_EDIT_TEMPLATE = "scheduleEditView";
     public static final String SCHEDULE_CREATE_TEMPLATE = "scheduleCreateView";
     public static final String SCHEDULE_CREATE_URL = "/doctor/schedule/create";
+    public static final String DOCTOR_PAST_APPOINTMENTS_URL = "/doctor/past-appointments";
+    public static final String DOCTOR_PAST_APPOINTMENTS_TEMPLATE = "doctorPastAppointmentsView";
     @Autowired
     private ODRPasswordEncoder odrPasswordEncoder;
     @Autowired
@@ -53,13 +52,15 @@ public class DoctorWebController {
         // values from the session
         dataBinder.setDisallowedFields("id", "email");
     }
+
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/myDetails")
     String doctorDetails(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
         return "doctorAccountView";
     }
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/all-appointments")
     String doctorAllAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -68,7 +69,7 @@ public class DoctorWebController {
 
         return "doctorAllAppointmentsView";
     }
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/today-appointments")
     String doctorTodayAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -77,6 +78,16 @@ public class DoctorWebController {
 
         return "doctorTodayAppointmentView";
     }
+
+    @GetMapping(DOCTOR_PAST_APPOINTMENTS_URL)
+    String doctorPastAppointments(Model model){
+        Doctor doctor = doctorService.getLoggedInDoctor();
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("appointments", doctorService.getDoctorPastAppointments(doctor.getId()));
+
+        return "doctorPastAppointmentsView";
+    }
+
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/schedule/edit")
@@ -119,7 +130,7 @@ public class DoctorWebController {
         if (errors.isEmpty()) {
             schedule.setDoctor(doctor);
             schedule = scheduleService.saveSchedule(schedule);
-            model.addAttribute("successMsg", String.format( "Schedule %s %s <%s> created with ID %d",
+            model.addAttribute("successMsg", String.format( "Schedule %s from %s to %s created with ID %d",
                     schedule.getDayOfWeek(),
                     schedule.getStartHour(),
                     schedule.getEndHour(),
@@ -174,7 +185,7 @@ public class DoctorWebController {
         return DOCTOR_EDIT_TEMPLATE;
     }
 
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/schedule")
     String getDoctorSchedule(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -184,7 +195,7 @@ public class DoctorWebController {
         return "doctorScheduleView";
     }
 
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/generate")
     String generateDoctorAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -193,6 +204,13 @@ public class DoctorWebController {
         model.addAttribute("appointments", doctor.getAppointmentList());
 
         return "doctorAllAppointmentsView";
+    }
+
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
+    @RequestMapping("/doctor/past-appointments/was-attended")
+    String wasAttendedAppointment(@RequestParam Long id, Model model){
+        appointmentService.setAppointmentWasAttended(id);
+        return doctorPastAppointments(model);
     }
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @RequestMapping("/doctor/appointments/cancel")
@@ -218,12 +236,30 @@ public class DoctorWebController {
         }else
             return doctorAllAppointments(model);//falback if nothing passed/error
     }
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/schedule/delete")
     String deleteSchedule(@RequestParam Long id, Model model){
         scheduleService.deleteScheduleById(id);
         return getDoctorSchedule(model);
     }
+
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
+    @GetMapping("/appointment/edit")
+    String editAppointment(@RequestParam Long id, Model model){
+        Appointment appointment = appointmentService.getAppointmentById(id);
+        model.addAttribute("appointment", appointment);
+        return "appointmentEditView";
+    }
+
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
+    @PostMapping("/appointment/edit")
+    String editAppointment(@RequestParam Long id, @ModelAttribute Appointment appointment, BindingResult result, Model model){
+        model.addAttribute("appointment", appointment);
+        model.addAttribute("successMsg","Appointment was updated successfully.");
+        appointmentService.updateAppointment(id, appointment);
+        return "appointmentEditView";
+    }
+
 
 
 
