@@ -212,6 +212,33 @@ public class DoctorWebController {
         appointmentService.setAppointmentWasAttended(id);
         return doctorPastAppointments(model);
     }
+
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
+    @RequestMapping("/doctor/appointments/avail")
+    String doctorAppointmentAvail(@RequestParam Long id, @RequestParam String from, Model model){
+        Doctor doctor = doctorService.getLoggedInDoctor();
+        boolean avail=false;// it's the same code as for cancellation, but it does a different thing.
+        try{
+            avail=appointmentService.flipAppointmentAvailable(id);
+        }catch(Throwable t){
+            log.error("cancellation error ",t);
+        }
+        if(avail) {
+            model.addAttribute("reserveMsg", "Appointment marked as available");
+        }else{
+            model.addAttribute("reserveMsg", "Appointment marked as available");
+        }
+        if("today".equals(from)) //"literal".equals(variable)
+            // is preferred as you can't call .equals() on null variables,
+            // but you always can on literals.
+            return doctorTodayAppointments(model);
+        else if("all".equals(from)){
+            return doctorAllAppointments(model);
+        }else
+            return doctorAllAppointments(model);//falback if nothing passed/error
+    }
+
+
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @RequestMapping("/doctor/appointments/cancel")
     String doctorAppointmentCancel(@RequestParam Long id, @RequestParam Long patientId,@RequestParam String from, Model model){

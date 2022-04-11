@@ -1,6 +1,7 @@
 package com.bootcamp.ondemandreservation.serviceimpl;
 
 import com.bootcamp.ondemandreservation.model.*;
+import com.bootcamp.ondemandreservation.repository.AppointmentRepository;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.security.ODRInputSanitiser;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
@@ -9,12 +10,16 @@ import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.ODRUserService;
 import com.bootcamp.ondemandreservation.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 
 
@@ -30,18 +35,24 @@ public class DoctorServiceImplementation implements DoctorService {
     private ScheduleService scheduleService;
     @Autowired
     private AppointmentService appointmentService;
-
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     public DoctorServiceImplementation() {
     }
 
-    public DoctorServiceImplementation(DoctorRepository doctorRepository, ODRPasswordEncoder odrPasswordEncoder, ODRUserService odrUserService, ScheduleService scheduleService, AppointmentService appointmentService) {
+    public DoctorServiceImplementation(DoctorRepository doctorRepository, ODRPasswordEncoder odrPasswordEncoder,
+                                       ODRUserService odrUserService, ScheduleService scheduleService,
+                                       AppointmentService appointmentService,
+                                       AppointmentRepository appointmentRepository) {
         this.doctorRepository = doctorRepository;
         this.odrPasswordEncoder = odrPasswordEncoder;
         this.odrUserService = odrUserService;
         this.scheduleService = scheduleService;
         this.appointmentService = appointmentService;
+        this.appointmentRepository = appointmentRepository;
     }
+
     @Transactional
     @Override
     public void changePassword(Long id, String plaintextPassword) {
@@ -126,8 +137,7 @@ public class DoctorServiceImplementation implements DoctorService {
 
     @Override
     public List<Appointment> getAllAppointments(Long id) {
-        Doctor doctor = findDoctorById(id);
-        return doctor.getAppointmentList();
+        return appointmentRepository.findByDoctorId(id,Sort.by(Sort.Direction.ASC,"appointmentTime"));
     }
 
     @Override
@@ -150,6 +160,7 @@ public class DoctorServiceImplementation implements DoctorService {
         }
 
         return pastAppointments;
+
     }
     @Transactional
     @Override
@@ -160,18 +171,8 @@ public class DoctorServiceImplementation implements DoctorService {
 
     @Override
     public List<Appointment> getUpcomingAppointmentsForToday(Long id) {
-        List<Appointment> AllAppointments = getAllAppointments(id);
-        List<Appointment> todaysAppointments = new ArrayList<>();
-
-        for (Appointment appointment: AllAppointments) {
-
-            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth() && appointment.getAppointmentTime().isAfter(LocalDateTime.now())) {
-                todaysAppointments.add(appointment);
-            }
-
-        }
-
-        return todaysAppointments;
+        LocalDateTime now=LocalDateTime.now();
+        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(id, now,now.plusDays(1).truncatedTo(ChronoUnit.DAYS),Sort.by(Sort.Direction.ASC,"appointmentTime"));
     }
 
     /**
