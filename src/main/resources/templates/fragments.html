@@ -1,48 +1,50 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>Title</title>
 </head>
 <body>
-  <div th:fragment="adminNav">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <div class="navbar-nav">
-          <a class="nav-link" href="/web/admin/myDetails">My Account</a>
-          <a class="nav-link" href="/web/admin/all-doctors">Doctors</a>
-          <a class="nav-link" href="/web/admin/all-appointments"> All Appointments </a>
-          <a class="nav-link" href="/web/admin/today-appointments">Appointments For Today</a>
-          <a class="nav-link" href="/logout_now">Log Out</a>
-        </div>
+<div th:fragment="adminNav">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/web/admin/myDetails">My Account</a>
+        <a class="nav-link" href="/web/admin/all-doctors">Doctors</a>
+        <a class="nav-link" href="/web/admin/all-appointments"> All Appointments </a>
+        <a class="nav-link" href="/web/admin/today-appointments">Appointments For Today</a>
+        <a class="nav-link" href="/logout_now">Log Out</a>
       </div>
-    </nav>
-  </div>
-  <div th:fragment="doctorNav">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <div class="navbar-nav">
-          <a class="nav-link" href="/web/doctor/myDetails">My Account</a>
-          <a class="nav-link" href="/web/doctor/all-appointments"> All Appointments </a>
-          <a class="nav-link" href="/web/doctor/today-appointments">Appointments For Today</a>
-          <a class="nav-link" href="/web/doctor/schedule">Schedule</a>
-          <a class="nav-link" href="/web/doctor/generate">Generate Appointments</a>
-          <a class="nav-link" href="/logout_now">Log Out</a>
-        </div>
+    </div>
+  </nav>
+</div>
+
+<div th:fragment="doctorNav">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/web/doctor/myDetails">My Account</a>
+        <a class="nav-link" href="/web/doctor/all-appointments"> All Appointments </a>
+        <a class="nav-link" href="/web/doctor/today-appointments">Appointments For Today</a>
+        <a class="nav-link" href="/web/doctor/schedule">Schedule</a>
+        <a class="nav-link" href="/web/doctor/generate">Generate Appointments</a>
+        <a class="nav-link" href="/logout_now">Log Out</a>
       </div>
-    </nav>
-  </div>
-  <div th:fragment="patientNav">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <div class="navbar-nav">
-          <a class="nav-link" href="/web/patient/myDetails">My Account</a>
-          <a class="nav-link" href="/web/patient/appointments">My Appointments</a>
-          <a class="nav-link" href="/web/patient/available-appointments">Browse Available Appointments</a>
-          <a class="nav-link" href="/logout_now">Log Out</a>
-        </div>
+    </div>
+  </nav>
+</div>
+
+<div th:fragment="patientNav">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/web/patient/myDetails">My Account</a>
+        <a class="nav-link" href="/web/patient/appointments">My Appointments</a>
+        <a class="nav-link" href="/web/patient/available-appointments">Browse Available Appointments</a>
+        <a class="nav-link" href="/logout_now">Log Out</a>
       </div>
-    </nav>
-  </div>
+    </div>
+  </nav>
+</div>
 </body>
 </html>
