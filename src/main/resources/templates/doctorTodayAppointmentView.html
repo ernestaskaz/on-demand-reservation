@@ -28,7 +28,9 @@
                 <td th:text="${appointment.patient != null} ? ${appointment.patient.firstName} +' '+${appointment.patient.lastName} : 'Free appointment '"></td>
                 <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                 <td th:text="${appointment.doctor.specialty}"></td>
-                <td><button type="button" class="btn btn-primary">Cancel Appointment</button></td>
+                <td><a th:if="${appointment.patient!=null}" th:href="@{/web/doctor/appointments/cancel(id=${appointment.id},patientId=${appointment.patient.id}, from=today)}" class="btn btn-primary">Cancel</a>
+                        <div th:if="${appointment.patient==null}" class="btn btn-primary">---</div>
+                </td>
 
             </tr>
             </tbody>
