@@ -36,9 +36,16 @@
                 <label for="inputIsReserved" class="form-label">Is Reserved</label>
                 <input type="text" th:placeholder="*{reserved}" class="form-control" id="inputIsReserved" disabled>
             </div>
-            <div class="mb-3">
-                <label for="inputWasAttended" class="form-label">Was Attended</label>
-                <input type="text" th:field="*{wasAttended}" class="form-control" id="inputWasAttended" value="wasAttended">
+            <label>Was attended?</label>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" id="attended" type="radio" name="attend" value="1" th:field="*{wasAttended}">
+                    <label class="form-check-label" for="attended">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" id="notAttended" type="radio" name="attend" value="0" th:field="*{wasAttended}">
+                    <label class="form-check-label" for="notAttended">No</label>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="inputComment" class="form-label">Comment</label>
