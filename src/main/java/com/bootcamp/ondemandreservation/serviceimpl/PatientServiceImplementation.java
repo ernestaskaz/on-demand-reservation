@@ -12,6 +12,7 @@ import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +47,7 @@ public class PatientServiceImplementation implements PatientService {
 
 
     }
-
+    @Transactional
     @Override
     public Patient savePatient(Patient patient) {
         return patientRepository.save(patient);
@@ -69,7 +70,7 @@ public class PatientServiceImplementation implements PatientService {
      *  This method removes relations to any Appointment list that a patient might have relations to.
      *  Deletes patient.
      */
-
+    @Transactional
     @Override
     public void deletePatientById(Long id) {
         Patient currentPatient  = findPatientById(id);
@@ -82,7 +83,7 @@ public class PatientServiceImplementation implements PatientService {
         Patient patient = findPatientById(id);
         return patient.getAppointmentList();
     }
-
+    @Transactional
     @Override
     public Patient updatePatient(Long id, Patient patient) {
         patient.setId(id);
@@ -129,6 +130,7 @@ public class PatientServiceImplementation implements PatientService {
      * @param patient patient model to save
      * @return
      */
+    @Transactional
     @Override
     public Patient savePatientAndPassword(Patient patient) {
         patient.setPassword(odrPasswordEncoder.defaultPasswordEncoder()

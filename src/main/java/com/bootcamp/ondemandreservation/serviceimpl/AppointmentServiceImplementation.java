@@ -8,6 +8,7 @@ import com.bootcamp.ondemandreservation.repository.AppointmentRepository;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,7 +78,8 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Override
     public List<Appointment> getTodaysAppointments() {
-        List<Appointment> AllAppointments = getAllAppointments();
+        //return appointmentRepository.findAll()
+        List<Appointment> AllAppointments = appointmentRepository.findAll(Sort.by(Sort.Direction.ASC,"appointmentTime","id"));
         List<Appointment> todaysAppointments = new ArrayList<>();
 
         for (Appointment appointment: AllAppointments) {
@@ -133,10 +135,11 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Transactional
     @Override
-    public void setAppointmentUnavailable(Long appointmentId) {
+    public boolean flipAppointmentAvailable(Long appointmentId) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
-        currentAppointment.setAvailable(false);
-        saveAppointment(currentAppointment);
+        currentAppointment.setAvailable(!currentAppointment.isAvailable());
+        currentAppointment=saveAppointment(currentAppointment);
+        return currentAppointment.isAvailable();
     }
     @Transactional
     @Override
@@ -145,7 +148,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
         currentAppointment.setWasAttended(true);
         saveAppointment(currentAppointment);
     }
-
+    @Transactional
     @Override
     public void addComment(Long appointmentId, String comment) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
@@ -221,6 +224,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
        return saveAppointment(appointment);
 
     }
+
 
 
 }

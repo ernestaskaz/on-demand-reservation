@@ -84,7 +84,7 @@ public class AdminWebController {
         model.addAttribute("errors", errors);
         if (errors.isEmpty()) {
             doctor.setId(null);
-            doctor=doctorService.saveDoctorAndPassword(doctor);
+            doctor=doctorService.saveDoctorAndPassword(doctor,true);
             doctor.setPassword("");
             doctor.setConfirmPassword("");
             model.addAttribute("successMsg", String.format( "Doctor %s %s <%s> created with ID %d",
