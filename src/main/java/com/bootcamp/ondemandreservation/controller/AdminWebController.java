@@ -6,6 +6,8 @@ import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import java.util.Map;
 @RequestMapping("/web/")
 @SessionAttributes({"admin","doctor"})
 public class AdminWebController {
+    private static final Logger log= LoggerFactory.getLogger(AdminWebController.class);
     public static final String DOCTOR_GET_ALL = "/admin/all-doctors";
     public static final String ADMIN_DETAILS_URL = "/admin/myDetails";
     public static final String ADMIN_EDIT_URL = "/admin/edit";
@@ -196,6 +199,55 @@ public class AdminWebController {
         }//if validation errors empty
         admin.blankPasswords();
         return ADMIN_EDIT_TEMPLATE;
+    }
+
+    @PreAuthorize(Admin.ADMIN_ROLE)
+    @RequestMapping("/admin/appointments/avail")
+    String doctorAppointmentAvail(@RequestParam Long id, @RequestParam String from, Model model){
+        boolean avail=false;// it's the same code as for cancellation, but it does a different thing.
+        try{
+            avail=appointmentService.flipAppointmentAvailable(id);
+        }catch(Throwable t){
+            log.error("cancellation error ",t);
+        }
+        if(avail) {
+            model.addAttribute("reserveMsg", "Appointment marked as available");
+        }else{
+            model.addAttribute("reserveMsg", "Appointment marked as available");
+        }
+        if("today".equals(from)) //"literal".equals(variable)
+            // is preferred as you can't call .equals() on null variables,
+            // but you always can on literals.
+            return getAllTodayAppointments(model);
+        else if("all".equals(from)){
+            return getAllAppointments(model);
+        }else
+            return getAllAppointments(model);//fallback if nothing passed/error
+    }
+
+
+    @PreAuthorize(Admin.ADMIN_ROLE)
+    @RequestMapping("/admin/appointments/cancel")
+    String doctorAppointmentCancel(@RequestParam Long id, @RequestParam Long patientId,@RequestParam String from, Model model){
+        boolean canceled=false;
+        try{
+            canceled=appointmentService.cancelAppointment(patientId,id);
+        }catch(Throwable t){
+            log.error("cancellation error ",t);
+        }
+        if(canceled) {
+            model.addAttribute("reserveMsg", "Appointment canceled");
+        }else{
+            model.addAttribute("reserveMsg", "Appointment cancellation failed");
+        }
+        if("today".equals(from)) //"literal".equals(variable)
+            // is preferred as you can't call .equals() on null variables,
+            // but you always can on literals.
+            return getAllTodayAppointments(model);
+        else if("all".equals(from)){
+            return getAllAppointments(model);
+        }else
+            return getAllAppointments(model);//fallback if nothing passed/error
     }
 
 
