@@ -9,6 +9,7 @@ import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -130,13 +131,14 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     }
 
+    @Transactional
     @Override
     public void setAppointmentUnavailable(Long appointmentId) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
         currentAppointment.setAvailable(false);
         saveAppointment(currentAppointment);
     }
-
+    @Transactional
     @Override
     public void setAppointmentWasAttended(Long appointmentId) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
@@ -151,6 +153,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
         saveAppointment(currentAppointment);
     }
 
+    @Transactional
     @Override
     public void reserveAppointment(Long patientId, Long appointmentId) {
         Appointment currentAppointment = getAppointmentById(appointmentId);
