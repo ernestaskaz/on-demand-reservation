@@ -1,8 +1,5 @@
 package com.bootcamp.ondemandreservation.controller;
-import com.bootcamp.ondemandreservation.model.Admin;
-import com.bootcamp.ondemandreservation.model.Doctor;
-import com.bootcamp.ondemandreservation.model.Patient;
-import com.bootcamp.ondemandreservation.model.Schedule;
+import com.bootcamp.ondemandreservation.model.*;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
@@ -80,7 +77,7 @@ public class DoctorWebController {
     }
 
     @GetMapping(DOCTOR_PAST_APPOINTMENTS_URL)
-    String doctorPastAPpointments(Model model){
+    String doctorPastAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
         model.addAttribute("appointments", doctorService.getDoctorPastAppointments(doctor.getId()));
@@ -203,6 +200,12 @@ public class DoctorWebController {
         model.addAttribute("appointments", doctor.getAppointmentList());
 
         return "doctorAllAppointmentsView";
+    }
+
+    @RequestMapping("/doctor/past-appointments/was-attended")
+    String wasAttendedAppointment(@RequestParam Long id, Model model){
+        appointmentService.setAppointmentWasAttended(id);
+        return doctorPastAppointments(model);//Not sure if this is good
     }
 
     @RequestMapping("/doctor/appointments/cancel")
