@@ -20,7 +20,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/web/")
 @PreAuthorize(Doctor.DOCTOR_ROLE)
-@SessionAttributes({"doctor", "schedule"})
+@SessionAttributes({"doctor", "schedule", "appointment"})
 public class DoctorWebController {
     static final Logger log= LoggerFactory.getLogger(DoctorWebController.class);
 
@@ -205,7 +205,7 @@ public class DoctorWebController {
     @RequestMapping("/doctor/past-appointments/was-attended")
     String wasAttendedAppointment(@RequestParam Long id, Model model){
         appointmentService.setAppointmentWasAttended(id);
-        return doctorPastAppointments(model);//Not sure if this is good
+        return doctorPastAppointments(model);
     }
 
     @RequestMapping("/doctor/appointments/cancel")
@@ -230,6 +230,24 @@ public class DoctorWebController {
         scheduleService.deleteScheduleById(id);
         return getDoctorSchedule(model);
     }
+
+
+    @GetMapping("/appointment/edit")
+    String editAppointment(@RequestParam Long id, Model model){
+        Appointment appointment = appointmentService.getAppointmentById(id);
+        model.addAttribute("appointment", appointment);
+        return "appointmentEditView";
+    }
+
+
+    @PostMapping("/appointment/edit")
+    String editAppointment(@RequestParam Long id, @ModelAttribute Appointment appointment, BindingResult result, Model model){
+        model.addAttribute("appointment", appointment);
+        model.addAttribute("successMsg","Appointment was updated successfully.");
+        appointmentService.updateAppointment(id, appointment);
+        return "appointmentEditView";
+    }
+
 
 
 
