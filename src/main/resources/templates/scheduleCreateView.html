@@ -17,10 +17,18 @@
 <div class="d-flex justify-content-center">
     <div class="col-auto">
         <form th:action="@{/web/doctor/schedule/create}" th:object="${schedule}"  method="post">
-            <div class="mb-3">
-                <label for="inputDayOfWeek" class="form-label">Day Of Week</label>
-                <input type="text" th:field="*{dayOfWeek}"  class="form-control" id="inputDayOfWeek" >
-                <p style="color:red" th:text="${errors.get('dayOfWeek')}"></p>
+            <label for="daySelect" class="form-label">Day Of Week</label>
+            <div class="form-floating" id="daySelect">
+                    <select class="form-select" id="dayOfWeekSelect" th:field="*{dayOfWeek}">
+                        <option th:value="'MONDAY'" th:text="MONDAY"></option>
+                        <option th:value="'TUESDAY'" th:text="TUESDAY"></option>
+                        <option th:value="'WEDNESDAY'" th:text="WEDNESDAY"></option>
+                        <option th:value="'THURSDAY'" th:text="THURSDAY"></option>
+                        <option th:value="'FRIDAY'" th:text="FRIDAY"></option>
+                        <option th:value="'SATURDAY'" th:text="SATURDAY"></option>
+                        <option th:value="'SUNDAY'" th:text="SUNDAY"></option>
+                </select>
+                <label for="dayOfWeekSelect">Select a day</label>
             </div>
             <div class="mb-3">
                 <label for="inputStartHour" class="form-label">Start Hour</label>
