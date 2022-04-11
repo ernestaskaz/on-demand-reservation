@@ -22,15 +22,15 @@
             </div>
             <div class="mb-3">
                     <label  class="form-label">Is Available</label>
-                    <input type="checkbox" th:field="*{available}" th:checked="*{available}?'checked'" th:disabled="${#request.getParameter('from')}=='past'" >
+                    <input type="checkbox" th:field="*{available}" th:checked="*{available}?'checked'" >
                 </div>
             <div class="mb-3">
                 <label  class="form-label">Is Confirmed</label>
-                <input type="checkbox" th:field="*{confirmed}" th:checked="*{confirmed}?'checked'"  th:disabled="${#request.getParameter('from')}=='past'" >
+                <input type="checkbox" th:field="*{confirmed}" th:checked="*{confirmed}?'checked'" >
             </div>
             <div class="mb-3">
                 <label  class="form-label">Is Reserved</label>
-                <input type="checkbox" th:field="*{reserved}" th:checked="*{reserved}?'checked'" th:disabled="${#request.getParameter('from')}=='past'" >
+                <input type="checkbox" th:field="*{reserved}" th:checked="*{reserved}?'checked'" >
             </div>
             <div class="mb-3">
                 <label>Was attended</label>
