@@ -31,6 +31,7 @@
                 <td><a th:if="${appointment.patient!=null}" th:href="@{/web/doctor/appointments/cancel(id=${appointment.id},patientId=${appointment.patient.id}, from=all)}" class="btn btn-primary">Cancel</a>
                     <a th:if="${appointment.patient==null&&appointment.available}" th:href="@{/web/doctor/appointments/avail(id=${appointment.id}, from=all)}" class="btn btn-primary">Make Unavailable</a>
                     <a th:if="${appointment.patient==null&&!appointment.available}" th:href="@{/web/doctor/appointments/avail(id=${appointment.id}, from=all)}" class="btn btn-primary">Make Available</a></td>
+                <td><a th:href="@{/web/appointment/edit(id=${appointment.id}, from=all)}" class="btn btn-primary">Edit</a></td>
             </tr>
             </tbody>
         </table>

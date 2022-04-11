@@ -17,35 +17,24 @@
     <div class="d-flex justify-content-center">
         <form action="#" th:action="@{/web/appointment/edit(id=${appointment.id})}" th:object="${appointment}" method="post">
             <div class="mb-3">
-                <label for="inputId" class="form-label">Id</label>
-                <input type="text" th:placeholder="*{Id}" class="form-control" id="inputId" disabled>
-            </div>
-            <div class="mb-3">
                 <label for="inputAppointmentTime" class="form-label">Appointment Time</label>
-                <input type="text" th:placeholder="*{#temporals.format(appointmentTime,'yyyy-MM-dd HH:mm')}" class="form-control" id="inputAppointmentTime" disabled>
+                <div th:text="*{#temporals.format(appointmentTime,'yyyy-MM-dd HH:mm')}" class="form-control" id="inputAppointmentTime" />
             </div>
             <div class="mb-3">
-                    <label for="inputIsAvailable" class="form-label">Is Available</label>
-                    <input type="text" th:placeholder="*{available}" class="form-control" id="inputIsAvailable" disabled>
+                    <label  class="form-label">Is Available</label>
+                    <input type="checkbox" th:field="*{available}" th:checked="*{available}?'checked'" th:disabled="${#request.getParameter('from')}=='past'" >
                 </div>
             <div class="mb-3">
-                <label for="inputIsConfirmed" class="form-label">Is Confirmed</label>
-                <input type="text" th:placeholder="*{confirmed}" class="form-control" id="inputIsConfirmed" disabled>
+                <label  class="form-label">Is Confirmed</label>
+                <input type="checkbox" th:field="*{confirmed}" th:checked="*{confirmed}?'checked'"  th:disabled="${#request.getParameter('from')}=='past'" >
             </div>
             <div class="mb-3">
-                <label for="inputIsReserved" class="form-label">Is Reserved</label>
-                <input type="text" th:placeholder="*{reserved}" class="form-control" id="inputIsReserved" disabled>
+                <label  class="form-label">Is Reserved</label>
+                <input type="checkbox" th:field="*{reserved}" th:checked="*{reserved}?'checked'" th:disabled="${#request.getParameter('from')}=='past'" >
             </div>
-            <label>Was attended?</label>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" id="attended" type="radio" name="attend" value="1" th:field="*{wasAttended}">
-                    <label class="form-check-label" for="attended">Yes</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" id="notAttended" type="radio" name="attend" value="0" th:field="*{wasAttended}">
-                    <label class="form-check-label" for="notAttended">No</label>
-                </div>
+            <div class="mb-3">
+                <label>Was attended</label>
+                <input type="checkbox" th:field="*{wasAttended}" th:checked="*{wasAttended}?'checked'" >
             </div>
             <div class="mb-3">
                 <label for="inputComment" class="form-label">Comment</label>

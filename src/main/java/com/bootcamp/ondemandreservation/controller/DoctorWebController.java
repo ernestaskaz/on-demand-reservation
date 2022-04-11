@@ -270,18 +270,25 @@ public class DoctorWebController {
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/appointment/edit")
-    String editAppointment(@RequestParam Long id, Model model){
+    String editAppointment(@RequestParam Long id, @RequestParam String from, Model model){
         Appointment appointment = appointmentService.getAppointmentById(id);
         model.addAttribute("appointment", appointment);
+        model.addAttribute("from", from);
         return "appointmentEditView";
     }
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @PostMapping("/appointment/edit")
-    String editAppointment(@RequestParam Long id, @ModelAttribute Appointment appointment, BindingResult result, Model model){
+    String editAppointment(@RequestParam Long id, @ModelAttribute String from, @ModelAttribute Appointment appointment, BindingResult result, Model model){
+        appointmentService.updateAppointment(id, appointment);
+        if("past".equals(from)){
+            return doctorPastAppointments(model);
+        }else if("all".equals(from)){
+            return doctorAllAppointments(model);
+        }
+        //fallback
         model.addAttribute("appointment", appointment);
         model.addAttribute("successMsg","Appointment was updated successfully.");
-        appointmentService.updateAppointment(id, appointment);
         return "appointmentEditView";
     }
 
