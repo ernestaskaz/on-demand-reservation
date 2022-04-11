@@ -1,0 +1,12 @@
+.full-height{
+    height:60vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
+.logout-message{
+    padding-bottom: 10px;
+}
+.welcome-message{
+    padding-bottom: 10px;
+}
