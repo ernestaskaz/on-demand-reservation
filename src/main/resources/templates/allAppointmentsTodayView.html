@@ -21,10 +21,8 @@
                 <th scope="col">Doctor</th>
                 <th scope="col">Specialty</th>
                 <th scope="col">Edit</th>
-                <th scope="col">Edit</th>
                 </thead>
 
-                <tbody>
                 <tr th:each="appointment : ${appointments}">
                     <td th:text="${appointment.id}"></td>
                     <td th:text="${#temporals.format(appointment.appointmentTime,'yyyy-MM-dd HH:mm')}"></td>
@@ -33,8 +31,9 @@
                     <td th:text="${appointment.doctor.specialty}"></td>
                     <td><a th:if="${appointment.patient!=null}" th:href="@{/web/admin/appointments/cancel(id=${appointment.id},patientId=${appointment.patient.id}, from=today)}" class="btn btn-primary">Cancel</a>
                         <a th:if="${appointment.patient==null&&appointment.available}" th:href="@{/web/admin/appointments/avail(id=${appointment.id}, from=today)}" class="btn btn-primary">Make Unavailable</a>
-                        <a th:if="${appointment.patient==null&&!appointment.available}" th:href="@{/web/admin/appointments/avail(id=${appointment.id}, from=today)}" class="btn btn-primary">Make Available</a></td>
-                    <td><button type="button" class="btn btn-primary">Edit</button></td>
+                        <a th:if="${appointment.patient==null&&!appointment.available}" th:href="@{/web/admin/appointments/avail(id=${appointment.id}, from=today)}" class="btn btn-primary">Make Available</a>
+                    </td>
+
                 </tr>
                 </tbody>
             </table>
