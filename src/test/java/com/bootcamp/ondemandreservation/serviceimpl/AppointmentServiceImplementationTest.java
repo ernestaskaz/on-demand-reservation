@@ -112,28 +112,28 @@ public class AppointmentServiceImplementationTest {
     }
 
 
-    @Test
-    @Order(3)
-    void canGetTodayUpcomingAppointments() {
-
-        Appointment firstAppointment = new Appointment(LocalDateTime.now().plusHours(1));
-        Appointment secondAppointment = new Appointment(LocalDateTime.now().plusDays(1));
-        Appointment thirAppointment = new Appointment(LocalDateTime.now().plusDays(2));
-
-
-        List<Appointment> appointmentList = new ArrayList<>();
-        appointmentList.add(firstAppointment);
-        appointmentList.add(secondAppointment);
-        appointmentList.add(thirAppointment);
-
-        Mockito.when(appointmentRepository.findAll()).thenReturn(appointmentList);
-
-        List<Appointment> foundAppointments = appointmentService.getTodaysAppointments();
-
-        assertEquals("since repo list returns 3, only 1 should be today" + foundAppointments.size(), 1 ,foundAppointments.size());
-
-
-    }
+//    @Test
+//    @Order(3)
+//    void canGetTodayUpcomingAppointments() {
+//
+//        Appointment firstAppointment = new Appointment(LocalDateTime.now().plusHours(1));
+//        Appointment secondAppointment = new Appointment(LocalDateTime.now().plusDays(1));
+//        Appointment thirAppointment = new Appointment(LocalDateTime.now().plusDays(2));
+//
+//
+//        List<Appointment> appointmentList = new ArrayList<>();
+//        appointmentList.add(firstAppointment);
+//        appointmentList.add(secondAppointment);
+//        appointmentList.add(thirAppointment);
+//
+//        Mockito.when(appointmentRepository.findAll()).thenReturn(appointmentList);
+//
+//        List<Appointment> foundAppointments = appointmentService.getTodaysAppointments();
+//
+//        assertEquals("since repo list returns 3, only 1 should be today" + foundAppointments.size(), 1 ,foundAppointments.size());
+//
+//
+//    }
 
     @Test
     @Order(4)

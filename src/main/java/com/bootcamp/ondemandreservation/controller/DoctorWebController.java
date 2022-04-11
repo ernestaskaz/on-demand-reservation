@@ -74,7 +74,7 @@ public class DoctorWebController {
     String doctorTodayAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
-        model.addAttribute("appointments", doctorService.getUpcomingAppointmentsForToday(doctor.getId()));
+        model.addAttribute("appointments", appointmentService.getUpcomingAppointmentsForTodayByDoctorId(doctor.getId()));
 
         return "doctorTodayAppointmentView";
     }
@@ -83,7 +83,7 @@ public class DoctorWebController {
     String doctorPastAppointments(Model model){
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
-        model.addAttribute("appointments", doctorService.getDoctorPastAppointments(doctor.getId()));
+        model.addAttribute("appointments", appointmentService.getPastAppointmentsByDoctorId(doctor.getId()));
 
         return "doctorPastAppointmentsView";
     }

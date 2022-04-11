@@ -35,22 +35,18 @@ public class DoctorServiceImplementation implements DoctorService {
     private ScheduleService scheduleService;
     @Autowired
     private AppointmentService appointmentService;
-    @Autowired
-    private AppointmentRepository appointmentRepository;
 
     public DoctorServiceImplementation() {
     }
 
     public DoctorServiceImplementation(DoctorRepository doctorRepository, ODRPasswordEncoder odrPasswordEncoder,
                                        ODRUserService odrUserService, ScheduleService scheduleService,
-                                       AppointmentService appointmentService,
-                                       AppointmentRepository appointmentRepository) {
+                                       AppointmentService appointmentService) {
         this.doctorRepository = doctorRepository;
         this.odrPasswordEncoder = odrPasswordEncoder;
         this.odrUserService = odrUserService;
         this.scheduleService = scheduleService;
         this.appointmentService = appointmentService;
-        this.appointmentRepository = appointmentRepository;
     }
 
     @Transactional
@@ -137,7 +133,7 @@ public class DoctorServiceImplementation implements DoctorService {
 
     @Override
     public List<Appointment> getAllAppointments(Long id) {
-        return appointmentRepository.findByDoctorId(id,Sort.by(Sort.Direction.ASC,"appointmentTime"));
+        return appointmentService.getAllAppointmentsByDoctorId(id);
     }
 
     @Override
@@ -146,22 +142,22 @@ public class DoctorServiceImplementation implements DoctorService {
         return doctor.getSchedulesList();
     }
 
-    @Override
-    public List<Appointment> getDoctorPastAppointments(Long id) {
-        List<Appointment> AllAppointments = getAllAppointments(id);
-        List<Appointment> pastAppointments = new ArrayList<>();
-
-        for (Appointment appointment: AllAppointments) {
-
-            if(appointment.getAppointmentTime().isBefore(LocalDateTime.now())) {
-                pastAppointments.add(appointment);
-            }
-
-        }
-
-        return pastAppointments;
-
-    }
+//    @Override
+//    public List<Appointment> getDoctorPastAppointments(Long id) {
+//        List<Appointment> AllAppointments = getAllAppointments(id);
+//        List<Appointment> pastAppointments = new ArrayList<>();
+//
+//        for (Appointment appointment: AllAppointments) {
+//
+//            if(appointment.getAppointmentTime().isBefore(LocalDateTime.now())) {
+//                pastAppointments.add(appointment);
+//            }
+//
+//        }
+//
+//        return pastAppointments;
+//
+//    }
     @Transactional
     @Override
     public Doctor updateDoctor(Long id, Doctor doctor) {
@@ -169,11 +165,11 @@ public class DoctorServiceImplementation implements DoctorService {
         return saveDoctor(doctor, false);
     }
 
-    @Override
-    public List<Appointment> getUpcomingAppointmentsForToday(Long id) {
-        LocalDateTime now=LocalDateTime.now();
-        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(id, now,now.plusDays(1).truncatedTo(ChronoUnit.DAYS),Sort.by(Sort.Direction.ASC,"appointmentTime"));
-    }
+//    @Override
+//    public List<Appointment> getUpcomingAppointmentsForToday(Long id) {
+//        LocalDateTime now=LocalDateTime.now();
+//        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(id, now,now.plusDays(1).truncatedTo(ChronoUnit.DAYS),Sort.by(Sort.Direction.ASC,"appointmentTime"));
+//    }
 
     /**
      * Validates the doctor

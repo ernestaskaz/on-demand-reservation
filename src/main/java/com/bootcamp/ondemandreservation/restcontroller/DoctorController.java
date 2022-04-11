@@ -40,10 +40,10 @@ public class DoctorController {
         return doctorService.getDoctorSchedules(id);
     }
 
-    @GetMapping("/today/{id}")
-    public List<Appointment> getTodaysAppointments(@PathVariable("id") Long id) {
-        return doctorService.getUpcomingAppointmentsForToday(id);
-    }
+//    @GetMapping("/today/{id}")
+//    public List<Appointment> getTodaysAppointments(@PathVariable("id") Long id) {
+//        return doctorService.getUpcomingAppointmentsForToday(id);
+//    }
 
     @GetMapping ("{id}")
     public ResponseEntity<Doctor> findDoctorById(@PathVariable("id") Long id) {
