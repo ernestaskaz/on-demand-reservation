@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,6 +70,17 @@ public class AppointmentServiceImplementation implements AppointmentService {
     }
 
     @Override
+    public List<Appointment> getAllAppointmentsByDoctorId(Long doctorId) {
+        return appointmentRepository.findByDoctorId(doctorId,Sort.by(Sort.Direction.ASC,"appointmentTime"));
+    }
+    @Override
+    public List<Appointment> getPastAppointmentsByDoctorId(Long doctorId) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime start = LocalDateTime.of(2000, Month.JULY, 1, 00, 00, 00);
+        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doctorId, start,now,Sort.by(Sort.Direction.ASC,"appointmentTime"));
+    }
+
+    @Override
     public List<Appointment> findAvailableAndNotReserved() {
         return appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now());
     }
@@ -79,18 +92,22 @@ public class AppointmentServiceImplementation implements AppointmentService {
     @Override
     public List<Appointment> getTodaysAppointments() {
         //return appointmentRepository.findAll()
-        List<Appointment> AllAppointments = appointmentRepository.findAll(Sort.by(Sort.Direction.ASC,"appointmentTime","id"));
-        List<Appointment> todaysAppointments = new ArrayList<>();
+//        List<Appointment> AllAppointments = appointmentRepository.findAll(Sort.by(Sort.Direction.ASC,"appointmentTime","id"));
+//        List<Appointment> todaysAppointments = new ArrayList<>();
+//
+//        for (Appointment appointment: AllAppointments) {
+//
+//            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth() && appointment.getAppointmentTime().isAfter(LocalDateTime.now()) ) {
+//                todaysAppointments.add(appointment);
+//            }
+//        }
 
-        for (Appointment appointment: AllAppointments) {
-
-            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth() && appointment.getAppointmentTime().isAfter(LocalDateTime.now()) ) {
-                todaysAppointments.add(appointment);
-            }
-
-        }
-
-        return todaysAppointments;
+        return appointmentRepository.findByAppointmentTimeBetween(LocalDateTime.now(),LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS), Sort.by(Sort.Direction.ASC,"appointmentTime") );
+    }
+    @Override
+    public List<Appointment> getUpcomingAppointmentsForTodayByDoctorId(Long id) {
+        LocalDateTime now=LocalDateTime.now();
+        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(id, now,now.plusDays(1).truncatedTo(ChronoUnit.DAYS),Sort.by(Sort.Direction.ASC,"appointmentTime"));
     }
 
 

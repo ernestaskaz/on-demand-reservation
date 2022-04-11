@@ -17,9 +17,9 @@ public interface DoctorService {
     void deleteDoctor(Long id);
     List<Appointment> getAllAppointments(Long id);
     List<Schedule> getDoctorSchedules(Long id);
-    List<Appointment> getDoctorPastAppointments(Long id);
+   // List<Appointment> getDoctorPastAppointments(Long id);
     Doctor updateDoctor(Long id, Doctor doctor);
-    List<Appointment> getUpcomingAppointmentsForToday(Long id);
+   // List<Appointment> getUpcomingAppointmentsForToday(Long id);
     Doctor getLoggedInDoctor();
     /**
      * Validates the doctor

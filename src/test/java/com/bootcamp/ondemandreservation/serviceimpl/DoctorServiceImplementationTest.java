@@ -154,29 +154,29 @@ public class DoctorServiceImplementationTest {
 
     }
 
-    @Test
-    @Order(7)
-    void canGetUpcomingAppointmentsForToday() {
-
-        List<Appointment> appointmentList = new ArrayList<>();
-        List<Schedule> scheduleList = new ArrayList<>();
-        Appointment appointment = new Appointment(LocalDateTime.now().plusHours(1));
-        Appointment appointmentTwo = new Appointment(LocalDateTime.now().plusDays(1));
-        Schedule schedule = new Schedule();
-        appointmentList.add(appointment);
-        appointmentList.add(appointmentTwo);
-        scheduleList.add(schedule);
-        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
-
-        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
-
-        List<Appointment> foundAppointments = doctorService.getUpcomingAppointmentsForToday(1L);
-
-
-        assertEquals("size is " + foundAppointments.size(), 1, foundAppointments.size());
-
-
-    }
+//    @Test
+//    @Order(7)
+//    void canGetUpcomingAppointmentsForToday() {
+//
+//        List<Appointment> appointmentList = new ArrayList<>();
+//        List<Schedule> scheduleList = new ArrayList<>();
+//        Appointment appointment = new Appointment(LocalDateTime.now().plusHours(1));
+//        Appointment appointmentTwo = new Appointment(LocalDateTime.now().plusDays(1));
+//        Schedule schedule = new Schedule();
+//        appointmentList.add(appointment);
+//        appointmentList.add(appointmentTwo);
+//        scheduleList.add(schedule);
+//        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
+//
+//        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+//
+//        List<Appointment> foundAppointments = doctorService.getUpcomingAppointmentsForToday(1L);
+//
+//
+//        assertEquals("size is " + foundAppointments.size(), 1, foundAppointments.size());
+//
+//
+//    }
 
 
 

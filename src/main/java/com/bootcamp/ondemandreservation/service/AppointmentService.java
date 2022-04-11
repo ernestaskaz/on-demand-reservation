@@ -11,6 +11,9 @@ public interface AppointmentService {
     List<Appointment> getAllAppointments();
     List<Appointment> findAvailableAndNotReserved();
     List<Appointment> getTodaysAppointments();
+    List<Appointment> getUpcomingAppointmentsForTodayByDoctorId(Long doctorId);
+    List<Appointment> getPastAppointmentsByDoctorId(Long doctorId);
+    List<Appointment> getAllAppointmentsByDoctorId(Long doctorId);
     Appointment getAppointmentById(Long appointmentId);
     void cancelAppointment(Long appointmentId);
     void deleteAppointment(Long appointmentId);
