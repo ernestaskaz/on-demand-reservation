@@ -229,7 +229,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
 
 
-    @Scheduled(cron = "0 15 13 12 * ?")
+    @Scheduled(cron = "0 30 14 12 * ?")
     public void automaticAppointmentGeneration() {
         List<Doctor> listOfDoctors = doctorRepository.findAll();
 
