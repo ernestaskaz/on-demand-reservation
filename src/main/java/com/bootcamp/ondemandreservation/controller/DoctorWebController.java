@@ -1,5 +1,6 @@
 package com.bootcamp.ondemandreservation.controller;
 
+import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.model.Schedule;
@@ -18,11 +19,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
-@PreAuthorize(Doctor.DOCTOR_ROLE)
+//@PreAuthorize(Doctor.DOCTOR_ROLE)
 @SessionAttributes({"doctor", "schedule", "appointment"})
 public class DoctorWebController {
     static final Logger log = LoggerFactory.getLogger(DoctorWebController.class);
@@ -83,7 +85,7 @@ public class DoctorWebController {
 
         return "doctorTodayAppointmentView";
     }
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping(DOCTOR_PAST_APPOINTMENTS_URL)
     String doctorPastAppointments(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
@@ -271,7 +273,7 @@ public class DoctorWebController {
         return getDoctorSchedule(model);
     }
 
-    @PreAuthorize(Doctor.DOCTOR_ROLE)
+    @PreAuthorize(Doctor.DOCTOR_ROLE+" or "+ Admin.ADMIN_ROLE)
     @GetMapping("/appointment/{from}/edit")
     String editAppointment(@RequestParam Long id, @PathVariable("from") String from, Model model) {
         Appointment appointment = appointmentService.getAppointmentById(id);
@@ -281,7 +283,7 @@ public class DoctorWebController {
         return "appointmentEditView";
     }
 
-    @PreAuthorize(Doctor.DOCTOR_ROLE)
+    @PreAuthorize(Doctor.DOCTOR_ROLE+" or "+ Admin.ADMIN_ROLE)
     @PostMapping("/appointment/{from}/edit")
     String editAppointment(@RequestParam Long id, @PathVariable("from") String from, @ModelAttribute Appointment appointment, BindingResult result, Model model) {
         Map<String, String> errors = appointmentService.validateAppointment(appointment);
@@ -291,6 +293,10 @@ public class DoctorWebController {
                 return doctorPastAppointments(model);
             } else if ("all".equals(from)) {
                 return doctorAllAppointments(model);
+            }else if ("alladm".equals(from)) {
+                List<Appointment> appointments = appointmentService.getAllAppointments();
+                model.addAttribute("appointments", appointments);
+                return "allAppointmentsView";
             }
             //fallback
             model.addAttribute("errors", errors);
