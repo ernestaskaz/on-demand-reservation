@@ -44,7 +44,6 @@ public class AppointmentServiceImplementationTest {
 
     AppointmentService appointmentService;
 
-//comment
     @BeforeEach
     void init() {
         appointmentService = new AppointmentServiceImplementation(appointmentRepository, doctorRepository, patientRepository,null);
@@ -54,11 +53,12 @@ public class AppointmentServiceImplementationTest {
     @Test
     @Order(1)
     void canSaveAppointment() {
+        //context
         Patient patient = new Patient(1L, "firstName", "lastName");
         Mockito.when(patientRepository.findById(anyLong())).thenReturn(Optional.of(patient));
 
         Doctor doctor = new Doctor(1L,"this is name", "this is lastName", "Specialty");
-        //context
+
         Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
 
         Appointment savedAppointment =  appointmentService.saveAppointment(1L, 1L);
