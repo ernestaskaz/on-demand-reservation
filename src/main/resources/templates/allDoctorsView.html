@@ -36,6 +36,7 @@
                         <!--                    is there a status for doctor?-->
                         <!--                    <td th:text="${doctor.status}"></td>-->
                         <td th:text="${doctor.email}"></td>
+                        <td><a th:href="@{/web/admin/doctor/edit(id=${doctor.id})}" class="btn btn-primary">Edit</a></td></td>
                     </tr>
                     </tbody>
                 </table>
