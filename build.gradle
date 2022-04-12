@@ -33,6 +33,9 @@ dependencies {
 	//Guava (Google's collection ov misc. utility classes)
 	// https://mvnrepository.com/artifact/com.google.guava/guava
 	implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+	// https://mvnrepository.com/artifact/org.owasp.antisamy/antisamy
+	implementation group: 'org.owasp.antisamy', name: 'antisamy', version: '1.6.6.1'
+
 
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
 }
