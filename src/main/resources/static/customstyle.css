@@ -4,9 +4,27 @@
      align-items: center;
      justify-content: center;
 }
+.register-height{
+    height:100vh;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+}
 .logout-message{
     padding-bottom: 10px;
 }
 .welcome-message{
     padding-bottom: 10px;
+}
+.for-content{
+    margin-top: 50px;
+}
+.please-register{
+    padding-bottom: 10px;
+}
+.proceed-message{
+    padding-bottom: 10px;
+}
+.body-color-gray{
+    background-color: rgb(238,238,238);
 }
