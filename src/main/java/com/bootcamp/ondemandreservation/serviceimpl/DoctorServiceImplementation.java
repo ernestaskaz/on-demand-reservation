@@ -221,6 +221,13 @@ public class DoctorServiceImplementation implements DoctorService {
         scheduleThursday.setDoctor(doctor);
         scheduleFriday.setDoctor(doctor);
 
+        doctor.addScheduleList(scheduleMonday);
+        doctor.addScheduleList(scheduleTuesday);
+        doctor.addScheduleList(scheduleWednesday);
+        doctor.addScheduleList(scheduleThursday);
+        doctor.addScheduleList(scheduleFriday);
+
+
         scheduleService.saveSchedule(scheduleMonday);
         scheduleService.saveSchedule(scheduleTuesday);
         scheduleService.saveSchedule(scheduleWednesday);
