@@ -2,8 +2,11 @@ package com.bootcamp.ondemandreservation.restcontroller;
 
 import com.bootcamp.ondemandreservation.Helpers;
 
+import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
 
+import com.bootcamp.ondemandreservation.model.Patient;
+import com.bootcamp.ondemandreservation.model.Schedule;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -41,6 +44,11 @@ public class DoctorControllerTest {
     void canSaveDoctor() throws Exception {
 
         Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
+        Schedule schedule = new Schedule();
+        doctor.addScheduleList(schedule);
+        Appointment appointment = new Appointment();
+        doctor.addAppointmentList(appointment);
+        doctor.addAppointmentList(appointment);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
                         .content(Helpers.asJsonString(doctor))
@@ -98,21 +106,20 @@ public class DoctorControllerTest {
 
     }
 
+
+
 //    @Test
 //    @Order(5)
 //    void canGetAppointments () throws Exception {
-//        Patient patient = new Patient(1L, "firstName", "lastName");
-//        Doctor doctor = new Doctor(1L, "this is name", "this is lastName", "Specialty");
-//        Appointment appointment = new Appointment(doctor, patient);
-//        doctor.addAppointmentList(appointment);
-//        mockMvc.perform(MockMvcRequestBuilders.put("/appointments/1")
-//                        .content(Helpers.asJsonString(doctor))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
+//
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/doctor/appointments/2")
+//                        .accept(MediaType.ALL_VALUE))
 //                .andDo(print())
-//                .andExpect(jsonPath("$.specialty").value("Specialty"));
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(jsonPath("$.appointmentList").isNotEmpty());
 //
 //    }
+
 
     @Test
     @WithMockUser(username="admin@default.com")
@@ -125,6 +132,39 @@ public class DoctorControllerTest {
                 .andExpect(content().string(org.hamcrest.Matchers.equalTo("Doctor successfully deleted")));
 
     }
+
+
+//    @Test
+//    @Order(7)
+//    void canGetSchedules () throws Exception {
+//
+//
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/doctor/2")
+//                        .accept(MediaType.ALL_VALUE))
+//                .andDo(print())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(jsonPath("$.specialty").value("Specialty"));
+
+
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/doctor/schedule/2")
+//                        .accept(MediaType.ALL_VALUE))
+//                .andDo(print())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(jsonPath("$.specialty").value("Specialty"));
+
+
+//                .andExpect(jsonPath("$.schedulesList").isNotEmpty());
+//        Doctor doctor = new Doctor(1L, "this is name", "this is lastName", "Specialty");
+//        Schedule schedule = new Schedule();
+//        doctor.addScheduleList(schedule);
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/doctor/2")
+//                        .content(Helpers.asJsonString(doctor))
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(jsonPath("$.specialty").value("Specialty"));
+//
+//    }
 
 
 }

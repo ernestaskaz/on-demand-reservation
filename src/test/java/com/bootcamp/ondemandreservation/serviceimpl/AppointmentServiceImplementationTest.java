@@ -27,10 +27,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static com.bootcamp.ondemandreservation.serviceimpl.AppointmentServiceImplementation.SORT_BY_APPOINTMENT_TIME;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
@@ -80,7 +82,7 @@ public class AppointmentServiceImplementationTest {
         List<Appointment> appointmentList = new ArrayList<>();
         appointmentList.add(appointment);
 
-        Mockito.when(appointmentRepository.findAll()).thenReturn(appointmentList);
+        Mockito.when(appointmentRepository.findAll(SORT_BY_APPOINTMENT_TIME)).thenReturn(appointmentList);
 
         List<Appointment> foundAppointments = appointmentService.getAllAppointments();
 
@@ -104,7 +106,7 @@ public class AppointmentServiceImplementationTest {
         List<Appointment> appointmentList = new ArrayList<>();
         appointmentList.add(savedAppointment);
 
-        Mockito.when(appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now(), Sort.by(Sort.Direction.ASC, "appointmentTime"))).thenReturn(appointmentList);
+        Mockito.when(appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now(), SORT_BY_APPOINTMENT_TIME)).thenReturn(appointmentList);
 
         List<Appointment> foundAppointments = appointmentService.findAvailableAndNotReserved();
 
@@ -120,13 +122,13 @@ public class AppointmentServiceImplementationTest {
 
         Appointment firstAppointment = new Appointment(LocalDateTime.now().plusHours(1));
         Appointment secondAppointment = new Appointment(LocalDateTime.now().plusDays(1));
-        Appointment thirAppointment = new Appointment(LocalDateTime.now().plusDays(2));
+        Appointment thirdAppointment = new Appointment(LocalDateTime.now().plusDays(2));
 
 
         List<Appointment> appointmentList = new ArrayList<>();
         appointmentList.add(firstAppointment);
         appointmentList.add(secondAppointment);
-        appointmentList.add(thirAppointment);
+        appointmentList.add(thirdAppointment);
 
         Mockito.when(appointmentRepository.findByAppointmentTimeBetween(any(LocalDateTime.class), any(LocalDateTime.class), any(Sort.class))).thenReturn(appointmentList);
 
@@ -234,6 +236,81 @@ public class AppointmentServiceImplementationTest {
         appointmentService.generateAppointmentsBySchedule(1L, 30);
 
         assertTrue("actual size is " + doctor.getAppointmentList().size(), doctor.getAppointmentList().size() > 5 );
+
+    }
+
+    @Test
+    @Order(8)
+    void canFlipAppointment() {
+
+        Appointment appointment = new Appointment(LocalDateTime.now());
+        boolean originalIsAvailable = appointment.isAvailable();
+
+        Mockito.when(appointmentRepository.findById(anyLong())).thenReturn(Optional.of(appointment));
+
+        Mockito.when(appointmentRepository.save(any(Appointment.class))).thenReturn((appointment));
+
+        boolean expected = appointmentService.flipAppointmentAvailable(1L);
+
+        assertEquals("something went wrong", expected, !originalIsAvailable);
+
+    }
+
+
+    @Test
+    @Order(9)
+    void canSetAppointmentWasAttended() {
+
+        Appointment appointment = new Appointment(LocalDateTime.now());
+        boolean originalIsAvailable = appointment.isWasAttended();
+
+        Mockito.when(appointmentRepository.findById(anyLong())).thenReturn(Optional.of(appointment));
+
+        Mockito.when(appointmentRepository.save(any(Appointment.class))).thenReturn((appointment));
+
+        appointmentService.setAppointmentWasAttended(1L);
+
+        assertEquals("something went wrong", !originalIsAvailable, appointment.isWasAttended());
+
+    }
+
+    @Test
+    @Order(10)
+    void canAddComment() {
+
+        Appointment appointment = new Appointment(LocalDateTime.now());
+
+        Mockito.when(appointmentRepository.findById(anyLong())).thenReturn(Optional.of(appointment));
+
+        Mockito.when(appointmentRepository.save(any(Appointment.class))).thenReturn((appointment));
+
+        appointmentService.addComment(1L, "this is comment");
+
+        assertEquals("something went wrong", "this is comment", appointment.getComment());
+
+    }
+
+    @Test
+    @Order(11)
+    void reserveReservedAppointmentThrowsException() {
+
+        Patient patient = new Patient(1L, "firstName", "lastName");
+        Mockito.when(patientRepository.findById(anyLong())).thenReturn(Optional.of(patient));
+
+        Doctor doctor = new Doctor(1L,"this is name", "this is lastName", "Specialty");
+        //context
+
+        Appointment appointment = new Appointment(LocalDateTime.now(), doctor);
+
+        Mockito.when(appointmentRepository.findById(1L)).thenReturn(Optional.of(appointment));
+
+        appointmentService.reserveAppointment(1L, 1L);
+
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            appointmentService.reserveAppointment(1L, 1L);;
+        });
+
 
     }
 

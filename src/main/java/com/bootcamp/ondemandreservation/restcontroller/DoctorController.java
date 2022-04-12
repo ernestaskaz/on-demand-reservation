@@ -30,20 +30,15 @@ public class DoctorController {
         return doctorService.getAllDoctors();
     }
 
-    @GetMapping("/appointments/{id}")
-    public List<Appointment> getAllAppointments(@PathVariable("id") Long id) {
-        return doctorService.getAllAppointments(id);
-    }
+//    @GetMapping("/appointments/{id}")
+//    public List<Appointment> getAllAppointments(@PathVariable("id") Long id) {
+//        return doctorService.getAllAppointments(id);
+//    }
 
     @GetMapping("/schedule/{id}")
     public List<Schedule> getDoctorSchedules(@PathVariable("id") Long id) {
         return doctorService.getDoctorSchedules(id);
     }
-
-//    @GetMapping("/today/{id}")
-//    public List<Appointment> getTodaysAppointments(@PathVariable("id") Long id) {
-//        return doctorService.getUpcomingAppointmentsForToday(id);
-//    }
 
     @GetMapping ("{id}")
     public ResponseEntity<Doctor> findDoctorById(@PathVariable("id") Long id) {

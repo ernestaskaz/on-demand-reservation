@@ -131,10 +131,10 @@ public class DoctorServiceImplementation implements DoctorService {
         doctorRepository.deleteById(id);
     }
 
-    @Override
-    public List<Appointment> getAllAppointments(Long id) {
-        return appointmentService.getAllAppointmentsByDoctorId(id);
-    }
+//    @Override
+//    public List<Appointment> getAllAppointments(Long id) {
+//        return appointmentService.getAllAppointmentsByDoctorId(id);
+//    }
 
     @Override
     public List<Schedule> getDoctorSchedules(Long id) {
@@ -142,22 +142,6 @@ public class DoctorServiceImplementation implements DoctorService {
         return doctor.getSchedulesList();
     }
 
-//    @Override
-//    public List<Appointment> getDoctorPastAppointments(Long id) {
-//        List<Appointment> AllAppointments = getAllAppointments(id);
-//        List<Appointment> pastAppointments = new ArrayList<>();
-//
-//        for (Appointment appointment: AllAppointments) {
-//
-//            if(appointment.getAppointmentTime().isBefore(LocalDateTime.now())) {
-//                pastAppointments.add(appointment);
-//            }
-//
-//        }
-//
-//        return pastAppointments;
-//
-//    }
     @Transactional
     @Override
     public Doctor updateDoctor(Long id, Doctor doctor) {
@@ -165,11 +149,6 @@ public class DoctorServiceImplementation implements DoctorService {
         return saveDoctor(doctor, false);
     }
 
-//    @Override
-//    public List<Appointment> getUpcomingAppointmentsForToday(Long id) {
-//        LocalDateTime now=LocalDateTime.now();
-//        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(id, now,now.plusDays(1).truncatedTo(ChronoUnit.DAYS),Sort.by(Sort.Direction.ASC,"appointmentTime"));
-//    }
 
     /**
      * Validates the doctor
