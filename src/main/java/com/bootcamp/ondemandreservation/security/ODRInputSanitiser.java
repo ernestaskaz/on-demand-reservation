@@ -1,6 +1,12 @@
 package com.bootcamp.ondemandreservation.security;
 
+import org.owasp.validator.html.Policy;
+import org.owasp.validator.html.PolicyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ODRInputSanitiser {
+    private static final Logger log= LoggerFactory.getLogger(ODRInputSanitiser.class);
 
     public static boolean seemsToBePhoneNumber(String num){
         return num.matches("\\+?[0-9\\s]+");
