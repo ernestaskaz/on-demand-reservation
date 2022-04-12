@@ -8,6 +8,7 @@
 </head>
 <body>
 <div th:insert="fragments :: doctorNav"></div>
+<div th:insert="fragments :: background-style"></div>
 
 <div class="container for-content">
     <div class="container">
@@ -15,7 +16,7 @@
             <h1>Edit Schedule</h1>
         </div>
     </div>
-
+    <div th:text="${successMsg}" class="d-flex justify-content-center"></div>
     <div class="container">
         <div class="d-flex justify-content-center">
             <form action="#" th:action="@{/web/doctor/schedule/edit(id=${schedule.id})}" th:object="${schedule}" method="post">
@@ -40,9 +41,6 @@
                     <p th:text="${errors.get('lunchTime')}"></p>
                 </div>
                 <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
-
-                <p th:text="${successMsg}"></p>
-
             </form>
         </div>
     </div>
