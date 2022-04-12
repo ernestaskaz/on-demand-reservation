@@ -10,6 +10,7 @@ import com.bootcamp.ondemandreservation.repository.PatientRepository;
 import com.bootcamp.ondemandreservation.repository.ScheduleRepository;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import org.checkerframework.checker.units.qual.A;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -112,28 +114,29 @@ public class AppointmentServiceImplementationTest {
     }
 
 
-//    @Test
-//    @Order(3)
-//    void canGetTodayUpcomingAppointments() {
-//
-//        Appointment firstAppointment = new Appointment(LocalDateTime.now().plusHours(1));
-//        Appointment secondAppointment = new Appointment(LocalDateTime.now().plusDays(1));
-//        Appointment thirAppointment = new Appointment(LocalDateTime.now().plusDays(2));
-//
-//
-//        List<Appointment> appointmentList = new ArrayList<>();
-//        appointmentList.add(firstAppointment);
-//        appointmentList.add(secondAppointment);
-//        appointmentList.add(thirAppointment);
-//
-//        Mockito.when(appointmentRepository.findAll()).thenReturn(appointmentList);
-//
-//        List<Appointment> foundAppointments = appointmentService.getTodaysAppointments();
-//
-//        assertEquals("since repo list returns 3, only 1 should be today" + foundAppointments.size(), 1 ,foundAppointments.size());
-//
-//
-//    }
+    @Test
+    @Order(3)
+    void canGetTodayUpcomingAppointments() {
+
+        Appointment firstAppointment = new Appointment(LocalDateTime.now().plusHours(1));
+        Appointment secondAppointment = new Appointment(LocalDateTime.now().plusDays(1));
+        Appointment thirAppointment = new Appointment(LocalDateTime.now().plusDays(2));
+
+
+        List<Appointment> appointmentList = new ArrayList<>();
+        appointmentList.add(firstAppointment);
+        appointmentList.add(secondAppointment);
+        appointmentList.add(thirAppointment);
+
+        Mockito.when(appointmentRepository.findByAppointmentTimeBetween(any(LocalDateTime.class), any(LocalDateTime.class), any(Sort.class))).thenReturn(appointmentList);
+
+
+        List<Appointment> foundAppointments = appointmentService.getTodaysAppointments();
+
+        assertEquals("should be 3 appointments" + foundAppointments.size(), 3 ,foundAppointments.size());
+
+
+    }
 
     @Test
     @Order(4)
@@ -203,10 +206,13 @@ public class AppointmentServiceImplementationTest {
 
         Appointment DateTimeValueToUpdate = new Appointment(LocalDateTime.now().plusDays(1));
 
-        appointmentService.updateAppointment(1L, DateTimeValueToUpdate);
+        Mockito.when(appointmentRepository.save(any(Appointment.class))).thenReturn(DateTimeValueToUpdate);
 
-        assertEquals("patient is present" , patient.getFirstName(),DateTimeValueToUpdate.getPatient().getFirstName());
-        assertEquals("doctor is present" , doctor.getFirstName(),DateTimeValueToUpdate.getDoctor().getFirstName());
+        Appointment updatedAppointment = appointmentService.updateAppointment(1L, DateTimeValueToUpdate);
+        // might fail, since it checks LocalDateTime values up to miliseconds.
+        assertEquals("appointment time changed" + appointment.getAppointmentTime(), updatedAppointment.getAppointmentTime(),DateTimeValueToUpdate.getAppointmentTime());
+        assertEquals("patient is present" , patient.getFirstName(),updatedAppointment.getPatient().getFirstName());
+        assertEquals("doctor is present" , doctor.getFirstName(),updatedAppointment.getDoctor().getFirstName());
 
 
 
@@ -230,6 +236,8 @@ public class AppointmentServiceImplementationTest {
         assertTrue("actual size is " + doctor.getAppointmentList().size(), doctor.getAppointmentList().size() > 5 );
 
     }
+
+
 
 
 

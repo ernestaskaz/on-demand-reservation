@@ -126,17 +126,6 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Override
     public List<Appointment> getTodaysAppointments() {
-        //return appointmentRepository.findAll()  threading/concurrency problem - multiple users.  takes time, loads service and db.
-//        DB automatically has built in concurrency safeguards.
-//        List<Appointment> AllAppointments = appointmentRepository.findAll(Sort.by(Sort.Direction.ASC,"appointmentTime","id"));
-//        List<Appointment> todaysAppointments = new ArrayList<>();
-//
-//        for (Appointment appointment: AllAppointments) {
-//
-//            if(appointment.getAppointmentTime().getDayOfMonth() == LocalDateTime.now().getDayOfMonth() && appointment.getAppointmentTime().isAfter(LocalDateTime.now()) ) {
-//                todaysAppointments.add(appointment);
-//            }
-//        }
 
         return appointmentRepository.findByAppointmentTimeBetween(LocalDateTime.now(),LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS), Sort.by(Sort.Direction.ASC,"appointmentTime") );
     }
