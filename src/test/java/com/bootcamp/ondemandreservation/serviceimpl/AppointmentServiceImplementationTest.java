@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -102,7 +103,7 @@ public class AppointmentServiceImplementationTest {
         List<Appointment> appointmentList = new ArrayList<>();
         appointmentList.add(savedAppointment);
 
-        Mockito.when(appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now())).thenReturn(appointmentList);
+        Mockito.when(appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now(), Sort.by(Sort.Direction.ASC, "appointmentTime"))).thenReturn(appointmentList);
 
         List<Appointment> foundAppointments = appointmentService.findAvailableAndNotReserved();
 

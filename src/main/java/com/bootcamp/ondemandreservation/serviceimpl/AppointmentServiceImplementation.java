@@ -35,6 +35,7 @@ import java.util.*;
 @Transactional
 public class AppointmentServiceImplementation implements AppointmentService {
 
+    public static final Sort SORT_BY_APPOINTMENT_TIME = Sort.by(Sort.Direction.ASC, "appointmentTime","doctorId");
     private Logger log= LoggerFactory.getLogger(AppointmentServiceImplementation.class);
     private AppointmentRepository appointmentRepository;
     private DoctorRepository doctorRepository;
@@ -58,7 +59,10 @@ public class AppointmentServiceImplementation implements AppointmentService {
             CleanResults scan=antiSamy.scan(appointment.getComment());
             if (scan.getNumberOfErrors()>0){
                 StringBuilder sb = new StringBuilder();
-                for (String s : scan.getErrorMessages()) sb.append(s);
+                for (String s : scan.getErrorMessages()) {
+                    sb.append(s);
+                    sb.append(" \n");
+                }
                 rv.put("comment",sb.toString());
             }
         } catch (Exception x) {
@@ -101,23 +105,23 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Override
     public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
+        return appointmentRepository.findAll(SORT_BY_APPOINTMENT_TIME);
     }
 
     @Override
     public List<Appointment> getAllAppointmentsByDoctorId(Long doctorId) {
-        return appointmentRepository.findByDoctorId(doctorId,Sort.by(Sort.Direction.ASC,"appointmentTime"));
+        return appointmentRepository.findByDoctorId(doctorId, SORT_BY_APPOINTMENT_TIME);
     }
     @Override
     public List<Appointment> getPastAppointmentsByDoctorId(Long doctorId) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime start = LocalDateTime.of(2000, Month.JULY, 1, 00, 00, 00);
-        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doctorId, start,now,Sort.by(Sort.Direction.ASC,"appointmentTime"));
+        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doctorId, start,now, SORT_BY_APPOINTMENT_TIME);
     }
 
     @Override
     public List<Appointment> findAvailableAndNotReserved() {
-        return appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now());
+        return appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now(),SORT_BY_APPOINTMENT_TIME);
     }
 
     /**
@@ -138,12 +142,12 @@ public class AppointmentServiceImplementation implements AppointmentService {
 //            }
 //        }
 
-        return appointmentRepository.findByAppointmentTimeBetween(LocalDateTime.now(),LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS), Sort.by(Sort.Direction.ASC,"appointmentTime") );
+        return appointmentRepository.findByAppointmentTimeBetween(LocalDateTime.now(),LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS), SORT_BY_APPOINTMENT_TIME);
     }
     @Override
     public List<Appointment> getUpcomingAppointmentsForTodayByDoctorId(Long id) {
         LocalDateTime now=LocalDateTime.now();
-        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(id, now,now.plusDays(1).truncatedTo(ChronoUnit.DAYS),Sort.by(Sort.Direction.ASC,"appointmentTime"));
+        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(id, now,now.plusDays(1).truncatedTo(ChronoUnit.DAYS), SORT_BY_APPOINTMENT_TIME);
     }
 
 
