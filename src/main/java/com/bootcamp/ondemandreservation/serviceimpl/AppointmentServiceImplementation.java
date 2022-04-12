@@ -8,6 +8,7 @@ import com.bootcamp.ondemandreservation.repository.AppointmentRepository;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
+import org.hibernate.Hibernate;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @Configuration
 @EnableScheduling
 @Service
+@Transactional
 public class AppointmentServiceImplementation implements AppointmentService {
 
     private AppointmentRepository appointmentRepository;
@@ -192,11 +194,15 @@ public class AppointmentServiceImplementation implements AppointmentService {
         }else throw new IllegalArgumentException("Appointment already reserved.");
 
     }
+    /**
+     *  This method iterates through Doctor List and automatically calls generateAppointmentsBySchedule() method for each doctor.
+     *  Automatic generation happens on (cron = "{value for seconds} {value for mintues} {value for hours} {value for days} * ?")
+     */
 
 
 
-    @Scheduled(cron = "0 29 12 12 * ?")
-    public void automaticGeneration() {
+    @Scheduled(cron = "0 15 13 12 * ?")
+    public void automaticAppointmentGeneration() {
         List<Doctor> listOfDoctors = doctorRepository.findAll();
 
         for (Doctor doctor: listOfDoctors) {
@@ -211,7 +217,6 @@ public class AppointmentServiceImplementation implements AppointmentService {
      *  and between schedule.startHour and endHour for that specific day.
      *  appointments are hourly.
      */
-
 
 
     @Override
@@ -231,6 +236,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
         LocalDateTime endPoint = startPoint.plusDays(daysCount);
 
         List<Appointment> doctorAppointmentList = getAllAppointmentsByDoctorId(currentDoctor.getId());
+        List<Schedule> doctorScheduleList = currentDoctor.getSchedulesList();
 
         if (doctorAppointmentList.size() != 0) {
             // get list and sort it.
@@ -246,7 +252,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
         }
 
-        for (Schedule schedule : currentDoctor.getSchedulesList()) {
+        for (Schedule schedule : doctorScheduleList) {
 
             startPoint = originalPoint;
             while(startPoint.isBefore(endPoint)) {
