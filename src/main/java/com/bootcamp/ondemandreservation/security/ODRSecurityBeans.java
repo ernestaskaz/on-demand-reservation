@@ -31,7 +31,7 @@ public class ODRSecurityBeans {
     public AntiSamy antiSamy(final ApplicationContext ctx) {
         try {
             //TODO: get rid of hardcoded URL
-            final Policy policy = Policy.getInstance(ctx.getResource("file:src/main/resources/antisamy-tinymce.xml").getFile());
+            final Policy policy = Policy.getInstance(ctx.getResource("file:src/main/resources/antisamy-policy.xml").getFile());
             return new AntiSamy(policy);
         } catch (final Exception e) {
             throw new IllegalStateException(e.getMessage(), e);
