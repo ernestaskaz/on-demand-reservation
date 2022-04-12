@@ -11,24 +11,25 @@
 <div th:insert="fragments :: adminNav"></div>
 
 <div class="container for-content">
-    <div class="container">
+    <div class="container  justify-content-center">
         <div class="d-flex justify-content-center">
-            <div class="row g-5">
-                <div class="p-3">
-                    <h1>My Details</h1>
-                </div>
-            </div>
+            <h1>My Details</h1>
         </div>
     </div>
-
-    <div class="container">
-        <div class="d-flex justify-content-center">
-            <ul class="list">
-                <li class="list-group-item" th:text="'Id: '+ ${admin.id}"></li>
-                <li class="list-group-item" th:text="'Name: '+${admin.firstName}"></li>
-                <li class="list-group-item" th:text="'Last Name: '+${admin.lastName}"></li>
-                <li class="list-group-item" th:text="'Email: '+${admin.email}"></li>
-            </ul>
+    <div class="d-flex justify-content-center">
+        <div class="row details-row">
+            <div class="col-auto">
+                <div class="row my-details-item-left" th:text="'Id: '"></div>
+                <div class="row my-details-item-left" th:text="'Name: '"></div>
+                <div class="row my-details-item-left" th:text="'Last Name: '"></div>
+                <div class="row my-details-item-left" th:text="'Email: '"></div>
+            </div>
+            <div class="col-auto">
+                <div class="row my-details-item-right" th:text="${admin.id}"></div>
+                <div class="row my-details-item-right" th:text="${admin.firstName}"></div>
+                <div class="row my-details-item-right" th:text="${admin.lastName}"></div>
+                <div class="row my-details-item-right" th:text="${admin.email}"></div>
+            </div>
         </div>
     </div>
 

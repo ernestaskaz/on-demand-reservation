@@ -8,31 +8,34 @@
 </head>
 <body>
 <div th:insert="fragments :: patientNav"></div>
-
 <div class="container for-content">
-    <div class="container">
+
+    <div class="container  justify-content-center">
         <div class="d-flex justify-content-center">
-            <div class="row g-5">
-                <div class="p-3">
-                    <h1>My Details</h1>
-                </div>
+            <h1>My Details</h1>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <div class="row details-row">
+            <div class="col-auto">
+                <div class="row my-details-item-left" th:text="'Name: '"></div>
+                <div class="row my-details-item-left" th:text="'Last Name: '"></div>
+                <div class="row my-details-item-left" th:text="'Age: '"></div>
+                <div th:if="${!#strings.isEmpty(patient.city)}" class="row my-details-item-left" th:text="'City: '"></div>
+                <div class="row my-details-item-left" th:text="'Phone Number: '"></div>
+                <div class="row my-details-item-left" th:text="'Email: '"></div>
+            </div>
+            <div class="col-auto">
+                <div class="row my-details-item-right" th:text="${patient.firstName}"></div>
+                <div class="row my-details-item-right" th:text="${patient.lastName}"></div>
+                <div class="row my-details-item-right" th:text="${patient.age}"></div>
+                <div th:if="${!#strings.isEmpty(patient.city)}" class="row my-details-item-right" th:text="${patient.city}"></div>
+                <div class="row my-details-item-right" th:text="${patient.phoneNumber}"></div>
+                <div class="row my-details-item-right" th:text="${patient.email}"></div>
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="d-flex justify-content-center">
-            <ul class="list">
-                <li class="list-group-item" th:text="'Id: '+ ${patient.id}"></li>
-                <li class="list-group-item" th:text="'Name: '+${patient.firstName}"></li>
-                <li class="list-group-item" th:text="'Last Name: '+${patient.lastName}"></li>
-                <li class="list-group-item" th:text="'Age: '+${patient.age}"></li>
-                <li class="list-group-item" th:text="'City: '+${patient.city}"></li>
-                <li class="list-group-item" th:text="'Id Card: '+ ${patient.idCard}"></li>
-                <li class="list-group-item" th:text="'Phone Number: '+${patient.phoneNumber}"></li>
-                <li class="list-group-item" th:text="'Email: '+${patient.email}"></li>
-            </ul>
-        </div>
-    </div>
+
     <div class="container">
         <div class="d-flex justify-content-center">
             <a href="edit" class="btn btn-primary" role="button">Edit my details</a>
