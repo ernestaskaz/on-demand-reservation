@@ -1,5 +1,9 @@
 package com.bootcamp.ondemandreservation.controller;
-import com.bootcamp.ondemandreservation.model.*;
+
+import com.bootcamp.ondemandreservation.model.Admin;
+import com.bootcamp.ondemandreservation.model.Appointment;
+import com.bootcamp.ondemandreservation.model.Doctor;
+import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.security.ODRPasswordEncoder;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import com.bootcamp.ondemandreservation.service.DoctorService;
@@ -15,14 +19,15 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/web/")
-@PreAuthorize(Doctor.DOCTOR_ROLE)
+//@PreAuthorize(Doctor.DOCTOR_ROLE)
 @SessionAttributes({"doctor", "schedule", "appointment"})
 public class DoctorWebController {
-    static final Logger log= LoggerFactory.getLogger(DoctorWebController.class);
+    static final Logger log = LoggerFactory.getLogger(DoctorWebController.class);
 
     public static final String DOCTOR_EDIT_TEMPLATE = "doctorDetailsEdit";
     public static final String SCHEDULE_EDIT_TEMPLATE = "scheduleEditView";
@@ -55,32 +60,34 @@ public class DoctorWebController {
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/myDetails")
-    String doctorDetails(Model model){
+    String doctorDetails(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
         return "doctorAccountView";
     }
+
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/all-appointments")
-    String doctorAllAppointments(Model model){
+    String doctorAllAppointments(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
         model.addAttribute("appointments", appointmentService.getAllAppointmentsByDoctorId(doctor.getId()));
 
         return "doctorAllAppointmentsView";
     }
+
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/today-appointments")
-    String doctorTodayAppointments(Model model){
+    String doctorTodayAppointments(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
         model.addAttribute("appointments", appointmentService.getUpcomingAppointmentsForTodayByDoctorId(doctor.getId()));
 
         return "doctorTodayAppointmentView";
     }
-
+    @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping(DOCTOR_PAST_APPOINTMENTS_URL)
-    String doctorPastAppointments(Model model){
+    String doctorPastAppointments(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
         model.addAttribute("appointments", appointmentService.getPastAppointmentsByDoctorId(doctor.getId()));
@@ -91,7 +98,7 @@ public class DoctorWebController {
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/schedule/edit")
-    String editSchedule(@RequestParam Long id, Model model){
+    String editSchedule(@RequestParam Long id, Model model) {
         model.addAttribute("errors", Collections.EMPTY_MAP);
         Schedule schedule = scheduleService.findScheduleById(id);
         model.addAttribute("schedule", schedule);
@@ -100,23 +107,23 @@ public class DoctorWebController {
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @PostMapping("/doctor/schedule/edit")
-    String editSchedule(@RequestParam Long id, @ModelAttribute Schedule schedule, BindingResult result, Model model){
+    String editSchedule(@RequestParam Long id, @ModelAttribute Schedule schedule, BindingResult result, Model model) {
         Map<String, String> errors = scheduleService.validateSchedule(schedule);
         model.addAttribute("schedule", schedule);
         model.addAttribute("errors", errors);
 
-        if(errors.isEmpty()) {
+        if (errors.isEmpty()) {
             scheduleService.updateSchedule(id, schedule);
-            model.addAttribute("successMsg","Your data was updated successfully.");
+            model.addAttribute("successMsg", "Your data was updated successfully.");
         }
         return SCHEDULE_EDIT_TEMPLATE;
     }
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping(SCHEDULE_CREATE_URL)
-    String createSchedule(Model model){
+    String createSchedule(Model model) {
         model.addAttribute("errors", Collections.EMPTY_MAP);
-        model.addAttribute("schedule",new Schedule());
+        model.addAttribute("schedule", new Schedule());
         return SCHEDULE_CREATE_TEMPLATE;
     }
 
@@ -130,7 +137,7 @@ public class DoctorWebController {
         if (errors.isEmpty()) {
             schedule.setDoctor(doctor);
             schedule = scheduleService.saveSchedule(schedule);
-            model.addAttribute("successMsg", String.format( "Schedule %s from %s to %s created with ID %d",
+            model.addAttribute("successMsg", String.format("Schedule %s from %s to %s created with ID %d",
                     schedule.getDayOfWeek(),
                     schedule.getStartHour(),
                     schedule.getEndHour(),
@@ -140,10 +147,9 @@ public class DoctorWebController {
     }
 
 
-
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/edit")
-    String editLoggedInDoctor(Model model){
+    String editLoggedInDoctor(Model model) {
         model.addAttribute("errors", Collections.EMPTY_MAP);
         Doctor doctor = doctorService.getLoggedInDoctor();
         doctor.blankPasswords();
@@ -152,32 +158,30 @@ public class DoctorWebController {
     }
 
 
-
-
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @PostMapping("/doctor/edit")
-    String editLoggedInDoctor(@ModelAttribute Doctor doctor, BindingResult result, Model model){
+    String editLoggedInDoctor(@ModelAttribute Doctor doctor, BindingResult result, Model model) {
         //note matchPassword is true now.
         System.out.println(doctor.getId());
-        Map errors=doctorService.validateDoctor(doctor,true,true);
+        Map errors = doctorService.validateDoctor(doctor, true, true);
         model.addAttribute("doctor", doctor);
         model.addAttribute("errors", errors);
-        if(errors.isEmpty()) {
-            String currentPassword=doctorService.getLoggedInDoctor().getPassword();
-            if(odrPasswordEncoder.defaultPasswordEncoder().matches(doctor.getPassword(),currentPassword)) {
+        if (errors.isEmpty()) {
+            String currentPassword = doctorService.getLoggedInDoctor().getPassword();
+            if (odrPasswordEncoder.defaultPasswordEncoder().matches(doctor.getPassword(), currentPassword)) {
 
-                if(doctor.getNewPassword()!=null&&!doctor.getNewPassword().isBlank()){
+                if (doctor.getNewPassword() != null && !doctor.getNewPassword().isBlank()) {
                     //user wants to change password
                     doctor.setPassword(doctor.getNewPassword());//plain text
                     doctorService.saveDoctorAndPassword(doctor, false);
-                }else {
+                } else {
                     //User doesn't want to change password
                     doctor.setPassword(currentPassword);//encrypted
                     doctorService.saveDoctor(doctor);
                 }
-                model.addAttribute("successMsg","Your data were updated successfully.");
-            }else{
-                errors.put("password","Incorrect password");
+                model.addAttribute("successMsg", "Your data were updated successfully.");
+            } else {
+                errors.put("password", "Incorrect password");
             }//else of if passwords match
 
         }//if validation errors empty
@@ -187,7 +191,7 @@ public class DoctorWebController {
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/schedule")
-    String getDoctorSchedule(Model model){
+    String getDoctorSchedule(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
         model.addAttribute("schedules", doctor.getSchedulesList());
@@ -197,7 +201,7 @@ public class DoctorWebController {
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/generate")
-    String generateDoctorAppointments(Model model){
+    String generateDoctorAppointments(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
         appointmentService.generateAppointmentsBySchedule(doctor.getId(), 14);
         model.addAttribute("doctor", doctor);
@@ -208,92 +212,103 @@ public class DoctorWebController {
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @RequestMapping("/doctor/past-appointments/was-attended")
-    String wasAttendedAppointment(@RequestParam Long id, Model model){
+    String wasAttendedAppointment(@RequestParam Long id, Model model) {
         appointmentService.setAppointmentWasAttended(id);
         return doctorPastAppointments(model);
     }
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @RequestMapping("/doctor/appointments/avail")
-    String doctorAppointmentAvail(@RequestParam Long id, @RequestParam String from, Model model){
-        boolean avail=false;// it's the same code as for cancellation, but it does a different thing.
-        try{
-            avail=appointmentService.flipAppointmentAvailable(id);
-        }catch(Throwable t){
-            log.error("cancellation error ",t);
+    String doctorAppointmentAvail(@RequestParam Long id, @RequestParam String from, Model model) {
+        boolean avail = false;// it's the same code as for cancellation, but it does a different thing.
+        try {
+            avail = appointmentService.flipAppointmentAvailable(id);
+        } catch (Throwable t) {
+            log.error("cancellation error ", t);
         }
-        if(avail) {
+        if (avail) {
             model.addAttribute("reserveMsg", "Appointment marked as available");
-        }else{
+        } else {
             model.addAttribute("reserveMsg", "Appointment marked as available");
         }
-        if("today".equals(from)) //"literal".equals(variable)
+        if ("today".equals(from)) //"literal".equals(variable)
             // is preferred as you can't call .equals() on null variables,
             // but you always can on literals.
             return doctorTodayAppointments(model);
-        else if("all".equals(from)){
+        else if ("all".equals(from)) {
             return doctorAllAppointments(model);
-        }else
+        } else
             return doctorAllAppointments(model);//falback if nothing passed/error
     }
 
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @RequestMapping("/doctor/appointments/cancel")
-    String doctorAppointmentCancel(@RequestParam Long id, @RequestParam Long patientId,@RequestParam String from, Model model){
-        boolean canceled=false;
-        try{
-            canceled=appointmentService.cancelAppointment(patientId,id);
-        }catch(Throwable t){
-            log.error("cancellation error ",t);
+    String doctorAppointmentCancel(@RequestParam Long id, @RequestParam Long patientId, @RequestParam String from, Model model) {
+        boolean canceled = false;
+        try {
+            canceled = appointmentService.cancelAppointment(patientId, id);
+        } catch (Throwable t) {
+            log.error("cancellation error ", t);
         }
-        if(canceled) {
+        if (canceled) {
             model.addAttribute("reserveMsg", "Appointment canceled");
-        }else{
+        } else {
             model.addAttribute("reserveMsg", "Appointment cancellation failed");
         }
-        if("today".equals(from)) //"literal".equals(variable)
-                                 // is preferred as you can't call .equals() on null variables,
-                                 // but you always can on literals.
+        if ("today".equals(from)) //"literal".equals(variable)
+            // is preferred as you can't call .equals() on null variables,
+            // but you always can on literals.
             return doctorTodayAppointments(model);
-        else if("all".equals(from)){
+        else if ("all".equals(from)) {
             return doctorAllAppointments(model);
-        }else
+        } else
             return doctorAllAppointments(model);//falback if nothing passed/error
     }
+
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/schedule/delete")
-    String deleteSchedule(@RequestParam Long id, Model model){
+    String deleteSchedule(@RequestParam Long id, Model model) {
         scheduleService.deleteScheduleById(id);
         return getDoctorSchedule(model);
     }
 
-    @PreAuthorize(Doctor.DOCTOR_ROLE)
-    @GetMapping("/appointment/edit")
-    String editAppointment(@RequestParam Long id, @RequestParam String from, Model model){
+    @PreAuthorize(Doctor.DOCTOR_ROLE+" or "+ Admin.ADMIN_ROLE)
+    @GetMapping("/appointment/{from}/edit")
+    String editAppointment(@RequestParam Long id, @PathVariable("from") String from, Model model) {
         Appointment appointment = appointmentService.getAppointmentById(id);
         model.addAttribute("appointment", appointment);
+        model.addAttribute("errors", Collections.EMPTY_MAP);
         model.addAttribute("from", from);
         return "appointmentEditView";
     }
 
-    @PreAuthorize(Doctor.DOCTOR_ROLE)
-    @PostMapping("/appointment/edit")
-    String editAppointment(@RequestParam Long id, @ModelAttribute String from, @ModelAttribute Appointment appointment, BindingResult result, Model model){
-        appointmentService.updateAppointment(id, appointment);
-        if("past".equals(from)){
-            return doctorPastAppointments(model);
-        }else if("all".equals(from)){
-            return doctorAllAppointments(model);
+    @PreAuthorize(Doctor.DOCTOR_ROLE+" or "+ Admin.ADMIN_ROLE)
+    @PostMapping("/appointment/{from}/edit")
+    String editAppointment(@RequestParam Long id, @PathVariable("from") String from, @ModelAttribute Appointment appointment, BindingResult result, Model model) {
+        Map<String, String> errors = appointmentService.validateAppointment(appointment);
+        if (errors.isEmpty()) {
+            appointmentService.updateAppointment(id, appointment);
+            if ("past".equals(from)) {
+                return doctorPastAppointments(model);
+            } else if ("all".equals(from)) {
+                return doctorAllAppointments(model);
+            }else if ("alladm".equals(from)) {
+                List<Appointment> appointments = appointmentService.getAllAppointments();
+                model.addAttribute("appointments", appointments);
+                return "allAppointmentsView";
+            }
+            //fallback
+            model.addAttribute("errors", errors);
+            model.addAttribute("appointment", appointment);
+            model.addAttribute("successMsg", "Appointment was updated successfully.");
+            return "appointmentEditView";
+        }else{
+            model.addAttribute("errors", errors);
+            model.addAttribute("appointment", appointment);
+            return "appointmentEditView";
         }
-        //fallback
-        model.addAttribute("appointment", appointment);
-        model.addAttribute("successMsg","Appointment was updated successfully.");
-        return "appointmentEditView";
     }
-
-
-
 
 
 }

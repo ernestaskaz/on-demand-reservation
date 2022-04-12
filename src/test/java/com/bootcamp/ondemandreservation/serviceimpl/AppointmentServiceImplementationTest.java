@@ -47,7 +47,7 @@ public class AppointmentServiceImplementationTest {
 //comment
     @BeforeEach
     void init() {
-        appointmentService = new AppointmentServiceImplementation(appointmentRepository, doctorRepository, patientRepository);
+        appointmentService = new AppointmentServiceImplementation(appointmentRepository, doctorRepository, patientRepository,null);
 
     }
 
