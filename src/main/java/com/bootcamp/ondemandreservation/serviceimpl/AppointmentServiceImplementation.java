@@ -8,6 +8,9 @@ import com.bootcamp.ondemandreservation.repository.AppointmentRepository;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
+import org.owasp.validator.html.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,21 +19,42 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class AppointmentServiceImplementation implements AppointmentService {
 
+    private Logger log= LoggerFactory.getLogger(AppointmentServiceImplementation.class);
     private AppointmentRepository appointmentRepository;
     private DoctorRepository doctorRepository;
     private PatientRepository patientRepository;
+    private AntiSamy antiSamy;
 
-    public AppointmentServiceImplementation(AppointmentRepository appointmentRepository, DoctorRepository doctorRepository, PatientRepository patientRepository) {
+
+    public AppointmentServiceImplementation(AppointmentRepository appointmentRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AntiSamy antiSamy) {
         this.appointmentRepository = appointmentRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
+        this.antiSamy = antiSamy;
+    }
+
+
+
+    @Override
+    public Map<String,String> validateAppointment(Appointment appointment){
+        HashMap<String,String> rv=new HashMap<>();
+        try {
+            CleanResults scan=antiSamy.scan(appointment.getComment());
+            if (scan.getNumberOfErrors()>0){
+                StringBuilder sb = new StringBuilder();
+                for (String s : scan.getErrorMessages()) sb.append(s);
+                rv.put("comment",sb.toString());
+            }
+        } catch (Exception x) {
+            log.error("AntiSamy error", x);
+            rv.put("comment","internal error.");
+        }
+        return rv;
     }
 
 

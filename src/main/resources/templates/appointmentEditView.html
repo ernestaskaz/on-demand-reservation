@@ -18,7 +18,7 @@
 
     <div class="container">
         <div class="d-flex justify-content-center">
-            <form action="#" th:action="@{/web/appointment/edit(id=${appointment.id})}" th:object="${appointment}" method="post">
+            <form action="#" th:action="@{'/web/appointment/{from}/edit'(id=${appointment.id},from=${from})}" th:object="${appointment}" method="post">
                 <div class="mb-3">
                     <label for="inputAppointmentTime" class="form-label">Appointment Time</label>
                     <div th:text="*{#temporals.format(appointmentTime,'yyyy-MM-dd HH:mm')}" class="form-control" id="inputAppointmentTime" />
@@ -42,6 +42,7 @@
                 <div class="mb-3">
                     <label for="inputComment" class="form-label">Comment</label>
                     <input type="text" th:field="*{comment}" class="form-control" id="inputComment" value="comment">
+                    <p th:text="${errors.get('comment')}"></p>
                 </div>
 
                 <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
