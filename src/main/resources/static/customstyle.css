@@ -28,6 +28,15 @@
 .body-color-gray{
     background-color: rgb(238,238,238);
 }
+.index-background{
+    height: 100vh;
+    background-image: url(../images/welcome-page-image.jpg)
+}
+.bg-overlay-index{
+    background-color: rgba(238,238,238,0.5);
+    height: 100vh;
+}
+
 .my-details-item-left{
     justify-content: left;
     align-items: center;
