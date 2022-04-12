@@ -8,7 +8,10 @@ import com.bootcamp.ondemandreservation.repository.AppointmentRepository;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
+@Configuration
+@EnableScheduling
 @Service
 public class AppointmentServiceImplementation implements AppointmentService {
 
@@ -189,6 +193,17 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     }
 
+
+
+    @Scheduled(cron = "0 29 12 12 * ?")
+    public void automaticGeneration() {
+        List<Doctor> listOfDoctors = doctorRepository.findAll();
+
+        for (Doctor doctor: listOfDoctors) {
+            generateAppointmentsBySchedule(doctor.getId(), 14);
+        }
+    }
+
     /**
      * @param daysCount passed from Controller specifies for how many days should appointments be generated.
      * @param doctorId finds doctor for which appointments are generated and sets this doctor to newly created appointments.
@@ -196,6 +211,8 @@ public class AppointmentServiceImplementation implements AppointmentService {
      *  and between schedule.startHour and endHour for that specific day.
      *  appointments are hourly.
      */
+
+
 
     @Override
     public void generateAppointmentsBySchedule(Long doctorId, int daysCount) {
