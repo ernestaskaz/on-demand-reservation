@@ -24,7 +24,7 @@
                 <th scope="col">Patient</th>
                 <th scope="col">Doctor</th>
                 <th scope="col">Specialty</th>
-                <th scope="col">Edit</th>
+                <th scope="col">Comment</th>
                 <th scope="col">Edit</th>
                 </thead>
 
@@ -35,10 +35,11 @@
                     <td th:text="${appointment.patient != null} ? ${appointment.patient.privacyName()}  : 'Free appointment '"></td>
                     <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                     <td th:text="${appointment.doctor.specialty}"></td>
+                    <td th:text="${appointment.comment}"></td>
                     <td><a th:if="${appointment.patient!=null}" th:href="@{/web/admin/appointments/cancel(id=${appointment.id},patientId=${appointment.patient.id}, from=all)}" class="btn btn-primary">Cancel</a>
                         <a th:if="${appointment.patient==null&&appointment.available}" th:href="@{/web/admin/appointments/avail(id=${appointment.id}, from=all)}" class="btn btn-primary">Make Unavailable</a>
-                        <a th:if="${appointment.patient==null&&!appointment.available}" th:href="@{/web/admin/appointments/avail(id=${appointment.id}, from=all)}" class="btn btn-primary">Make Available</a></td>
-                    <td><a th:href="@{/web/appointment/alladm/edit(id=${appointment.id}, from=alladm)}" class="btn btn-primary">Edit</a></td>
+                        <a th:if="${appointment.patient==null&&!appointment.available}" th:href="@{/web/admin/appointments/avail(id=${appointment.id}, from=all)}" class="btn btn-primary">Make Available</a>
+                    <a th:href="@{/web/appointment/alladm/edit(id=${appointment.id}, from=alladm)}" class="btn btn-primary">Edit</a></td>
                 </tr>
                 </tbody>
             </table>
