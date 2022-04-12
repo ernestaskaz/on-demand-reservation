@@ -22,6 +22,7 @@
                 <th scope="col">Doctor</th>
                 <th scope="col">Specialty</th>
                 <th scope="col">Was Attended</th>
+                <th scope="col">Comment</th>
                 <th scope="col">Edit</th>
                 </thead>
                 <tbody>
@@ -32,10 +33,9 @@
                     <td th:text="${appointment.doctor.firstName}+' '+${appointment.doctor.lastName}"></td>
                     <td th:text="${appointment.doctor.specialty}"></td>
                     <td th:text="${appointment.wasAttended}"></td>
+                    <td th:text="${appointment.comment}"></td>
                     <td>
                         <a th:href="@{/web/doctor/past-appointments/was-attended(id=${appointment.id})}" class="btn btn-primary">Was Attended</a>
-                    </td>
-                    <td>
                         <a th:href="@{/web/appointment/past/edit(id=${appointment.id},from='past')}" class="btn btn-primary">Edit</a>
                     </td>
 
