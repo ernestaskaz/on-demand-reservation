@@ -8,6 +8,7 @@
 </head>
 <body>
 <div th:insert="fragments :: patientNav"></div>
+<div th:insert="fragments :: background-style"></div>
 <div class="container for-content">
 
     <div class="container  justify-content-center">
@@ -20,7 +21,6 @@
             <div class="col-auto">
                 <div class="row my-details-item-left" th:text="'Name: '"></div>
                 <div class="row my-details-item-left" th:text="'Last Name: '"></div>
-                <div class="row my-details-item-left" th:text="'Age: '"></div>
                 <div th:if="${!#strings.isEmpty(patient.city)}" class="row my-details-item-left" th:text="'City: '"></div>
                 <div class="row my-details-item-left" th:text="'Phone Number: '"></div>
                 <div class="row my-details-item-left" th:text="'Email: '"></div>
@@ -28,7 +28,6 @@
             <div class="col-auto">
                 <div class="row my-details-item-right" th:text="${patient.firstName}"></div>
                 <div class="row my-details-item-right" th:text="${patient.lastName}"></div>
-                <div class="row my-details-item-right" th:text="${patient.age}"></div>
                 <div th:if="${!#strings.isEmpty(patient.city)}" class="row my-details-item-right" th:text="${patient.city}"></div>
                 <div class="row my-details-item-right" th:text="${patient.phoneNumber}"></div>
                 <div class="row my-details-item-right" th:text="${patient.email}"></div>

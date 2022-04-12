@@ -6,8 +6,16 @@
 </head>
 
 <body>
+
+<div th:fragment="background-style">
+  <div class="background-image">
+    <div class="bg-overlay">
+    </div>
+  </div>
+</div>
+
   <div th:fragment="adminNav">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-secondary">
       <div class="container-fluid">
         <div class="navbar-nav">
           <a class="nav-link" href="/web/admin/myDetails">My Account</a>
@@ -20,7 +28,7 @@
             <div class="p-2"><h6 class="navbar-text">Logged in as ADMIN</h6></div>
           </div>
           <div class="col-m-auto">
-            <div class="p-2"><a class="btn btn-outline-secondary" href="/logout_now"><h6>Log Out</h6></a></div>
+            <div class="p-2"><a class="btn btn-outline-light" href="/logout_now"><h6>Log Out</h6></a></div>
           </div>
         </div>
       </div>
@@ -29,7 +37,7 @@
 
 
   <div th:fragment="doctorNav">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-secondary">
       <div class="container-fluid">
         <div class="navbar-nav">
           <a class="nav-link" href="/web/doctor/myDetails">My Account</a>
@@ -44,14 +52,14 @@
             <div class="p-2"><h6 class="navbar-text">Logged in as DOCTOR</h6></div>
           </div>
           <div class="col-m-auto">
-            <div class="p-2"><a class="btn btn-outline-secondary" href="/logout_now"><h6>Log Out</h6></a></div>
+            <div class="p-2"><a class="btn btn-outline-light" href="/logout_now"><h6>Log Out</h6></a></div>
           </div>
         </div>
       </div>
     </nav>
   </div>
   <div th:fragment="patientNav">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-secondary">
       <div class="container-fluid">
         <div class="navbar-nav">
           <a class="nav-link" href="/web/patient/myDetails">My Account</a>
@@ -63,7 +71,7 @@
             <div class="p-2"><h6 class="navbar-text">Logged in as PATIENT</h6></div>
           </div>
           <div class="col-m-auto">
-            <div class="p-2"><a class="btn btn-outline-secondary" href="/logout_now"><h6>Log Out</h6></a></div>
+            <div class="p-2"><a class="btn btn-outline-light" href="/logout_now"><h6>Log Out</h6></a></div>
           </div>
         </div>
         </div>

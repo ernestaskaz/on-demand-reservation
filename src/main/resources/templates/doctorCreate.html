@@ -8,54 +8,51 @@
 </head>
 <body>
 <div th:insert="fragments :: adminNav"></div>
+<div th:insert="fragments :: background-style"></div>
 
 <div class="container for-content">
-    <div class="d-flex justify-content-center">
-        <div class="col-auto">
-            <h1>Add Doctor</h1>
-        </div>
-    </div>
+            <div class="d-flex justify-content-center">
+                <div class="col-auto">
+                    <h1>Add Doctor</h1>
+                </div>
+            </div>
+            <div th:text="${successMsg}" class="d-flex justify-content-center"></div>
 
-    <div class="d-flex justify-content-center">
-        <div class="col-auto">
-            <form th:action="@{/web/doctor/create}" th:object="${doctor}"  method="post">
-                <div class="mb-3">
-                    <label for="inputName" class="form-label">First Name</label>
-                    <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" >
-                    <p style="color:red" th:text="${errors.get('firstName')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="inputLastName" class="form-label">Last Name</label>
-                    <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName">
-                    <p style="color:red" th:text="${errors.get('lastName')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="inputSpeciality" class="form-label">Specialty</label>
-                    <input type="text" th:field="*{specialty}" class="form-control" id="inputSpeciality">
-                    <p style="color:red" th:text="${errors.get('specialty')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="inputEmail" class="form-label">Email address</label>
-                    <input type="text" th:field="*{email}" class="form-control" id="inputEmail">
-                    <p style="color:red" th:text="${errors.get('email')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="inputPassword" class="form-label">Password</label>
-                    <input type="password" th:field="*{password}" class="form-control"  id="inputPassword">
-                    <p style="color:red" th:text="${errors.get('password')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="confirmPassword" class="form-label">Confirm password</label>
-                    <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword">
-                    <p style="color:red" th:text="${errors.get('confirmPassword')}"></p>
-                </div>
-                <input type="submit" value="Create" class="btn btn-primary"/>
-            </form>
+            <div class="d-flex justify-content-center">
+                <form th:action="@{/web/doctor/create}" th:object="${doctor}"  method="post">
+                    <div class="mb-3">
+                        <label for="inputName" class="form-label">First Name</label>
+                        <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" >
+                        <p style="color:red" th:text="${errors.get('firstName')}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputLastName" class="form-label">Last Name</label>
+                        <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName">
+                        <p style="color:red" th:text="${errors.get('lastName')}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputSpeciality" class="form-label">Specialty</label>
+                        <input type="text" th:field="*{specialty}" class="form-control" id="inputSpeciality">
+                        <p style="color:red" th:text="${errors.get('specialty')}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputEmail" class="form-label">Email address</label>
+                        <input type="text" th:field="*{email}" class="form-control" id="inputEmail">
+                        <p style="color:red" th:text="${errors.get('email')}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPassword" class="form-label">Password</label>
+                        <input type="password" th:field="*{password}" class="form-control"  id="inputPassword">
+                        <p style="color:red" th:text="${errors.get('password')}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm password</label>
+                        <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword">
+                        <p style="color:red" th:text="${errors.get('confirmPassword')}"></p>
+                    </div>
+                    <input type="submit" value="Create" class="btn btn-primary" role="button"/>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="d-flex justify-content-center">
-        <p th:text="${successMsg}"></p>
-    </div>
-</div>
 </body>
 </html>

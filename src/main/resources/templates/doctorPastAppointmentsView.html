@@ -8,6 +8,8 @@
 </head>
 <body>
 <div th:insert="fragments :: doctorNav"></div>
+<div th:insert="fragments :: background-style"></div>
+
 <div class="container for-content">
     <div class="d-flex justify-content-center">
         <h1>Past Appointments</h1>
@@ -38,7 +40,6 @@
                         <a th:href="@{/web/doctor/past-appointments/was-attended(id=${appointment.id})}" class="btn btn-primary">Was Attended</a>
                         <a th:href="@{/web/appointment/past/edit(id=${appointment.id},from='past')}" class="btn btn-primary">Edit</a>
                     </td>
-
                 </tr>
                 </tbody>
             </table>
