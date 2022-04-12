@@ -17,6 +17,7 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,7 +92,8 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Override
     public List<Appointment> getTodaysAppointments() {
-        //return appointmentRepository.findAll()
+        //return appointmentRepository.findAll()  threading/concurrency problem - multiple users.  takes time, loads service and db.
+//        DB automatically has built in concurrency safeguards.
 //        List<Appointment> AllAppointments = appointmentRepository.findAll(Sort.by(Sort.Direction.ASC,"appointmentTime","id"));
 //        List<Appointment> todaysAppointments = new ArrayList<>();
 //
@@ -201,17 +203,31 @@ public class AppointmentServiceImplementation implements AppointmentService {
         Doctor currentDoctor = doctorRepository.findById(doctorId).get();
         DateTimeFormatter toStringDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         DateTimeFormatter setHoursToZero = DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00");
-        //start generating appointments from the next day.
-        LocalDateTime addOneDay = LocalDateTime.now();
+
+        LocalDateTime originalLocalDateTime = LocalDateTime.now();
         // set generation at 00:00.
-        String zeroHoursAndMinutes = addOneDay.format(setHoursToZero);
+        String zeroHoursAndMinutes = originalLocalDateTime.format(setHoursToZero);
         // creates LocalDateTime start point for  appointment generation.
         LocalDateTime startPoint = LocalDateTime.parse(zeroHoursAndMinutes, toStringDateFormatter);
         LocalDateTime originalPoint = startPoint;
         // creates LocalDateTime end point for appointment generation.
         LocalDateTime endPoint = startPoint.plusDays(daysCount);
 
+        List<Appointment> doctorAppointmentList = getAllAppointmentsByDoctorId(currentDoctor.getId());
 
+        if (doctorAppointmentList.size() != 0) {
+            // get list and sort it.
+            //get last date
+            LocalDateTime lastAppointmentTime = doctorAppointmentList.get(doctorAppointmentList.size() -1).getAppointmentTime();
+            LocalDateTime firstAppointmentTime = doctorAppointmentList.get(0).getAppointmentTime();
+            //Last appointment isi now start point.
+            startPoint = lastAppointmentTime;
+            originalPoint = startPoint;
+            // generates for the next 10 days.
+            endPoint = startPoint.plusDays(14);
+            //set start date to new date that is missing from days count.
+
+        }
 
         for (Schedule schedule : currentDoctor.getSchedulesList()) {
 
