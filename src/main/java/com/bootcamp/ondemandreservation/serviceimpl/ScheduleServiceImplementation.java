@@ -80,13 +80,6 @@ public class ScheduleServiceImplementation implements ScheduleService {
     @Override
     public Map<String, String> validateSchedule(Schedule schedule) {
         Map<String,String> rv=new HashMap<>();
-        List<DayOfWeek> weekDays= new ArrayList<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
-        if(!weekDays.contains(schedule.getDayOfWeek())) {
-            rv.put("dayOfWeek", "Please enter correct day of week: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY");
-        }
-        if(schedule.getDayOfWeek() == null) {
-            rv.put("dayOfWeek", "Please enter correct day of week: MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY");
-        }
         if(schedule.getStartHour() < 1 || schedule.getStartHour() > 23) {
             rv.put("startHour", "Please provide a start hour(number) between 1 and 23");
         }

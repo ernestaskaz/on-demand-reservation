@@ -42,6 +42,10 @@ public class Patient extends ODRUser{
         super(id,firstName,lastName);
     }
 
+    public Patient(String firstName, String lastName) {
+        super(firstName,lastName);
+    }
+
     public Patient(Long id, String firstName, String lastName, List<Appointment> appointmentList) {
         super(id,firstName,lastName);
         this.appointmentList = appointmentList;
