@@ -8,10 +8,14 @@ import com.bootcamp.ondemandreservation.repository.AppointmentRepository;
 import com.bootcamp.ondemandreservation.repository.DoctorRepository;
 import com.bootcamp.ondemandreservation.repository.PatientRepository;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
+import org.hibernate.Hibernate;
+import org.springframework.context.annotation.Configuration;
 import org.owasp.validator.html.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +23,16 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.*;
+@Configuration
+@EnableScheduling
 
 @Service
+@Transactional
 public class AppointmentServiceImplementation implements AppointmentService {
 
     private Logger log= LoggerFactory.getLogger(AppointmentServiceImplementation.class);
@@ -115,7 +126,8 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Override
     public List<Appointment> getTodaysAppointments() {
-        //return appointmentRepository.findAll()
+        //return appointmentRepository.findAll()  threading/concurrency problem - multiple users.  takes time, loads service and db.
+//        DB automatically has built in concurrency safeguards.
 //        List<Appointment> AllAppointments = appointmentRepository.findAll(Sort.by(Sort.Direction.ASC,"appointmentTime","id"));
 //        List<Appointment> todaysAppointments = new ArrayList<>();
 //
@@ -210,6 +222,21 @@ public class AppointmentServiceImplementation implements AppointmentService {
         }else throw new IllegalArgumentException("Appointment already reserved.");
 
     }
+    /**
+     *  This method iterates through Doctor List and automatically calls generateAppointmentsBySchedule() method for each doctor.
+     *  Automatic generation happens on (cron = "{value for seconds} {value for mintues} {value for hours} {value for days} * ?")
+     */
+
+
+
+    @Scheduled(cron = "0 30 14 12 * ?")
+    public void automaticAppointmentGeneration() {
+        List<Doctor> listOfDoctors = doctorRepository.findAll();
+
+        for (Doctor doctor: listOfDoctors) {
+            generateAppointmentsBySchedule(doctor.getId(), 14);
+        }
+    }
 
     /**
      * @param daysCount passed from Controller specifies for how many days should appointments be generated.
@@ -219,25 +246,41 @@ public class AppointmentServiceImplementation implements AppointmentService {
      *  appointments are hourly.
      */
 
+
     @Override
     public void generateAppointmentsBySchedule(Long doctorId, int daysCount) {
 
         Doctor currentDoctor = doctorRepository.findById(doctorId).get();
         DateTimeFormatter toStringDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         DateTimeFormatter setHoursToZero = DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00");
-        //start generating appointments from the next day.
-        LocalDateTime addOneDay = LocalDateTime.now();
+
+        LocalDateTime originalLocalDateTime = LocalDateTime.now();
         // set generation at 00:00.
-        String zeroHoursAndMinutes = addOneDay.format(setHoursToZero);
+        String zeroHoursAndMinutes = originalLocalDateTime.format(setHoursToZero);
         // creates LocalDateTime start point for  appointment generation.
         LocalDateTime startPoint = LocalDateTime.parse(zeroHoursAndMinutes, toStringDateFormatter);
         LocalDateTime originalPoint = startPoint;
         // creates LocalDateTime end point for appointment generation.
         LocalDateTime endPoint = startPoint.plusDays(daysCount);
 
+        List<Appointment> doctorAppointmentList = getAllAppointmentsByDoctorId(currentDoctor.getId());
+        List<Schedule> doctorScheduleList = currentDoctor.getSchedulesList();
 
+        if (doctorAppointmentList.size() != 0) {
+            // get list and sort it.
+            //get last date
+            LocalDateTime lastAppointmentTime = doctorAppointmentList.get(doctorAppointmentList.size() -1).getAppointmentTime();
+            LocalDateTime firstAppointmentTime = doctorAppointmentList.get(0).getAppointmentTime();
+            //Last appointment isi now start point.
+            startPoint = lastAppointmentTime;
+            originalPoint = startPoint;
+            // generates for the next 10 days.
+            endPoint = startPoint.plusDays(14);
+            //set start date to new date that is missing from days count.
 
-        for (Schedule schedule : currentDoctor.getSchedulesList()) {
+        }
+
+        for (Schedule schedule : doctorScheduleList) {
 
             startPoint = originalPoint;
             while(startPoint.isBefore(endPoint)) {

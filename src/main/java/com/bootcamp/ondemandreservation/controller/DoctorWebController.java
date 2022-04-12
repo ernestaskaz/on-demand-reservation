@@ -71,7 +71,7 @@ public class DoctorWebController {
     String doctorAllAppointments(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
         model.addAttribute("doctor", doctor);
-        model.addAttribute("appointments", doctor.getAppointmentList());
+        model.addAttribute("appointments", appointmentService.getAllAppointmentsByDoctorId(doctor.getId()));
 
         return "doctorAllAppointmentsView";
     }
@@ -203,11 +203,11 @@ public class DoctorWebController {
     @GetMapping("/doctor/generate")
     String generateDoctorAppointments(Model model) {
         Doctor doctor = doctorService.getLoggedInDoctor();
-        appointmentService.generateAppointmentsBySchedule(doctor.getId(), 15);
+        appointmentService.generateAppointmentsBySchedule(doctor.getId(), 14);
         model.addAttribute("doctor", doctor);
         model.addAttribute("appointments", doctor.getAppointmentList());
 
-        return "doctorAllAppointmentsView";
+        return doctorAllAppointments(model);
     }
 
     @PreAuthorize(Doctor.DOCTOR_ROLE)
