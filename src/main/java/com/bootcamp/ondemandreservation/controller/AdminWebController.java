@@ -250,5 +250,44 @@ public class AdminWebController {
             return getAllAppointments(model);//fallback if nothing passed/error
     }
 
+    @PreAuthorize(Admin.ADMIN_ROLE)
+    @GetMapping("/admin/doctor/edit")
+    String editDoctor(Model model,@RequestParam Long id) {
+        model.addAttribute("errors", Collections.EMPTY_MAP);
+        Doctor doctor = doctorService.findDoctorById(id);
+        doctor.blankPasswords();
+        model.addAttribute("doctor", doctor);
+        return "doctorDetailsEditAdm";
+    }
+
+
+    @PreAuthorize(Admin.ADMIN_ROLE)
+    @PostMapping("/admin/doctor/edit")
+    String editDoctor(@ModelAttribute Doctor doctor, BindingResult result, Model model) {
+        //note matchPassword is true now.
+        System.out.println(doctor.getId());
+        Map<String,String> errors = doctorService.validateDoctor(doctor, true, true);
+        errors.remove("password");
+        //errors.remove("email");
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("errors", errors);
+        if (errors.isEmpty()) {
+            String currentPassword = doctorService.findDoctorById(doctor.getId()).getPassword();
+            if (doctor.getNewPassword() != null && !doctor.getNewPassword().isBlank()) {
+                //user wants to change password
+                doctor.setPassword(doctor.getNewPassword());//plain text
+                doctorService.saveDoctorAndPassword(doctor, false);
+            } else {
+                //User doesn't want to change password
+                doctor.setPassword(currentPassword);//encrypted
+                doctorService.saveDoctor(doctor);
+            }
+            model.addAttribute("successMsg", String.format("%s %s <%s> data were updated successfully.",
+                    doctor.getFirstName(),doctor.getLastName(),doctor.getEmail()));
+
+        }//if validation errors empty
+        doctor.blankPasswords();
+        return "doctorDetailsEditAdm";
+    }
 
 }
