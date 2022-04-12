@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
 
-    List<Appointment> findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime localDateTime);
+    List<Appointment> findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime localDateTime,Sort sort);
 
     List<Appointment> findByDoctorId(Long doctorId, Sort sort);
 

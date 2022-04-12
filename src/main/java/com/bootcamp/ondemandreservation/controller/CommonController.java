@@ -36,15 +36,14 @@ public class CommonController {
     String root(Model model){
         String userType=odrUserService.getLoggedInODRUser().getAccountType();
         if(userType.equals("ADMIN")){
-            return "allAppointmentsTodayView";//placeholder
+            return "forward:/web/admin/today-appointments";
         }else if(userType.equals("PATIENT")){
-            return "patientView";//placeholder
+            return "patientView";
         }else if(userType.equals("DOCTOR")){
-            return "doctorView";//placeholder
+            return "doctorView";
         }
         return "index";
     }
-    //coment
 
     @GetMapping("/logoutSuccess")
     String logoutSuccess(Model model){

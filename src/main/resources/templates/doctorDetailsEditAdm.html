@@ -7,7 +7,7 @@
     <link href="/customstyle.css" rel="stylesheet"/>
 </head>
 <body>
-<div th:insert="fragments :: doctorNav"></div>
+<div th:insert="fragments :: adminNav"></div>
 <div th:insert="fragments :: background-style"></div>
 
 <div class="container for-content">
@@ -19,7 +19,7 @@
     <div th:text="${successMsg}" class="d-flex justify-content-center"></div>
     <div class="container">
         <div class="d-flex justify-content-center">
-            <form action="#" th:action="@{/web/doctor/edit}" th:object="${doctor}" method="post">
+            <form action="#" th:action="@{/web/admin/doctor/edit}" th:object="${doctor}" method="post">
                 <div class="mb-3">
                     <label for="inputName" class="form-label">First Name</label>
                     <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
@@ -36,26 +36,20 @@
                     <p th:text="${errors.get('specialty')}"></p>
                 </div>
                 <div class="mb-3">
-                    <label for="inputPassword" class="form-label">Your current password</label>
-                    <input type="password" th:field="*{password}" class="form-control" id="inputPassword" >
-                    <p th:text="${errors.get('password')}"></p>
-                </div>
-                <div class="mb-3">
                     Leave blank if you don't wish to change password.
                 </div>
                 <div class="mb-3">
                     <label for="newPassword" class="form-label">New Password</label>
-                    <input type="password" th:field="*{newPassword}" placeholder="Optional" class="form-control" id="newPassword" value="password">
+                    <input type="password" placeholder="Optional" th:field="*{newPassword}" class="form-control" id="newPassword" value="password">
                     <p th:text="${errors.get('newPassword')}"></p>
                 </div>
                 <div class="mb-3">
                     <label for="confirmPassword" class="form-label">Confirm new password</label>
-                    <input type="password" th:field="*{confirmPassword}" placeholder="Optional" class="form-control" id="confirmPassword" value="password">
+                    <input type="password" placeholder="Optional" th:field="*{confirmPassword}" class="form-control" id="confirmPassword" value="password">
                     <p th:text="${errors.get('confirmPassword')}"></p>
                 </div>
 
                 <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
-
             </form>
         </div>
     </div>

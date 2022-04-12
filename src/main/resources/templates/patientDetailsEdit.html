@@ -8,63 +8,59 @@
 </head>
 <body>
 <div th:insert="fragments :: patientNav"></div>
+<div th:insert="fragments :: background-style"></div>
 
 <div class="container for-content">
-    <div class="container">
-        <div class="d-flex justify-content-center">
-            <h1>Edit my details</h1>
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <h1>Edit my details</h1>
+                </div>
+            </div>
+            <div th:text="${successMsg}" class="d-flex justify-content-center"></div>
+            <div class="container">
+                <div class="d-flex justify-content-center">
+                    <form action="#" th:action="@{/web/patient/edit}" th:object="${patient}" method="post">
+                        <div class="mb-3">
+                            <label for="inputName" class="form-label">First Name</label>
+                            <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
+                            <p style="color:red" th:text="${errors.get('firstName')}"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputLastName" class="form-label">Last Name</label>
+                            <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName" value="lastName">
+                            <p style="color:red" th:text="${errors.get('lastName')}"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputCity" class="form-label">City</label>
+                            <input type="text" th:field="*{city}" class="form-control" id="inputCity" value="city">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPhoneNumber" class="form-label">Phone Number</label>
+                            <input type="text" th:field="*{phoneNumber}" class="form-control" id="inputPhoneNumber" value="phoneNumber">
+                            <p style="color:red" th:text="${errors.get('phoneNumber')}"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPassword" class="form-label">Your current password</label>
+                            <input type="password" th:field="*{password}" class="form-control" id="inputPassword" >
+                            <p style="color:red" th:text="${errors.get('password')}"></p>
+                        </div>
+                        <div class="mb-3">
+                            Leave blank if you don't wish to change password.
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <input type="password" th:field="*{newPassword}" placeholder="Optional" class="form-control" id="newPassword" value="password">
+                            <p style="color:red" th:text="${errors.get('newPassword')} "></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirm new password</label>
+                            <input type="password" th:field="*{confirmPassword}" placeholder="Optional" class="form-control" id="confirmPassword" value="password">
+                            <p style="color:red" th:text="${errors.get('confirmPassword')}"></p>
+                        </div>
+                        <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div class="container">
-        <div class="d-flex justify-content-center">
-            <form action="#" th:action="@{/web/patient/edit}" th:object="${patient}" method="post">
-                <div class="mb-3">
-                    <label for="inputName" class="form-label">First Name</label>
-                    <input type="text" th:field="*{firstName}"  class="form-control" id="inputName" value="name">
-                    <p style="color:red" th:text="${errors.get('firstName')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="inputLastName" class="form-label">Last Name</label>
-                    <input type="text" th:field="*{lastName}" class="form-control" id="inputLastName" value="lastName">
-                    <p style="color:red" th:text="${errors.get('lastName')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="inputCity" class="form-label">City</label>
-                    <input type="text" th:field="*{city}" class="form-control" id="inputCity" value="city">
-                </div>
-                <div class="mb-3">
-                    <label for="inputPhoneNumber" class="form-label">Phone Number</label>
-                    <input type="text" th:field="*{phoneNumber}" class="form-control" id="inputPhoneNumber" value="phoneNumber">
-                    <p style="color:red" th:text="${errors.get('phoneNumber')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="inputPassword" class="form-label">Your current password</label>
-                    <input type="password" th:field="*{password}" class="form-control" id="inputPassword" >
-                    <p style="color:red" th:text="${errors.get('password')}"></p>
-                </div>
-                <div class="mb-3">
-                    Leave blank if you don't wish to change password.
-                </div>
-                <div class="mb-3">
-                    <label for="newPassword" class="form-label">New Password</label>
-                    <input type="password" th:field="*{newPassword}" class="form-control" id="newPassword" value="password">
-                    <p style="color:red" th:text="${errors.get('newPassword')}"></p>
-                </div>
-                <div class="mb-3">
-                    <label for="confirmPassword" class="form-label">Confirm new password</label>
-                    <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword" value="password">
-                    <p style="color:red" th:text="${errors.get('confirmPassword')}"></p>
-                </div>
-
-
-                <input type="submit" value="Submit" class="btn btn-primary" role="button"/>
-
-                <p th:text="${successMsg}"></p>
-
-            </form>
-        </div>
-    </div>
-</div>
 </body>
 </html>

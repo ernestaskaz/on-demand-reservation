@@ -104,7 +104,7 @@ public class AppointmentServiceImplementationTest {
         List<Appointment> appointmentList = new ArrayList<>();
         appointmentList.add(savedAppointment);
 
-        Mockito.when(appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now())).thenReturn(appointmentList);
+        Mockito.when(appointmentRepository.findByIsAvailableTrueAndIsReservedFalseAndAppointmentTimeIsAfter(LocalDateTime.now(), Sort.by(Sort.Direction.ASC, "appointmentTime"))).thenReturn(appointmentList);
 
         List<Appointment> foundAppointments = appointmentService.findAvailableAndNotReserved();
 
