@@ -44,7 +44,6 @@ public class CommonController {
         }
         return "index";
     }
-    //coment
 
     @GetMapping("/logoutSuccess")
     String logoutSuccess(Model model){
