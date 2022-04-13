@@ -32,7 +32,7 @@ public class PatientControllerTest {
 
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(1)
     void canSavePatient() throws Exception {
 
@@ -50,7 +50,7 @@ public class PatientControllerTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(3)
     void canFindPatientById() throws Exception{
 
@@ -62,7 +62,7 @@ public class PatientControllerTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",roles={"ADMIN_ROLE"})
     @Order(2)
     void canGetAllPatients () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/patient")
@@ -74,7 +74,7 @@ public class PatientControllerTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(4)
     void canUpdatePatient () throws Exception {
 
@@ -90,7 +90,7 @@ public class PatientControllerTest {
 
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(5)
     void canDeletePatient () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/patient/2")

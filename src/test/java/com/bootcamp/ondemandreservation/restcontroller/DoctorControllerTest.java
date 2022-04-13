@@ -36,7 +36,7 @@ public class DoctorControllerTest {
 
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(1)
     void canSaveDoctor() throws Exception {
 
@@ -60,7 +60,7 @@ public class DoctorControllerTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(3)
     void canFindDoctorById() throws Exception{
 
@@ -72,7 +72,7 @@ public class DoctorControllerTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(2)
     void canGetAllDoctors () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/doctor")
@@ -84,7 +84,7 @@ public class DoctorControllerTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(4)
     void canUpdateDoctor () throws Exception {
 
@@ -115,7 +115,7 @@ public class DoctorControllerTest {
 //    }
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(6)
     void canDeleteDoctorById () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/doctor/2")

@@ -33,7 +33,7 @@ public class AppointmentControllerTest {
 
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(1)
     void canSaveAppointment() throws Exception {
 
@@ -72,7 +72,7 @@ public class AppointmentControllerTest {
 
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(2)
     void canGetAllAppointments () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/appointment")
@@ -84,7 +84,7 @@ public class AppointmentControllerTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(3)
     void canFindAppointmentById() throws Exception{
 
@@ -97,7 +97,7 @@ public class AppointmentControllerTest {
 
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(4)
     void canCancelAppointment () throws Exception {
 
@@ -111,7 +111,7 @@ public class AppointmentControllerTest {
 
 
     @Test
-    @WithMockUser(username="admin@default.com")
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(5)
     void canDeleteAppointment () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/appointment/1")
