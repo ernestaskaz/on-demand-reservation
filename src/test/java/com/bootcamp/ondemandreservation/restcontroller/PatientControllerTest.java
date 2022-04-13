@@ -62,7 +62,7 @@ public class PatientControllerTest {
     }
 
     @Test
-    @WithMockUser(username="admin@default.com",roles={"ADMIN_ROLE"})
+    @WithMockUser(username="admin@default.com",roles={"PATIENT_ROLE","DOCTOR_ROLE","ADMIN_ROLE"})
     @Order(2)
     void canGetAllPatients () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/patient")
