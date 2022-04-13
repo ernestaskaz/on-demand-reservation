@@ -52,7 +52,7 @@ h1{
     padding-left: 6px;
     padding-right: 9px;
     padding-bottom: 6px;
-    margin-bottom: 6px;
+    margin-bottom: 20px;
     border-top-style: solid;
     border-bottom-style: solid;
     border-left-style: solid;
@@ -69,7 +69,7 @@ h1{
     padding-left: 9px;
     padding-right: 6px;
     padding-bottom: 6px;
-    margin-bottom: 6px;
+    margin-bottom: 20px;
     border-top-style: solid;
     border-bottom-style: solid;
     border-right-style: solid;
@@ -101,14 +101,14 @@ h1{
     position: relative;
     z-index: 50;
 }
-.btn-primary{
+/*.btn-primary{
     background-color: rgb(108, 117, 125);
     border-color: rgb(108, 117, 125);
 }
 .btn-primary:hover{
     background-color:rgb(73, 80, 87);
     border-color: rgb(73, 80, 87);
-}
+}*/
 form{
     margin-bottom: 20px;
 }
