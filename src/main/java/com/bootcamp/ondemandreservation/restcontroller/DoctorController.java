@@ -16,7 +16,7 @@ import java.util.List;
 @PreAuthorize(Admin.ADMIN_ROLE)//more fine-grained later
 @RequestMapping("/api/v1/doctor")
 public class DoctorController {
-zzzzzzzzzzzz
+
     private DoctorService doctorService;
 
     public DoctorController(DoctorService doctorService) {
