@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,6 +12,9 @@
     <div class="bg-overlay">
     </div>
   </div>
+  <div sec:authorize="hasRole('ROLE_DOCTOR')" th:insert="fragments :: doctorNav"></div>
+  <div sec:authorize="hasRole('ROLE_ADMIN')" th:insert="fragments :: adminNav"></div>
+  <div sec:authorize="hasRole('ROLE_PATIENT')" th:insert="fragments :: patientNav"></div>
 </div>
 
   <div th:fragment="adminNav">
