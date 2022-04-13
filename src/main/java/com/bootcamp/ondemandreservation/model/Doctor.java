@@ -66,6 +66,8 @@ public class Doctor extends ODRUser{
     }
 
     public void addAppointmentList(Appointment appointment) {
+        if(this.appointmentList==null)
+            this.appointmentList=new ArrayList<>();
         this.appointmentList.add(appointment);
     }
 
