@@ -22,6 +22,7 @@ overflow-x: hidden;
     padding-bottom: 10px;
 }
 .welcome-message{
+    margin-top: 0px;
     padding-bottom: 10px;
 }
 h1{
@@ -101,14 +102,48 @@ h1{
     position: relative;
     z-index: 50;
 }
-/*.btn-primary{
-    background-color: rgb(108, 117, 125);
-    border-color: rgb(108, 117, 125);
+.btn-primary{
+    background-color: rgb(249, 224, 118);
+    border-color: rgb(249, 224, 118);
+    color: #545252;
+}
+.btn-primary:focus {
+    background-color: rgb(249, 224, 118);
+    border-color: rgb(249, 224, 118);
+    color: #545252;
 }
 .btn-primary:hover{
-    background-color:rgb(73, 80, 87);
-    border-color: rgb(73, 80, 87);
-}*/
+    background-color: rgb(209, 180, 65);
+    border-color: rgb(209, 180, 65);
+    color: #545252;
+}
 form{
     margin-bottom: 20px;
+}
+.index-content {
+    top:150px;
+    position:fixed;
+}
+.btn-outline-light{
+    border-color: rgb(249, 224, 118)
+}
+.btn-outline-light:hover{
+    background-color: rgb(209, 180, 65);
+    border-color: rgb(209, 180, 65);
+    color: #545252;
+}
+.logout-content{
+    top:150px;
+    position:fixed;
+}
+.register-content{
+    top:75px;
+    position:fixed;
+}
+.please-register{
+    margin-top:0px;
+}
+.register-success{
+    top:150px;
+    position:fixed;
 }
