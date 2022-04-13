@@ -167,7 +167,7 @@ public class DoctorServiceImplementation implements DoctorService {
     }
     /**
      * The same as saveDoctor, but the password is treated as plain text
-     * and is hashed&salted before saving
+     * and is hashed and salted before saving
      * @param doctor Doctor model to save
      * @return doctor with hashed password
      */
