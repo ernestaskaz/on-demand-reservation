@@ -126,7 +126,7 @@ public class PatientServiceImplementation implements PatientService {
 
     /**
      * The same as savePatient, but the password is treated as plain text
-     * and is hashed&salted before saving
+     * and is hashed and salted before saving
      * @param patient patient model to save
      * @return
      */

@@ -75,7 +75,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     /**
      * @param doctorId and patientId passed from Controller to find specific entities.
-     * @Method saveAppointment then creates an appointment and maps to patient/doctor.
+     * method saveAppointment then creates an appointment and maps to patient/doctor.
      * sets isAvaialble and isReserved for appointment so that it is taken and not seen in getAvailableAndNotReserved appointments.
      */
 
