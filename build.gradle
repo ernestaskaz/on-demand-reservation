@@ -12,6 +12,7 @@ repositories {
 	mavenCentral()
 }
 
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -35,6 +36,8 @@ dependencies {
 	implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 	// https://mvnrepository.com/artifact/org.owasp.antisamy/antisamy
 	implementation group: 'org.owasp.antisamy', name: 'antisamy', version: '1.6.6.1'
+	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5
+	implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
 
 
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
