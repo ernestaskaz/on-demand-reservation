@@ -1,14 +1,17 @@
 package com.bootcamp.ondemandreservation.restcontroller;
 
+import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@PreAuthorize(Admin.ADMIN_ROLE)//more fine-grained later
 @RequestMapping("/api/v1/schedule")
 public class ScheduleController {
 
