@@ -188,7 +188,7 @@ public class DoctorWebController {
         doctor.blankPasswords();
         return DOCTOR_EDIT_TEMPLATE;
     }
-
+//comment
     @PreAuthorize(Doctor.DOCTOR_ROLE)
     @GetMapping("/doctor/schedule")
     String getDoctorSchedule(Model model) {
