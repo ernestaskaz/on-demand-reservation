@@ -146,3 +146,6 @@ form{
     top:150px;
     position:fixed;
 }
+table{
+    background-color: rgba(255,255,255, 0.5);
+}
