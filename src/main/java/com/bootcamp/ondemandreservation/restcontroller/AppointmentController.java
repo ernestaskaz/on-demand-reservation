@@ -1,13 +1,16 @@
 package com.bootcamp.ondemandreservation.restcontroller;
 
+import com.bootcamp.ondemandreservation.model.Admin;
 import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.service.AppointmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 //comment
 @RestController
+@PreAuthorize(Admin.ADMIN_ROLE)//more fine-grained later
 @RequestMapping("/api/v1/appointment")
 public class AppointmentController {
 

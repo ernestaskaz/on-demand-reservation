@@ -127,7 +127,7 @@ public class ODRUser implements UserDetails {
 
     /**
      *
-     * Will contain encrypted (hashed&salted) password if read from the DB
+     * Will contain encrypted (hashed and salted) password if read from the DB
      * but can be used to temporarily store plain text password during form validation.
      * @param password password to set
      */
@@ -174,7 +174,7 @@ public class ODRUser implements UserDetails {
 
     /**
      * Returns the password used to authenticate the user.
-     * Will contain encrypted (hashed&salted) password if read from the DB
+     * Will contain encrypted (hashed and salted) password if read from the DB
      * but can be used to temporarily store plain text password during form validation.
      * @return the password
      */
