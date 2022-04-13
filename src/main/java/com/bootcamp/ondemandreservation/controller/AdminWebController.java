@@ -267,8 +267,7 @@ public class AdminWebController {
         //note matchPassword is true now.
         System.out.println(doctor.getId());
         Map<String,String> errors = doctorService.validateDoctor(doctor, true, true);
-        errors.remove("password");
-        //errors.remove("email");
+        errors.remove("password");//admins don't need password for this, but validation still expects it.
         model.addAttribute("doctor", doctor);
         model.addAttribute("errors", errors);
         if (errors.isEmpty()) {
