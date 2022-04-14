@@ -132,32 +132,11 @@ public class DoctorServiceImplementation implements DoctorService {
     }
 
     @Override
-    public List<Appointment> getAllAppointments(Long id) {
-        return appointmentService.getAllAppointmentsByDoctorId(id);
-    }
-
-    @Override
     public List<Schedule> getDoctorSchedules(Long id) {
         Doctor doctor = findDoctorById(id);
         return doctor.getSchedulesList();
     }
 
-//    @Override
-//    public List<Appointment> getDoctorPastAppointments(Long id) {
-//        List<Appointment> AllAppointments = getAllAppointments(id);
-//        List<Appointment> pastAppointments = new ArrayList<>();
-//
-//        for (Appointment appointment: AllAppointments) {
-//
-//            if(appointment.getAppointmentTime().isBefore(LocalDateTime.now())) {
-//                pastAppointments.add(appointment);
-//            }
-//
-//        }
-//
-//        return pastAppointments;
-//
-//    }
     @Transactional
     @Override
     public Doctor updateDoctor(Long id, Doctor doctor) {
@@ -165,11 +144,6 @@ public class DoctorServiceImplementation implements DoctorService {
         return saveDoctor(doctor, false);
     }
 
-//    @Override
-//    public List<Appointment> getUpcomingAppointmentsForToday(Long id) {
-//        LocalDateTime now=LocalDateTime.now();
-//        return appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(id, now,now.plusDays(1).truncatedTo(ChronoUnit.DAYS),Sort.by(Sort.Direction.ASC,"appointmentTime"));
-//    }
 
     /**
      * Validates the doctor
@@ -220,6 +194,13 @@ public class DoctorServiceImplementation implements DoctorService {
         scheduleWednesday.setDoctor(doctor);
         scheduleThursday.setDoctor(doctor);
         scheduleFriday.setDoctor(doctor);
+
+        doctor.addScheduleList(scheduleMonday);
+        doctor.addScheduleList(scheduleTuesday);
+        doctor.addScheduleList(scheduleWednesday);
+        doctor.addScheduleList(scheduleThursday);
+        doctor.addScheduleList(scheduleFriday);
+
 
         scheduleService.saveSchedule(scheduleMonday);
         scheduleService.saveSchedule(scheduleTuesday);

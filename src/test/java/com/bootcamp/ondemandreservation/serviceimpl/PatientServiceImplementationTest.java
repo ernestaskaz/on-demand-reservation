@@ -23,6 +23,7 @@ import java.util.Optional;
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class PatientServiceImplementationTest {
@@ -46,7 +47,7 @@ public class PatientServiceImplementationTest {
 
     @Test
     @Order(1)
-    void canSaveDoctor() {
+    void canSavePatient() {
         Patient patient = new Patient(1L, "firstName", "lastName");
         //context
 

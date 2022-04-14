@@ -18,12 +18,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
@@ -129,10 +131,13 @@ public class DoctorServiceImplementationTest {
 
         Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
 
-        Doctor foundDoctor = doctorService.findDoctorById(1L);
+       // Doctor foundDoctor = doctorService.findDoctorById(1L);
+
+        List<Schedule> doctorSchedules = doctorService.getDoctorSchedules(1L);
 
 
-        assertEquals("size is " + foundDoctor.getSchedulesList().size(), doctor.getSchedulesList().size(), foundDoctor.getSchedulesList().size());
+      //  assertEquals("size is " + foundDoctor.getSchedulesList().size(), doctor.getSchedulesList().size(), foundDoctor.getSchedulesList().size());
+        assertEquals("size is " + doctorSchedules.size(), doctor.getSchedulesList().size(), doctorSchedules.size());
 
 
     }
@@ -154,29 +159,20 @@ public class DoctorServiceImplementationTest {
 
     }
 
-//    @Test
-//    @Order(7)
-//    void canGetUpcomingAppointmentsForToday() {
-//
-//        List<Appointment> appointmentList = new ArrayList<>();
-//        List<Schedule> scheduleList = new ArrayList<>();
-//        Appointment appointment = new Appointment(LocalDateTime.now().plusHours(1));
-//        Appointment appointmentTwo = new Appointment(LocalDateTime.now().plusDays(1));
-//        Schedule schedule = new Schedule();
-//        appointmentList.add(appointment);
-//        appointmentList.add(appointmentTwo);
-//        scheduleList.add(schedule);
-//        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
-//
-//        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
-//
-//        List<Appointment> foundAppointments = doctorService.getUpcomingAppointmentsForToday(1L);
-//
-//
-//        assertEquals("size is " + foundAppointments.size(), 1, foundAppointments.size());
-//
-//
-//    }
+    @Test
+    @Order(6)
+    void canGenerateDefaultSchedules() {
+
+        Doctor doctor = new Doctor("this is name", "this is changed lastName", "Specialty");
+
+        Mockito.when(doctorRepository.save(any(Doctor.class))).thenReturn(doctor);
+
+        Doctor updatedDoctor = doctorService.saveDoctor(doctor, true);
+
+        assertTrue("actual size is " + updatedDoctor.getSchedulesList().size(), updatedDoctor.getSchedulesList().size() > 1 );
+
+    }
+
 
 
 

@@ -7,6 +7,7 @@ import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,6 @@ public class DoctorController {
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
-
     @PostMapping
     public ResponseEntity<Doctor> saveDoctor(@RequestBody Doctor doctor) {
         return new ResponseEntity<Doctor>(doctorService.saveDoctor(doctor), HttpStatus.CREATED);
@@ -33,20 +33,11 @@ public class DoctorController {
         return doctorService.getAllDoctors();
     }
 
-    @GetMapping("/appointments/{id}")
-    public List<Appointment> getAllAppointments(@PathVariable("id") Long id) {
-        return doctorService.getAllAppointments(id);
-    }
 
     @GetMapping("/schedule/{id}")
     public List<Schedule> getDoctorSchedules(@PathVariable("id") Long id) {
         return doctorService.getDoctorSchedules(id);
     }
-
-//    @GetMapping("/today/{id}")
-//    public List<Appointment> getTodaysAppointments(@PathVariable("id") Long id) {
-//        return doctorService.getUpcomingAppointmentsForToday(id);
-//    }
 
     @GetMapping ("{id}")
     public ResponseEntity<Doctor> findDoctorById(@PathVariable("id") Long id) {

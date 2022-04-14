@@ -1,6 +1,7 @@
 package com.bootcamp.ondemandreservation.restcontroller;
 
 import com.bootcamp.ondemandreservation.Helpers;
+import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.model.Patient;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -88,10 +89,56 @@ public class PatientControllerTest {
 
     }
 
-
     @Test
     @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(5)
+    void canGetPatientAppointments() throws Exception {
+
+        Patient patient = new Patient(1L, "firstName", "lastName");
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/patient")
+                        .content(Helpers.asJsonString(patient))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName").value("firstName"));
+
+        //create Doctor;
+        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
+
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
+                        .content(Helpers.asJsonString(doctor))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.specialty").value("Specialty"));
+
+        //create and map appointment;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/appointment/4/2")
+                        .content(Helpers.asJsonString(doctor))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.patient.id").value(2L))
+                .andExpect(jsonPath("$.doctor.firstName").value("this is name"));
+
+
+        //get patient appointment that should be one.
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/patient/appointments/2")
+                        .accept(MediaType.ALL_VALUE))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$.[0].patient.firstName").value("firstName"));
+    }
+
+
+    @Test
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
+    @Order(6)
     void canDeletePatient () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/patient/2")
                         .accept(MediaType.ALL_VALUE))
@@ -100,4 +147,6 @@ public class PatientControllerTest {
                 .andExpect(content().string(org.hamcrest.Matchers.equalTo("Patient successfully deleted")));
 
     }
+
+
 }

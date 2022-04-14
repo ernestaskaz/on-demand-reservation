@@ -2,8 +2,11 @@ package com.bootcamp.ondemandreservation.restcontroller;
 
 import com.bootcamp.ondemandreservation.Helpers;
 
+import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
 
+import com.bootcamp.ondemandreservation.model.Patient;
+import com.bootcamp.ondemandreservation.model.Schedule;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
+import java.time.DayOfWeek;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -36,11 +41,16 @@ public class DoctorControllerTest {
 
 
     @Test
-    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
+    @WithMockUser(username="admin@default.com", authorities="ROLE_ADMIN")
     @Order(1)
     void canSaveDoctor() throws Exception {
 
         Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty");
+        Schedule schedule = new Schedule(DayOfWeek.MONDAY, 12, 16);
+        doctor.addScheduleList(schedule);
+        Appointment appointment = new Appointment();
+        doctor.addAppointmentList(appointment);
+        doctor.addAppointmentList(appointment);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
                         .content(Helpers.asJsonString(doctor))
@@ -49,6 +59,7 @@ public class DoctorControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName").value("this is name"));
+
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/doctor")
                         .content(Helpers.asJsonString(doctor))
@@ -98,27 +109,46 @@ public class DoctorControllerTest {
 
     }
 
-//    @Test
-//    @Order(5)
-//    void canGetAppointments () throws Exception {
-//        Patient patient = new Patient(1L, "firstName", "lastName");
-//        Doctor doctor = new Doctor(1L, "this is name", "this is lastName", "Specialty");
-//        Appointment appointment = new Appointment(doctor, patient);
-//        doctor.addAppointmentList(appointment);
-//        mockMvc.perform(MockMvcRequestBuilders.put("/appointments/1")
-//                        .content(Helpers.asJsonString(doctor))
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(jsonPath("$.specialty").value("Specialty"));
-//
-//    }
+    @Test
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
+    @Order(5)
+    void canGetSchedules () throws Exception {
+        //context
+        Schedule schedule = new Schedule(DayOfWeek.MONDAY, 12, 16);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/schedule")
+                        .content(Helpers.asJsonString(schedule))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.dayOfWeek").value("MONDAY"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/schedule/1/2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(content().string(org.hamcrest.Matchers.equalTo("Schedule has been added to selected doctor")));
+
+
+        //result
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/doctor/schedule/2")
+                        .accept(MediaType.ALL_VALUE))
+                .andDo(print())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.[0].dayOfWeek").value("MONDAY"));
+
+
+
+    }
+
+
 
     @Test
     @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
     @Order(6)
     void canDeleteDoctorById () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/doctor/2")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/doctor/3")
                         .accept(MediaType.ALL_VALUE))
                 .andExpect(status().isOk())
                 .andDo(print())

@@ -15,7 +15,7 @@ public interface DoctorService {
     List<Doctor> getAllDoctors();
     Doctor findDoctorById(Long id);
     void deleteDoctor(Long id);
-    List<Appointment> getAllAppointments(Long id);
+    //List<Appointment> getAllAppointments(Long id);
     List<Schedule> getDoctorSchedules(Long id);
     Doctor updateDoctor(Long id, Doctor doctor);
     Doctor getLoggedInDoctor();

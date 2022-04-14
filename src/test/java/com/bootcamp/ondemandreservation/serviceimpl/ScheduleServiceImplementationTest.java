@@ -19,6 +19,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static junit.framework.TestCase.assertEquals;
@@ -115,21 +116,74 @@ public class ScheduleServiceImplementationTest {
     @Order(5)
     void canUpdateSchedule() {
         Schedule schedule = new Schedule(1L, DayOfWeek.MONDAY, 12, 19, 15);
-        Schedule updatedSchedule = new Schedule(1L, DayOfWeek.TUESDAY, 15, 23, 17);
+        Schedule scheduleNewValues = new Schedule(1L, DayOfWeek.TUESDAY, 15, 23, 17);
 
         Mockito.when(scheduleRepository.findById(anyLong())).thenReturn(Optional.of(schedule));
+
+        Mockito.when(scheduleRepository.save(any(Schedule.class))).thenReturn(scheduleNewValues);
 
         Doctor doctor = new Doctor(1L,"this is name", "this is lastName", "Specialty");
 
         Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
 
         scheduleService.setDoctorToSchedule(1L, 1L);
-        scheduleService.updateSchedule(1L, updatedSchedule);
+        Schedule updatedSchedule = scheduleService.updateSchedule(1L, scheduleNewValues);
 
 
-        assertEquals("schedule doctor name is " +  schedule.getDoctor().getFirstName(), doctor.getFirstName(),schedule.getDoctor().getFirstName() );
+
+        assertEquals("schedule doctor name is " +  updatedSchedule.getDoctor().getFirstName(), doctor.getFirstName(),updatedSchedule.getDoctor().getFirstName());
+        assertEquals("updated schedule day is  " +  updatedSchedule.getDayOfWeek(), scheduleNewValues.getDayOfWeek(),updatedSchedule.getDayOfWeek());
 
 
     }
+
+
+    @Test
+    @Order(6)
+    void canValidateSchedule() {
+        Schedule schedule = new Schedule(1L, DayOfWeek.MONDAY, 12, 19, 15);
+
+        Map<String, String> errors = scheduleService.validateSchedule(schedule);
+
+
+
+        assertEquals("number of errors is " +  errors.size(), 0,errors.size());
+
+
+    }
+
+
+    @Test
+    @Order(7)
+    void invalidatesSchedule() {
+        Schedule schedule = new Schedule(1L, DayOfWeek.MONDAY, 124, 194, 204);
+
+        Map<String, String> errors = scheduleService.validateSchedule(schedule);
+
+
+
+        assertEquals("number of errors is " +  errors.size(), 3,errors.size());
+
+
+    }
+
+    @Test
+    @Order(8)
+    void invalidatesScheduleWithValues() {
+        Schedule schedule = new Schedule(1L, DayOfWeek.MONDAY, 124, 194, 204);
+
+        Map<String, String> errors = scheduleService.validateSchedule(schedule);
+
+
+
+        assertEquals("number of errors is " +  errors.size(), 3,errors.size());
+        assertEquals("error for startHour is " +  errors.get("startHour"), "Please provide a start hour(number) between 1 and 23",errors.get("startHour"));
+        assertEquals("error for endHour is " +  errors.get("endHour"), "Please provide an end hour(number) between 1 and 23",errors.get("endHour"));
+        assertEquals("error for lunchTime is " +  errors.get("lunchTime"), "Please provide a lunch hour that is between Start Hour and End Hour",errors.get("lunchTime"));
+
+
+    }
+
+
 
 }

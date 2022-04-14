@@ -75,7 +75,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     /**
      * @param doctorId and patientId passed from Controller to find specific entities.
-     * method saveAppointment then creates an appointment and maps to patient/doctor.
+     * @Method saveAppointment then creates an appointment and maps to patient/doctor.
      * sets isAvaialble and isReserved for appointment so that it is taken and not seen in getAvailableAndNotReserved appointments.
      */
 
@@ -130,6 +130,7 @@ public class AppointmentServiceImplementation implements AppointmentService {
 
     @Override
     public List<Appointment> getTodaysAppointments() {
+
         return appointmentRepository.findByAppointmentTimeBetween(LocalDateTime.now(),LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS), SORT_BY_APPOINTMENT_TIME);
     }
     @Override
@@ -216,12 +217,13 @@ public class AppointmentServiceImplementation implements AppointmentService {
     }
     /**
      *  This method iterates through Doctor List and automatically calls generateAppointmentsBySchedule() method for each doctor.
-     *  Automatic generation happens on (cron = "{value for seconds} {value for mintues} {value for hours} {value for days} * ?")
+     *  Automatic generation happens on (cron = "{value for seconds} {value for minutes} {value for hours} {value for days} * ?").
+     *  Change it to values as you see fit. For testing purposes, we use LocalDateTime now + 2 minutes to create doctors from Admin.
      */
 
 
 
-    @Scheduled(cron = "0 30 14 12 * ?")
+    @Scheduled(cron = "0 39 12 13 * ?")
     public void automaticAppointmentGeneration() {
         List<Doctor> listOfDoctors = doctorRepository.findAll();
 
