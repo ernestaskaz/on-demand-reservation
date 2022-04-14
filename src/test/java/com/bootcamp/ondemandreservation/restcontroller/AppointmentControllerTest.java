@@ -1,6 +1,7 @@
 package com.bootcamp.ondemandreservation.restcontroller;
 
 import com.bootcamp.ondemandreservation.Helpers;
+import com.bootcamp.ondemandreservation.model.Appointment;
 import com.bootcamp.ondemandreservation.model.Doctor;
 import com.bootcamp.ondemandreservation.model.Patient;
 import org.junit.jupiter.api.MethodOrderer;
@@ -18,6 +19,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -108,11 +112,27 @@ public class AppointmentControllerTest {
                 .andExpect(content().string(org.hamcrest.Matchers.equalTo("Appointment has been canceled")));
 
     }
+    @Test
+    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
+    @Order(5)
+    void canGenerateAppointments() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/appointment/generate/3")
+                        .content(Helpers.asJsonString(15))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.equalTo("Appointments for given date has been generated.")));
+
+    }
+
+
 
 
     @Test
     @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
-    @Order(5)
+    @Order(25)
     void canDeleteAppointment () throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/appointment/1")
                         .accept(MediaType.ALL_VALUE))
@@ -122,15 +142,4 @@ public class AppointmentControllerTest {
 
     }
 
-//    @Test
-//    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
-//    @Order(6)
-//    void canGetPastAppointmentsByDoctorId () throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/appointment/1")
-//                        .accept(MediaType.ALL_VALUE))
-//                .andDo(print())
-//                .andDo(MockMvcResultHandlers.print())
-//                .andExpect(jsonPath("$.wasAttended").value(false));
-//
-//    }
 }
