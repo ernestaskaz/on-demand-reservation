@@ -22,6 +22,8 @@ import org.springframework.data.domain.Sort;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -224,7 +226,7 @@ public class AppointmentServiceImplementationTest {
     @Test
     @Order(7)
     void canGenerateAppointments() {
-        Schedule schedule = new Schedule(1L, DayOfWeek.THURSDAY, 12, 19, 15);
+        Schedule schedule = new Schedule(1L, DayOfWeek.THURSDAY, 8, 19, 15);
         List<Schedule> scheduleList = new ArrayList<>();
         List<Appointment> appointmentList = new ArrayList<>();
         scheduleList.add(schedule);
@@ -234,6 +236,8 @@ public class AppointmentServiceImplementationTest {
         Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
 
         appointmentService.generateAppointmentsBySchedule(1L, 30);
+
+
 
         assertTrue("actual size is " + doctor.getAppointmentList().size(), doctor.getAppointmentList().size() > 5 );
 
@@ -315,8 +319,102 @@ public class AppointmentServiceImplementationTest {
     }
 
 
+    @Test
+    @Order(12)
+    void canGenerateAppointmentsForSecondTime() {
+        Schedule schedule = new Schedule(1L, DayOfWeek.THURSDAY, 8, 19, 15);
+        List<Schedule> scheduleList = new ArrayList<>();
+        List<Appointment> appointmentList = new ArrayList<>();
+        scheduleList.add(schedule);
+
+        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
+
+        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+        appointmentService.generateAppointmentsBySchedule(1L, 30);
+        int firstIteration = doctor.getAppointmentList().size();
+        appointmentService.generateAppointmentsBySchedule(1L, 30);
+        int expected = firstIteration * 2;
 
 
+
+//        assertTrue("actual size is " + doctor.getAppointmentList().size(), doctor.getAppointmentList().size() > 5 );
+        assertEquals("something went wrong" + doctor.getAppointmentList().size(), expected, doctor.getAppointmentList().size());
+
+    }
+
+    /**
+     * Having issues with these tests. Can not think of a way to mock repository method that has specific parameters. Since we do not do any data modification in service layer,
+     * maybe it is not testable? The method does return just a list that is modified at the database level.
+     */
+
+//    @Test
+//    @Order(12)
+//    void canGetUpcomingAppointmentsForTodayByDoctorId() {
+//
+//        //sometimes this test might fail because of the fraction of LocalDateTime seconds that are not truncated in actual method. basically mismatch of arguments by small part of a second
+//        Schedule schedule = new Schedule(1L, DayOfWeek.THURSDAY, 8, 19, 15);
+//        List<Schedule> scheduleList = new ArrayList<>();
+//        List<Appointment> appointmentList = new ArrayList<>();
+//        scheduleList.add(schedule);
+//
+//        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
+//
+//        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+//
+//        appointmentService.generateAppointmentsBySchedule(1L, 30);
+//
+//        Mockito.lenient().when(appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(1L, LocalDateTime.now(), LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS), SORT_BY_APPOINTMENT_TIME))
+//                .thenReturn(appointmentList);
+//
+//
+////        Mockito.lenient().when(appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(anyLong(),any(LocalDateTime.class), any(LocalDateTime.class), any(Sort.class)))
+////                .thenReturn(appointmentList);
+//
+//        List<Appointment> actualList = appointmentService.getUpcomingAppointmentsForTodayByDoctorId(1L);
+//
+//        for (Appointment appointment: actualList
+//        ) {
+//            System.out.println(appointment.getAppointmentTime());
+//
+//        }
+//
+//        assertTrue("actual  " + actualList.get(0).getAppointmentTime(), actualList.get(0).getAppointmentTime().isAfter(LocalDateTime.now()));
+//
+//    }
+//    @Test
+//    @Order(13)
+//    void canGetPastAppointmentsByDoctorId() {
+//
+//        //sometimes this test might fail because of the fraction of LocalDateTime seconds that are not truncated in actual method. basically mismatch of arguments by small part of a second
+//        Schedule schedule = new Schedule(1L, DayOfWeek.THURSDAY, 12, 19, 15);
+//        List<Schedule> scheduleList = new ArrayList<>();
+//        List<Appointment> appointmentList = new ArrayList<>();
+//        scheduleList.add(schedule);
+//
+//        Doctor doctor = new Doctor("this is name", "this is lastName", "Specialty", scheduleList, appointmentList);
+//
+//        Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
+//
+//        appointmentService.generateAppointmentsBySchedule(1L, 30);
+//
+//        LocalDateTime start = LocalDateTime.of(2000, Month.JULY, 1, 00, 00, 00);
+//
+//        Mockito.lenient().when(appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(1L, start, LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), SORT_BY_APPOINTMENT_TIME))
+//                .thenReturn(appointmentList);
+//
+//        List<Appointment> actualList = appointmentService.getPastAppointmentsByDoctorId(1L);
+//
+//        for (Appointment appointment: actualList
+//             ) {
+//            System.out.println(appointment);
+//
+//        }
+//
+////        assertTrue("actual size is " + actualList.get(0), actualList.get(0).getAppointmentTime().isAfter(LocalDateTime.now()));
+//
+//        assertTrue("actual size is " + actualList.size(), doctor.getAppointmentList().size() > 55 );
+//
+//    }
 
 
 }

@@ -121,4 +121,16 @@ public class AppointmentControllerTest {
                 .andExpect(content().string(org.hamcrest.Matchers.equalTo("The appointment has been deleted")));
 
     }
+
+//    @Test
+//    @WithMockUser(username="admin@default.com",authorities="ROLE_ADMIN")
+//    @Order(6)
+//    void canGetPastAppointmentsByDoctorId () throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/appointment/1")
+//                        .accept(MediaType.ALL_VALUE))
+//                .andDo(print())
+//                .andDo(MockMvcResultHandlers.print())
+//                .andExpect(jsonPath("$.wasAttended").value(false));
+//
+//    }
 }

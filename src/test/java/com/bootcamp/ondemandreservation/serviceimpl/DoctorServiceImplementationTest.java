@@ -131,10 +131,13 @@ public class DoctorServiceImplementationTest {
 
         Mockito.when(doctorRepository.findById(anyLong())).thenReturn(Optional.of(doctor));
 
-        Doctor foundDoctor = doctorService.findDoctorById(1L);
+       // Doctor foundDoctor = doctorService.findDoctorById(1L);
+
+        List<Schedule> doctorSchedules = doctorService.getDoctorSchedules(1L);
 
 
-        assertEquals("size is " + foundDoctor.getSchedulesList().size(), doctor.getSchedulesList().size(), foundDoctor.getSchedulesList().size());
+      //  assertEquals("size is " + foundDoctor.getSchedulesList().size(), doctor.getSchedulesList().size(), foundDoctor.getSchedulesList().size());
+        assertEquals("size is " + doctorSchedules.size(), doctor.getSchedulesList().size(), doctorSchedules.size());
 
 
     }
