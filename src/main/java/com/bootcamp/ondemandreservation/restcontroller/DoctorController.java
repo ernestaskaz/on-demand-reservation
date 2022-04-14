@@ -7,6 +7,7 @@ import com.bootcamp.ondemandreservation.model.Schedule;
 import com.bootcamp.ondemandreservation.service.DoctorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,6 @@ public class DoctorController {
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
-
     @PostMapping
     public ResponseEntity<Doctor> saveDoctor(@RequestBody Doctor doctor) {
         return new ResponseEntity<Doctor>(doctorService.saveDoctor(doctor), HttpStatus.CREATED);
