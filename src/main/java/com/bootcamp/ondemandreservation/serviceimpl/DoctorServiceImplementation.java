@@ -131,11 +131,6 @@ public class DoctorServiceImplementation implements DoctorService {
         doctorRepository.deleteById(id);
     }
 
-//    @Override
-//    public List<Appointment> getAllAppointments(Long id) {
-//        return appointmentService.getAllAppointmentsByDoctorId(id);
-//    }
-
     @Override
     public List<Schedule> getDoctorSchedules(Long id) {
         Doctor doctor = findDoctorById(id);

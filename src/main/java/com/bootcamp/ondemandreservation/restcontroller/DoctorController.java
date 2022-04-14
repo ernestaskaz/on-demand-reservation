@@ -33,10 +33,6 @@ public class DoctorController {
         return doctorService.getAllDoctors();
     }
 
-//    @GetMapping("/appointments/{id}")
-//    public List<Appointment> getAllAppointments(@PathVariable("id") Long id) {
-//        return doctorService.getAllAppointments(id);
-//    }
 
     @GetMapping("/schedule/{id}")
     public List<Schedule> getDoctorSchedules(@PathVariable("id") Long id) {
